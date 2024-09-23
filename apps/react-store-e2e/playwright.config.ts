@@ -10,7 +10,8 @@ const baseURL = process.env['BASE_URL'] || 'http://localhost:4300';
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-// require('dotenv').config();
+// import { config } from 'dotenv';
+// config();
 
 /**
  * See https://playwright.dev/docs/test-configuration.

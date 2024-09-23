@@ -26,6 +26,7 @@ export default defineConfig({
   // },
 
   build: {
+    target: 'esnext', // Add this to ensure Vite targets the latest ECMAScript standard
     outDir: '../../dist/apps/react-store',
     emptyOutDir: true,
     reportCompressedSize: true,

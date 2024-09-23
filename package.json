@@ -2,6 +2,7 @@
   "name": "@react-monorepo/source",
   "version": "0.0.0",
   "license": "MIT",
+  "type": "module",
   "scripts": {},
   "private": true,
   "dependencies": {
@@ -20,7 +21,7 @@
     "@nx/playwright": "19.8.0",
     "@nx/react": "19.8.0",
     "@nx/vite": "19.8.0",
-    "@nx/web": "19.8.0",
+    "@nx/web": "19.8.0",  
     "@nx/workspace": "19.8.0",
     "@playwright/test": "^1.36.0",
     "@swc-node/register": "~1.9.1",
