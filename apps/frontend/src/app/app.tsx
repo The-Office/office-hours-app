@@ -1,4 +1,4 @@
-import NxWelcome from './nx-welcome';
+import NxWelcome from "./nx-welcome";
 
 export function App() {
   return (
