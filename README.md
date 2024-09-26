@@ -15,6 +15,11 @@ bun run frontend
 
 To run the backend:
 
+MAKE SURE YOU COPY `.env.template` INTO A NEW FILE CALLED `.env` RIGHT NEXT TO IT FIRST.
+
+Then, run:
+```bash
+
 ```bash
 bun run backend
 ```
