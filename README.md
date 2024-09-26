@@ -21,7 +21,7 @@ bun run backend
 
 This project was created using `bun init` in bun v0.4.0. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
 
-The backend is stored in `/apps/backend`, and the frontend is stored in `/apps/frontend`. The main file for both is `index.ts`.
+The backend is stored in `/apps/backend`, and the frontend is stored in `/apps/frontend`. The main file for backend is `index.ts` and the main file for frontend is `App.tsx`. These probably should not be modified much.
 
 ## Pushing to main
 
