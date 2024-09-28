@@ -6,17 +6,17 @@ import { createApiResponse } from "@/api-docs/openAPIResponseBuilders";
 import { ServiceResponse } from "@/common/models/serviceResponse";
 import { handleServiceResponse } from "@/common/utils/httpHandlers";
 
-export const healthCheckRegistry = new OpenAPIRegistry();
-export const healthCheckRouter: Router = express.Router();
+export const authRegistry = new OpenAPIRegistry();
+export const authRouter: Router = express.Router();
 
-healthCheckRegistry.registerPath({
+authRegistry.registerPath({
   method: "get",
-  path: "/health-check",
-  tags: ["Health Check"],
+  path: "/auth",
+  tags: ["Authorization"],
   responses: createApiResponse(z.null(), "Success"),
 });
 
-healthCheckRouter.get("/ok", (_req: Request, res: Response) => {
-  const serviceResponse = ServiceResponse.success("Service is healthy", null);
+authRouter.get("/ok", (_req: Request, res: Response) => {
+  const serviceResponse = ServiceResponse.success("This is the auth router.", null);
   return handleServiceResponse(serviceResponse, res);
 });
