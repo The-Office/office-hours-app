@@ -10,7 +10,7 @@ function App() {
   const [course, setCourse] = useState<Course | null>(null);
 
   useEffect(() => {
-    getCourseName('1016~7BYkJxWJhABDLZUBzu8xQ8PQ4yaMzVQFmn6zTFaD4Q9VWA84CEMGWMf6n8aQayVJ').then(setCourse);
+    getCourseName('1016~HrEEmUtZyBQ4xhJeC38WVRQU9wEEFkhFBQWH3NAN7ccFm2AM6tmD9wfxNJVXtHf7').then(setCourse);
   }, []);
 
   return (

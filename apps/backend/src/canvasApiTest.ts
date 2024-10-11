@@ -6,9 +6,14 @@ export type Course = {
 }
 
 export async function getCourseName(accessToken: string): Promise<Course> {
-    const url = `https://ufl.instructure.com/api/v1/courses?access_token=${accessToken}`;
-
-    const res = await fetch(url);
+    const url = `https://ufl.instructure.com/api/v1/courses`;
+    const headers = {
+        'Authorization': `Bearer ${accessToken}`
+    }
+    const res = await fetch(url, {
+        method: 'GET',  // or 'POST', 'PUT', etc. if needed
+        headers: headers
+    });
     const obj = await res.json();
     return { name: obj[1].name }
 
