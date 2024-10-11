@@ -1,22 +1,28 @@
 import { env } from "@/common/utils/envConfig";
 import { app, logger } from "@/server";
+import mysql from 'mysql2';
 
 const server = app.listen(env.PORT, () => {
   const { NODE_ENV, HOST, PORT } = env;
   logger.info(`Server (${NODE_ENV}) running on port http://${HOST}:${PORT}`);
 });
 
-const mysql = require("mysql");
 
+const { MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PASSWORD } = env;
 const db = mysql.createConnection({
-  host: "database-synchrohnize.c5usaiu2af5z.us-east-1.rds.amazonaws.com",
-  port: "3306",
-  user: "synchrohnize",
-  password: "superofficehours", // this is not good that the password is here, how do we obscure it?
+  host: MYSQL_HOST,
+  port: MYSQL_PORT,
+  user: MYSQL_USER,
+  password: MYSQL_PASSWORD,
   database: "-",
+  connectTimeout: 20000
 })
 
 db.connect((err) => {
+  console.log(`MYSQL HOST: ${MYSQL_HOST}`)
+  console.log(`MYSQL PORT: ${MYSQL_PORT}`)
+  console.log(`MYSQL USER: ${MYSQL_USER}`)
+  console.log(`MYSQL PASSWORD: ${MYSQL_PASSWORD}`)
   if (err) {
     console.log(err.message);
     return;
