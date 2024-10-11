@@ -6,6 +6,24 @@ const server = app.listen(env.PORT, () => {
   logger.info(`Server (${NODE_ENV}) running on port http://${HOST}:${PORT}`);
 });
 
+const mysql = require("mysql");
+
+const db = mysql.createConnection({
+  host: "database-synchrohnize.c5usaiu2af5z.us-east-1.rds.amazonaws.com",
+  port: "3306",
+  user: "synchrohnize",
+  password: "superofficehours", // this is not good that the password is here, how do we obscure it?
+  database: "-",
+})
+
+db.connect((err) => {
+  if (err) {
+    console.log(err.message);
+    return;
+  }
+  console.log("Database connected.");
+})
+
 const onCloseSignal = () => {
   logger.info("sigint received, shutting down");
   server.close(() => {
