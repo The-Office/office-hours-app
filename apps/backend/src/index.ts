@@ -13,9 +13,7 @@ const db = mysql.createConnection({
   host: MYSQL_HOST,
   port: MYSQL_PORT,
   user: MYSQL_USER,
-  password: MYSQL_PASSWORD,
-  database: "-",
-  connectTimeout: 20000
+  password: MYSQL_PASSWORD
 })
 
 db.connect((err) => {
