@@ -1,30 +1,41 @@
+// do we have to import mysql? maybe the database should be connected here instead
+// so we have an rds instance database-synchrohnize
+// then I created a database inside the instance called all_info
+// In the all_info database, there is a table called users
 import type { User } from "@/api/user/userModel";
+import { env } from "@/common/utils/envConfig";
+import mysql from 'mysql2';
 
-export const users: User[] = [
-  {
-    id: 1,
-    name: "Alice",
-    email: "alice@example.com",
-    age: 42,
-    createdAt: new Date(),
-    updatedAt: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // 5 days later
-  },
-  {
-    id: 2,
-    name: "Robert",
-    email: "Robert@example.com",
-    age: 21,
-    createdAt: new Date(),
-    updatedAt: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // 5 days later
-  },
-];
+const { MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PASSWORD } = env;
+const db = mysql.createConnection({
+  host: MYSQL_HOST,
+  port: MYSQL_PORT,
+  user: MYSQL_USER,
+  password: MYSQL_PASSWORD
+})
+
+db.connect((err) => {
+  console.log(`MYSQL HOST: ${MYSQL_HOST}`)
+  console.log(`MYSQL PORT: ${MYSQL_PORT}`)
+  console.log(`MYSQL USER: ${MYSQL_USER}`)
+  console.log(`MYSQL PASSWORD: ${MYSQL_PASSWORD}`)
+  if (err) {
+    console.log(err.message);
+    return;
+  }
+  console.log("Database connected.");
+})
 
 export class UserRepository {
   async findAllAsync(): Promise<User[]> {
-    return users;
-  }
-
-  async findByIdAsync(id: number): Promise<User | null> {
-    return users.find((user) => user.id === id) || null;
+    try {
+      const result = await db.query("SELECT * FROM users");
+      console.log("Query result:", result);
+      const [rows] = result;
+      return rows as User[];
+    } catch (error) {
+      console.error("Database query failed:", error);
+      throw error;
+    }
   }
 }
