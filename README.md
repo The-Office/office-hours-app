@@ -62,3 +62,14 @@ git push origin <new-branch-name>
 git checkout main
 git pull origin main
 ```
+
+### Database
+**Migrate up**:
+```
+npx knex migrate:latest 
+```
+
+**Migrate down**:
+```
+npx knex migrate:rollback 
+```
