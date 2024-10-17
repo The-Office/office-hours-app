@@ -3,7 +3,7 @@ import express, { type Request, type Response, type Router } from "express";
 import { z } from "zod";
 
 import { createApiResponse } from "@/api-docs/openAPIResponseBuilders";
-import { ServiceResponse } from "@/common/models/serviceResponse";
+import { ServiceResponse } from "@/common/schemas/serviceResponse";
 import { handleServiceResponse } from "@/common/utils/httpHandlers";
 
 export const authRegistry = new OpenAPIRegistry();
