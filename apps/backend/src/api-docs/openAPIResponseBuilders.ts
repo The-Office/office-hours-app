@@ -1,7 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 import type { z } from "zod";
 
-import { ServiceResponseSchema } from "@/common/models/serviceResponse";
+import { ServiceResponseSchema } from "@/common/schemas/serviceResponse";
 
 export function createApiResponse(schema: z.ZodTypeAny, description: string, statusCode = StatusCodes.OK) {
   return {
@@ -19,7 +19,7 @@ export function createApiResponse(schema: z.ZodTypeAny, description: string, sta
 // Use if you want multiple responses for a single endpoint
 
 // import { ResponseConfig } from '@asteasolutions/zod-to-openapi';
-// import { ApiResponseConfig } from '@common/models/openAPIResponseConfig';
+// import { ApiResponseConfig } from '@common/schemas/openAPIResponseConfig';
 // export type ApiResponseConfig = {
 //   schema: z.ZodTypeAny;
 //   description: string;

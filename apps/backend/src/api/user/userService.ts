@@ -1,21 +1,21 @@
 import { StatusCodes } from "http-status-codes";
 
-import type { User } from "@/api/user/userModel";
-import { UserRepository } from "@/api/user/userRepository";
-import { ServiceResponse } from "@/common/models/serviceResponse";
+import type { User } from "@/common/schemas/userSchema";
+import { UserRepository } from "@/database/userRepository";
+import { ServiceResponse } from "@/common/schemas/serviceResponse";
 import { logger } from "@/server";
 
 export class UserService {
   private userRepository: UserRepository;
 
-  constructor(repository: UserRepository = new UserRepository()) {
+  constructor(repository: UserRepository) {
     this.userRepository = repository;
   }
 
   // Retrieves all users from the database
   async findAll(): Promise<ServiceResponse<User[] | null>> {
     try {
-      const users = await this.userRepository.findAllAsync();
+      const users = await this.userRepository.getAllUsers();
       if (!users || users.length === 0) {
         return ServiceResponse.failure("No Users found", null, StatusCodes.NOT_FOUND);
       }
@@ -31,20 +31,22 @@ export class UserService {
     }
   }
 
-  // Retrieves a single user by their ID
-  async findById(id: number): Promise<ServiceResponse<User | null>> {
+  async getById(id: number): Promise<ServiceResponse<User | null>> {
     try {
-      const user = await this.userRepository.findByIdAsync(id);
+      const user = await this.userRepository.getById(id);
       if (!user) {
-        return ServiceResponse.failure("User not found", null, StatusCodes.NOT_FOUND);
+        return ServiceResponse.failure("No Users found", null, StatusCodes.NOT_FOUND);
       }
-      return ServiceResponse.success<User>("User found", user);
+      return ServiceResponse.success<User>("Users found", user);
     } catch (ex) {
-      const errorMessage = `Error finding user with id ${id}:, ${(ex as Error).message}`;
+      const errorMessage = `Error finding all user: $${(ex as Error).message}`;
       logger.error(errorMessage);
-      return ServiceResponse.failure("An error occurred while finding user.", null, StatusCodes.INTERNAL_SERVER_ERROR);
+      return ServiceResponse.failure(
+        "An error occurred while retrieving user.",
+        null,
+        StatusCodes.INTERNAL_SERVER_ERROR,
+      );
     }
   }
-}
 
-export const userService = new UserService();
+}
