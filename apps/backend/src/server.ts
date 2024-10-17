@@ -8,6 +8,7 @@ import { healthCheckRouter } from "@/api/healthCheck/healthCheckRouter";
 import { userRouter } from "@/api/user/userRouter";
 import { authRouter } from "./api/auth/authRouter";
 import { webScraperRouter } from "./api/webScraper/webScraperRouter";
+import { canvasRouter } from "./api/canvas/canvas"
 import errorHandler from "@/common/middleware/errorHandler";
 import rateLimiter from "@/common/middleware/rateLimiter";
 import requestLogger from "@/common/middleware/requestLogger";
@@ -34,6 +35,7 @@ app.use("/health-check", healthCheckRouter);
 app.use("/users", userRouter);
 app.use("/auth", authRouter);
 app.use("/web-scraper", webScraperRouter);
+app.use("/canvas", canvasRouter);
 
 // Swagger UI
 app.use(openAPIRouter);
