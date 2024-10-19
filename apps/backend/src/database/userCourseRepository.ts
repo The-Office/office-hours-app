@@ -1,8 +1,8 @@
-import type { Course } from "@/common/schemas/courseSchema";
+import type { Course } from "@/common/schemas/userCourseSchema";
 import { FieldPacket, Pool } from 'mysql2/promise';
 
 
-export class courseRepository {
+export class userCourseRepository {
   private db: Pool;
 
   constructor(db: Pool) {
@@ -11,7 +11,7 @@ export class courseRepository {
 
   async getAllCourses(): Promise<Course[]> {
     try {
-      const [rows] = await this.db.query("SELECT * FROM courses");
+      const [rows] = await this.db.query("SELECT * FROM user_courses");
       return rows as Course[];
     } catch (error) {
       console.error("Database query failed:", error);
@@ -22,7 +22,7 @@ export class courseRepository {
   async getById(id: number): Promise<Course | null> {
     try {
       // Parameterized query to prevent SQL injection
-      const [rows]: [any[], FieldPacket[]] = await this.db.query("SELECT * FROM courses WHERE id = ?", [id]);
+      const [rows]: [any[], FieldPacket[]] = await this.db.query("SELECT * FROM user_courses WHERE id = ?", [id]);
 
       // Check if rows exist and are in an array-like format
       if (rows.length === 0) {

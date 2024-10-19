@@ -11,7 +11,7 @@ export class UserRepository {
 
   async getAllUsers(): Promise<OfficeHour[]> {
     try {
-      const [rows] = await this.db.query("SELECT * FROM users");
+      const [rows] = await this.db.query("SELECT * FROM office_hours");
       return rows as OfficeHour[];
     } catch (error) {
       console.error("Database query failed:", error);
@@ -22,7 +22,7 @@ export class UserRepository {
   async getById(id: number): Promise<OfficeHour | null> {
     try {
       // Parameterized query to prevent SQL injection
-      const [rows]: [any[], FieldPacket[]] = await this.db.query("SELECT * FROM users WHERE id = ?", [id]);
+      const [rows]: [any[], FieldPacket[]] = await this.db.query("SELECT * FROM office_hours WHERE id = ?", [id]);
 
       // Check if rows exist and are in an array-like format
       if (rows.length === 0) {
