@@ -2,7 +2,7 @@ import type { Course } from "@/common/schemas/courseSchema";
 import { FieldPacket, Pool } from 'mysql2/promise';
 
 
-export class courseRepository {
+export class CourseRepository {
   private db: Pool;
 
   constructor(db: Pool) {
@@ -19,21 +19,21 @@ export class courseRepository {
     }
   }
 
-  async getById(id: number): Promise<Course | null> {
+  async getByCourseId(id: number): Promise<Course | null> {
     try {
       // Parameterized query to prevent SQL injection
-      const [rows]: [any[], FieldPacket[]] = await this.db.query("SELECT * FROM courses WHERE id = ?", [id]);
+      const [rows]: [any[], FieldPacket[]] = await this.db.query("SELECT * FROM courses WHERE course_id = ?", [id]);
 
       // Check if rows exist and are in an array-like format
       if (rows.length === 0) {
         return null;
       }
   
-      // Return the first row as a User object
+      // Return the first row as a Course object
       return rows[0] as Course;
     } catch (error) {
       console.error("Database query failed:", error);
-      throw new Error("Failed to fetch user from the database");
+      throw new Error("Failed to fetch course from the database");
     }
   }
   

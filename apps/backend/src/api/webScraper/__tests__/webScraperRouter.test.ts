@@ -1,7 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 import request from "supertest";
 
-import type { ServiceResponse } from "@/common/models/serviceResponse";
+import type { ServiceResponse } from "@/common/schemas/serviceResponse";
 import { app } from "@/server";
 
 describe("Web Scraping API endpoints", () => {

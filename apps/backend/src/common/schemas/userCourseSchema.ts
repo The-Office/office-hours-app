@@ -15,7 +15,7 @@ export const UserCourseSchema = z.object({
   updated_at: z.date(),
 });
 
-export type Course = z.infer<typeof UserCourseSchema>;
+export type UserCourse = z.infer<typeof UserCourseSchema>;
 
 // // Input Validation for 'GET users/:id' endpoint
 // export const GetCourseSchema = z.object({

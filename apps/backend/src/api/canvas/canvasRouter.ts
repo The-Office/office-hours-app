@@ -4,7 +4,7 @@ import { z } from "zod";
 import axios from 'axios';
 
 import { createApiResponse } from "@/api-docs/openAPIResponseBuilders";
-import { ServiceResponse } from "@/common/models/serviceResponse";
+import { ServiceResponse } from "@/common/schemas/serviceResponse";
 import { handleServiceResponse } from "@/common/utils/httpHandlers";
 
 export const canvasRegistry = new OpenAPIRegistry();

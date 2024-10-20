@@ -35,9 +35,9 @@ export class UserService {
     try {
       const user = await this.userRepository.getById(id);
       if (!user) {
-        return ServiceResponse.failure("No Users found", null, StatusCodes.NOT_FOUND);
+        return ServiceResponse.failure("No User found", null, StatusCodes.NOT_FOUND);
       }
-      return ServiceResponse.success<User>("Users found", user);
+      return ServiceResponse.success<User>("User found", user);
     } catch (ex) {
       const errorMessage = `Error finding all user: $${(ex as Error).message}`;
       logger.error(errorMessage);

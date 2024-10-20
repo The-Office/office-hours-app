@@ -5,7 +5,7 @@ import { commonValidations } from "@/common/utils/commonValidation";
 
 extendZodWithOpenApi(z);
 
-export const CourseSchema = z.object({
+export const OfficeHourSchema = z.object({
   course_id: z.number().int(),
   course_code: z.string(),
   office_hour_provider_id: z.number().int(),
@@ -17,7 +17,7 @@ export const CourseSchema = z.object({
   updated_at: z.date(),
 });
 
-export type OfficeHour = z.infer<typeof CourseSchema>;
+export type OfficeHour = z.infer<typeof OfficeHourSchema>;
 
 // // Input Validation for 'GET users/:id' endpoint
 // export const GetCourseSchema = z.object({
