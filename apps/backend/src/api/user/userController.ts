@@ -4,9 +4,6 @@ import { UserService } from "@/api/user/userService";
 import { CourseService } from "./courseService";
 import { OfficeHourService } from "./officeHourService";
 import { handleServiceResponse } from "@/common/utils/httpHandlers";
-import { CourseRepository } from "@/database/courseRepository";
-import { OfficeHourRepository } from "@/database/officeHoursRepository";
-import { ServiceResponse } from "@/common/schemas/serviceResponse";
 
 export class UserController {
   private userService: UserService;
