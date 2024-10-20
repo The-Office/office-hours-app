@@ -7,18 +7,24 @@ export async function seed(knex: Knex): Promise<void> {
   // Inserts seed entries
   await knex('user_courses').insert([
     {
-      user_id: 997865764,
-      course_id: 234597675,
-      course_code: 'MAS3114',
-      instructor_id: 5478986,
-      class_period: 5,
+      user_id: 88884444,
+      course_id: 508104,
+      course_code: 'CDA3101',
     },
     {
-      user_id: 234780987,
-      course_id: 876539,
-      course_code: 'COP3530',
-      instructor_id: 65429004,
-      class_period: 4,
+      user_id: 88884444,
+      course_id: 507903,
+      course_code: 'COP4533',
+    },
+    {
+      user_id: 55558888,
+      course_id: 508104,
+      course_code: 'CDA3101',
+    },
+    {
+      user_id: 55558888,
+      course_id: 507903,
+      course_code: 'COP4533',
     }
   ]);
 }
