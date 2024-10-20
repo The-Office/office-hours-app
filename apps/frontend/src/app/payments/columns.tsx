@@ -1,25 +1,54 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
+import { DataTableColumnHeader } from "../../components/ui/table-column-headers"
 
-export type Payment = {
+export type Hours = {
   id: string
-  amount: number
-  status: "pending" | "processing" | "success" | "failed"
-  email: string
+  course: string
+  leader: string
+  days: string
+  start_time: string
+  end_time: string
+  location: string
 }
 
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<Hours>[] = [
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: "course",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Course" />
+    ),
   },
   {
-    accessorKey: "email",
-    header: "Email",
+    accessorKey: "leader",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="TA" />
+    ),
   },
   {
-    accessorKey: "amount",
-    header: "Amount",
+    accessorKey: "days",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Days" />
+    ),
   },
+  {
+    accessorKey: "start_time",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Start Time" />
+    ),
+  },
+  {
+    accessorKey: "end_time",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="End Time" />
+    ),
+  },
+  {
+    accessorKey: "location",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Location" />
+    ),
+  }
 ]
+    
