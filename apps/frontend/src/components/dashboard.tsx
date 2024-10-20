@@ -1,5 +1,5 @@
 import NavBar from './navbar';
-import DemoPage from '../app/payments/page.tsx';
+import DemoPage from './table/page.tsx';
 
 const Dashboard = () => {
     return (
