@@ -36,8 +36,6 @@ userRegistry.registerPath({
   responses: createApiResponse(z.array(UserSchema), "Success"),
 });
 
-userRouter.get("/", userController.getAllUsers);
-
 userRegistry.registerPath({
   method: "get",
   path: "/users/{id}",
@@ -56,13 +54,14 @@ userRegistry.registerPath({
 
 userRegistry.registerPath({
   method: "get",
-  path: "/users/{id}/officehours",
+  path: "/users/{id}/office-hours",
   tags: ["User"],
   request: { params: GetUserSchema.shape.params },
   responses: createApiResponse(z.array(OfficeHourSchema), "Success"),
 });
 
 
+userRouter.get("/", userController.getAllUsers);
 userRouter.get("/:id", validateRequest(GetUserSchema), userController.getUserById);
 userRouter.get("/:id/courses", validateRequest(GetUserSchema), userController.getByCourseId);
 userRouter.get("/:id/office-hours", validateRequest(GetUserSchema), userController.getCourseOfficeHoursById);
