@@ -2,7 +2,7 @@ import project_logo from '../assets/project-logo.png';
 
 const NavBar = () => {
   return (
-    <div className="navbar fixed w-full flex items-center justify-between p-5">
+    <div className="navbar w-full flex items-center justify-between p-3 z-20 relative">
         <div className="flex items-center">
             <img src={project_logo} alt="Project Logo" className="h-9 w-9 mr-2" />
             <h1 className="font-extrabold text-lg md:text-3xl lg:text-4xl">SyncrOHnize</h1>

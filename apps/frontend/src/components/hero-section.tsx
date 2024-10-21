@@ -3,7 +3,7 @@ import clock_gray_cropped from '../assets/clock-gray-wall-cropped.jpg';
 
 const HeroSection = () => {
     return (
-        <div className="hero-section text-black">
+        <div className="-mt-16 text-black">
             <div className="flex flex-col md:flex-row h-screen">
                 <div className="w-full md:w-1/2 flex items-center justify-center h-screen">
                     <div className="text-center">
