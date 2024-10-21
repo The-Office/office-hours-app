@@ -16,7 +16,8 @@
     "prepare": "husky",
     "mig-up": "knex migrate:latest",
     "mig-down": "knex migrate:rollback",
-    "seed": "knex seed:run"
+    "seed": "knex seed:run",
+    "db-reset": "bun mig-down && bun mig-up && bun seed"
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^7.0.0",

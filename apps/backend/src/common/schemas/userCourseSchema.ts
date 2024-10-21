@@ -8,7 +8,6 @@ extendZodWithOpenApi(z);
 export const UserCourseSchema = z.object({
   user_id: z.number().int(),
   course_id: z.number().int(),
-  course_code: z.string(),
   created_at: z.date(),
   updated_at: z.date(),
 });
