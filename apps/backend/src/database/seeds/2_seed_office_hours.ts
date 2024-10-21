@@ -13,7 +13,7 @@ export async function seed(knex: Knex): Promise<void> {
       location: "https://discord.gg/eXU9Q7J8hm",
       start_time: "9:35 am",
       end_time: "10:25 am",
-      day: "Monday",
+      day: "monday",
     },
     {
       course_id: 508104,
@@ -22,7 +22,7 @@ export async function seed(knex: Knex): Promise<void> {
       location: "MALA5200",
       start_time: "9:35 am",
       end_time: "10:25 am",
-      day: "Tuesday",
+      day: "tuesday",
     },
     {
       course_id: 508104,
@@ -31,7 +31,7 @@ export async function seed(knex: Knex): Promise<void> {
       location: "https://discord.gg/eXU9Q7J8hm",
       start_time: "9:35 am",
       end_time: "10:25 am",
-      day: "Wednesday",
+      day: "wednesday",
     },
     {
       course_id: 508104,
@@ -40,7 +40,7 @@ export async function seed(knex: Knex): Promise<void> {
       location: "https://discord.gg/eXU9Q7J8hm",
       start_time: "9:35 am",
       end_time: "10:25 am",
-      day: "Thursday",
+      day: "thursday",
     },
     {
       course_id: 508104,
@@ -49,7 +49,7 @@ export async function seed(knex: Knex): Promise<void> {
       location: "MALA5200",
       start_time: "9:35 am",
       end_time: "10:25 am",
-      day: "Friday",
+      day: "friday",
     },
     {
       course_id: 507903,
@@ -58,7 +58,7 @@ export async function seed(knex: Knex): Promise<void> {
       location: "https://discord.gg/eXU9Q7J8hm",
       start_time: "10:40 am",
       end_time: "11:30 am",
-      day: "Monday",
+      day: "monday",
     },
     {
       course_id: 507903,
@@ -67,7 +67,7 @@ export async function seed(knex: Knex): Promise<void> {
       location: "MALA5200",
       start_time: "10:40 am",
       end_time: "11:30 am",
-      day: "Tuesday",
+      day: "tuesday",
     },
     {
       course_id: 507903,
@@ -76,7 +76,7 @@ export async function seed(knex: Knex): Promise<void> {
       location: "MALA5200",
       start_time: "10:40 am",
       end_time: "11:30 am",
-      day: "Wednesday",
+      day: "wednesday",
     },
     {
       course_id: 507903,
@@ -85,7 +85,7 @@ export async function seed(knex: Knex): Promise<void> {
       location: "https://discord.gg/eXU9Q7J8hm",
       start_time: "10:40 am",
       end_time: "11:30 am",
-      day: "Thursday",
+      day: "thursday",
     },
     {
       course_id: 507903,
@@ -94,7 +94,7 @@ export async function seed(knex: Knex): Promise<void> {
       location: "MALA5200",
       start_time: "10:40 am",
       end_time: "11:30 am",
-      day: "Friday",
+      day: "friday",
     },
     {
       course_id: 507903,
@@ -103,7 +103,7 @@ export async function seed(knex: Knex): Promise<void> {
       location: "MALA5200",
       start_time: "11:45 am",
       end_time: "12:35 pm",
-      day: "Thursday",
+      day: "thursday",
     },
     {
       course_id: 507903,
@@ -112,7 +112,7 @@ export async function seed(knex: Knex): Promise<void> {
       location: "MALA5200",
       start_time: "12:50 pm",
       end_time: "1:40 pm",
-      day: "Wednesday",
+      day: "wednesday",
     },
     {
       course_id: 508104,
@@ -121,7 +121,7 @@ export async function seed(knex: Knex): Promise<void> {
       location: "MALA5200",
       start_time: "1:55 pm",
       end_time: "2:45 pm",
-      day: "Monday",
+      day: "monday",
     },
     {
       course_id: 508104,
@@ -130,7 +130,7 @@ export async function seed(knex: Knex): Promise<void> {
       location: "MALA5200",
       start_time: "1:55 pm",
       end_time: "2:45 pm",
-      day: "Tuesday/Wednesday",
+      day: "tuesday",
     },
     {
       course_id: 508104,
@@ -139,7 +139,7 @@ export async function seed(knex: Knex): Promise<void> {
       location: "MALA5200",
       start_time: "1:55 pm",
       end_time: "2:45 pm",
-      day: "Friday",
+      day: "friday",
     },
     {
       course_id: 508104,
@@ -148,7 +148,7 @@ export async function seed(knex: Knex): Promise<void> {
       location: "MALA5200",
       start_time: "4:05 pm",
       end_time: "4:55 pm",
-      day: "Monday",
+      day: "monday",
     },
     {
       course_id: 508104,
@@ -157,7 +157,7 @@ export async function seed(knex: Knex): Promise<void> {
       location: "MALA5200",
       start_time: "4:05 pm",
       end_time: "4:55 pm",
-      day: "Tuesday/Wednesday",
+      day: "wednesday",
     },
     {
       course_id: 508104,
@@ -166,7 +166,7 @@ export async function seed(knex: Knex): Promise<void> {
       location: "https://discord.gg/eXU9Q7J8hm",
       start_time: "4:05 pm",
       end_time: "4:55 pm",
-      day: "Friday",
+      day: "friday",
     },
   ]);
 }
