@@ -29,7 +29,6 @@ export async function seed(knex: Knex): Promise<void> {
       access_token: 'access_token_2',
       refresh_token: 'refresh_token_2',
       token_expiration: new Date('2024-12-31T23:59:59'),
-      role: 'instructor',
       is_active: true,
       ical_link: 'https://example.com/ical/janedoe',
     }

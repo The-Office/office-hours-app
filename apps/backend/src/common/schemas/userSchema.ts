@@ -18,7 +18,6 @@ export const UserSchema = z.object({
   refresh_token: z.string().optional(), // Optional OAuth refresh token, storing as a string.
   token_expiration: z.date(), // Token expiration date and time.
 
-  role: z.string(), // User role (e.g., instructor, student, admin).
   is_active: z.boolean(), // Boolean to track active/deactivated status.
   ical_link: z.string().optional(), // Optional iCal link, stored as a string.
 

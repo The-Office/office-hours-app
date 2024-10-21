@@ -24,7 +24,6 @@ describe("userService", () => {
       access_token: "some-access-token",
       refresh_token: "some-refresh-token",
       token_expiration: new Date(), // Example expiration date
-      role: "student", // Example role
       is_active: true, // Example active status
       ical_link: "https://example.com/ical/alice", // Optional field
       created_at: new Date(),
@@ -40,7 +39,6 @@ describe("userService", () => {
       access_token: "another-access-token",
       refresh_token: undefined, // Optional field can be undefined
       token_expiration: new Date(), // Example expiration date
-      role: "instructor", // Example role
       is_active: true, // Example active status
       ical_link: undefined, // Optional field can be undefined
       created_at: new Date(),

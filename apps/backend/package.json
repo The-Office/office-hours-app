@@ -13,7 +13,10 @@
     "lint:fix": "biome check src/ --fix",
     "format": "biome format src/",
     "test": "vitest run",
-    "prepare": "husky"
+    "prepare": "husky",
+    "mig-up": "knex migrate:latest",
+    "mig-down": "knex migrate:rollback",
+    "seed": "knex seed:run"
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^7.0.0",
