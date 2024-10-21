@@ -11,16 +11,16 @@ import { UserService } from "./userService";
 import { UserRepository } from "@/database/userRepository";
 import { CourseSchema } from "@/common/schemas/courseSchema";
 import { OfficeHourSchema } from "@/common/schemas/officeHoursSchema";
-import { CourseRepository } from "@/database/courseRepository";
+import { UserCourseRepository } from "@/database/userCourseRepository";
 import { OfficeHourRepository } from "@/database/officeHoursRepository";
-import { CourseService } from "./courseService";
+import { UserCourseService } from "./userCourseService";
 import { OfficeHourService } from "./officeHourService";
 
 const userRepository = new UserRepository(db);
-const courseRepository = new CourseRepository(db);
+const userCourseRepository = new UserCourseRepository(db);
 const officeHourRepository = new OfficeHourRepository(db)
 const userService = new UserService(userRepository);
-const courseService = new CourseService(courseRepository);
+const courseService = new UserCourseService(userCourseRepository);
 const officeHourService = new OfficeHourService(officeHourRepository);
 const userController = new UserController(userService, courseService, officeHourService);
 
@@ -63,6 +63,6 @@ userRegistry.registerPath({
 
 userRouter.get("/", userController.getAllUsers);
 userRouter.get("/:id", validateRequest(GetUserSchema), userController.getUserById);
-userRouter.get("/:id/courses", validateRequest(GetUserSchema), userController.getByCourseId);
+userRouter.get("/:id/courses", validateRequest(GetUserSchema), userController.getUserCoursesById);
 userRouter.get("/:id/office-hours", validateRequest(GetUserSchema), userController.getCourseOfficeHoursById);
 

@@ -2,7 +2,7 @@ import type { UserCourse } from "@/common/schemas/userCourseSchema";
 import { FieldPacket, Pool } from 'mysql2/promise';
 
 
-export class userCourseRepository {
+export class UserCourseRepository {
   private db: Pool;
 
   constructor(db: Pool) {

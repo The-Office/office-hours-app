@@ -8,7 +8,7 @@ extendZodWithOpenApi(z);
 export const OfficeHourSchema = z.object({
   course_id: z.number().int(),
   course_code: z.string(),
-  office_hour_provider_id: z.number().int(),
+  host: z.string(),
   modality: z.string(),
   office_hour_location: z.string(),
   start_time: z.string(),

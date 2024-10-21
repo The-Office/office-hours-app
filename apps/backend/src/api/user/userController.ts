@@ -1,24 +1,21 @@
 import type { Request, RequestHandler, Response } from "express";
 
 import { UserService } from "@/api/user/userService";
-import { CourseService } from "./courseService";
+import { UserCourseService } from "./userCourseService";
 import { OfficeHourService } from "./officeHourService";
 import { handleServiceResponse } from "@/common/utils/httpHandlers";
 
 export class UserController {
   private userService: UserService;
-  private courseService: CourseService;
+  private userCourseService: UserCourseService;
   private officeHourService: OfficeHourService;
 
-  constructor(userService: UserService, courseService: CourseService, officeHourService: OfficeHourService) {
+  constructor(userService: UserService, userCourseService: UserCourseService, officeHourService: OfficeHourService) {
     this.userService = userService;
-    this.courseService = courseService;
+    this.userCourseService = userCourseService;
     this.officeHourService = officeHourService;
   }
 
-
-  // courseService
-  // officeHoursService
   
   public getAllUsers: RequestHandler = async (_req: Request, res: Response) => {
     const serviceResponse = await this.userService.findAll();
@@ -31,10 +28,9 @@ export class UserController {
     return handleServiceResponse(serviceResponse, res);
   };
 
-  // courseService.getByCourseId
-  public getByCourseId: RequestHandler = async (req: Request, res: Response) => {
+  public getUserCoursesById: RequestHandler = async (req: Request, res: Response) => {
     const id = Number.parseInt(req.params.id as string, 10);
-    const serviceResponse = await this.courseService.getByCourseId(id);
+    const serviceResponse = await this.userCourseService.getUserCoursesById(id);
     return handleServiceResponse(serviceResponse, res);
   };
 

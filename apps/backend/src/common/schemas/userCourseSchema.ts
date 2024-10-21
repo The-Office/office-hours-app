@@ -9,8 +9,6 @@ export const UserCourseSchema = z.object({
   user_id: z.number().int(),
   course_id: z.number().int(),
   course_code: z.string(),
-  instructor_id: z.number().int(),
-  class_period: z.number().int(),
   created_at: z.date(),
   updated_at: z.date(),
 });
