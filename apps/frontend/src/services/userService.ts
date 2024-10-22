@@ -43,9 +43,9 @@ export interface Course {
 // Fetch user by ID
 export const fetchUser = async (userId: number): Promise<User | {}> => {
   try {
-    const response = await axios.get<User>(`http://localhost:8080/users/${userId}`);
-    console.log(response.data);
-
+    const response = await axios.get(`http://localhost:8080/users/${userId}`);
+    const payload = response.data;
+    return payload.data;
     // Sample return data
     // const sampleUser: User = {
     //   id: 1,
@@ -64,7 +64,6 @@ export const fetchUser = async (userId: number): Promise<User | {}> => {
     // };
     // console.log(sampleUser);
     // return sampleUser;
-    return response.data;
   } catch (error) {
     console.error('Error fetching user:', error);
     return {};
@@ -74,9 +73,9 @@ export const fetchUser = async (userId: number): Promise<User | {}> => {
 // Fetch courses for a user by ID
 export const fetchCourses = async (userId: number): Promise<Course[]> => {
   try {
-    const response = await axios.get<Course[]>(`http://localhost:8080/users/${userId}/courses`);
-    console.log(response.data);
-
+    const response = await axios.get(`http://localhost:8080/users/${userId}/courses`);
+    const payload = response.data;
+    return payload.data;
     // Sample return data
     // const sampleCourses: Course[] = [
     //   {
@@ -93,7 +92,6 @@ export const fetchCourses = async (userId: number): Promise<Course[]> => {
     //   }
     // ];
     // console.log(sampleCourses);
-    return response.data;
   } catch (error) {
     console.error('Error fetching courses:', error);
     return [];
@@ -102,8 +100,9 @@ export const fetchCourses = async (userId: number): Promise<Course[]> => {
 
 export const fetchOfficeHours = async (userId: number): Promise<OfficeHour[]> => {
   try {
-    const response = await axios.get<OfficeHour[]>(`http://localhost:8080/users/${userId}/office-hours`);
-    console.log(response.data);
+    const response = await axios.get(`http://localhost:8080/users/${userId}/office-hours`);
+    const payload = response.data;
+    return payload.data;
 
     // const sampleOfficeHours: OfficeHour[] = [
     //   {
@@ -325,7 +324,6 @@ export const fetchOfficeHours = async (userId: number): Promise<OfficeHour[]> =>
     // ]
     // console.log(sampleOfficeHours);
     // return sampleOfficeHours;
-    return response.data.data;
   } catch (error) {
     console.error('Error fetching office hours:', error);
     return [];
