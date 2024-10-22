@@ -31,13 +31,13 @@ export class OfficeHourService {
     }
   }
 
-  async getCourseOfficeHoursById(id: number): Promise<ServiceResponse<OfficeHour | null>> {
+  async getOfficeHoursByUserId(id: number): Promise<ServiceResponse<OfficeHour[] | null>> {
     try {
-      const officehours = await this.officeHourRepository.getCourseOfficeHoursById(id);
+      const officehours = await this.officeHourRepository.getOfficeHoursByUserId(id);
       if (!officehours) {
         return ServiceResponse.failure("No office hours found", null, StatusCodes.NOT_FOUND);
       }
-      return ServiceResponse.success<OfficeHour>("Office hours found", officehours);
+      return ServiceResponse.success<OfficeHour[]>("Office hours found", officehours);
     } catch (ex) {
       const errorMessage = `Error finding all office hours: $${(ex as Error).message}`;
       logger.error(errorMessage);
