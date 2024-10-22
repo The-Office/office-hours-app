@@ -2,45 +2,44 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 import { DataTableColumnHeader } from "@/components/ui/table-column-headers"
+import { OfficeHour } from "@/services/userService"
 
-export type OFFICE_HOURS = {
-  id: string
-  course: string
-  leader: string
-  days: string
-  start: string
-  end: string
-  location: string
-}
 
-export const columns: ColumnDef<OFFICE_HOURS>[] = [
+export const columns: ColumnDef<OfficeHour>[] = [
   {
-    accessorKey: "course",
+    accessorKey: "course_code",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Course" />
+      <DataTableColumnHeader column={column} title="Course Code" />
     ),
   },
   {
-    accessorKey: "leader",
+    accessorKey: "host",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="TA" />
+      <DataTableColumnHeader column={column} title="Host" />
     ),
   },
   {
-    accessorKey: "days",
-    header: "Days",
+    accessorKey: "day",
+    header: "Day",
   },
   {
-    accessorKey: "start",
+    accessorKey: "start_time",
     header: "Start Time",
   },
   {
-    accessorKey: "end",
+    accessorKey: "end_time",
     header: "End Time",
+  },
+  {
+    accessorKey: "mode",
+    header: "Mode",
   },
   {
     accessorKey: "location",
     header: "Location",
-  }
+  },
+  {
+    accessorKey: "link",
+    header: "Link",
+  },
 ]
-    
