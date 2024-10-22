@@ -3,7 +3,7 @@ import { columns } from "./columns";
 import { OfficeHour, fetchOfficeHours } from "@/services/userService";
 import { DataTable } from "./data-table";
 
-export default function DemoPage() {
+export default function Table() {
   const [data, setData] = useState<OfficeHour[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -22,7 +22,7 @@ export default function DemoPage() {
   }
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="py-10  mx-5 md:mx-32">
       <DataTable columns={columns} data={data} />
     </div>
   );
