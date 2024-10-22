@@ -22,7 +22,7 @@ export class OfficeHourRepository {
   async getCourseOfficeHoursById(id: number): Promise<OfficeHour | null> {
     try {
       // Parameterized query to prevent SQL injection
-      const [rows]: [any[], FieldPacket[]] = await this.db.query("SELECT * FROM office_hours WHERE course_id = ?", [id]);
+      const [rows]: [any[], FieldPacket[]] = await this.db.query("SELECT office_hours.*, courses.course_code FROM office_hours JOIN user_courses ON office_hours.course_id = user_courses.course_id LEFT JOIN courses ON office_hours.course_id = courses.course_id WHERE user_courses.user_id = ?", [id]);
 
       // Check if rows exist and are in an array-like format
       if (rows.length === 0) {
