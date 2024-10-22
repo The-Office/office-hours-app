@@ -9,5 +9,8 @@
   "scripts": {
     "frontend": "cd apps && cd frontend && bun run dev",
     "backend": "cd apps && cd backend && bun run dev"
+  },
+  "dependencies": {
+    "axios": "^1.7.7"
   }
 }
