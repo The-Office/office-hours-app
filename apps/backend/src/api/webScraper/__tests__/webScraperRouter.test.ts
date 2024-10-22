@@ -1,7 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 import request from "supertest";
 
-import type { ServiceResponse } from "@/common/models/serviceResponse";
+import type { ServiceResponse } from "@/common/schemas/serviceResponse";
 import { app } from "@/server";
 
 describe("Web Scraping API endpoints", () => {
@@ -11,7 +11,7 @@ describe("Web Scraping API endpoints", () => {
 
     expect(response.statusCode).toEqual(StatusCodes.OK);
     expect(result.success).toBeTruthy();
-    expect(result.responseObject).toBeNull();
+    expect(result.data).toBeNull();
     expect(result.message).toEqual("Service is healthy");
   });
 });
