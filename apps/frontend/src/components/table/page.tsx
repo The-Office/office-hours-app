@@ -9,7 +9,7 @@ export default function DemoPage() {
 
   useEffect(() => {
     async function fetchData() {
-      const result = await fetchOfficeHours();
+      const result = await fetchOfficeHours(55558888);
       setData(result);
       setLoading(false);
     }

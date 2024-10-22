@@ -1,6 +1,6 @@
 import axios from 'axios';
-const created_at = '2023-10-01T09:00:00Z'
-const updated_at = '2023-10-15T09:00:00Z'
+// const created_at = '2023-10-01T09:00:00Z'
+// const updated_at = '2023-10-15T09:00:00Z'
 
 export interface User {
   id: number;
@@ -41,29 +41,30 @@ export interface Course {
 }
 
 // Fetch user by ID
-export const fetchUser = async (): Promise<User | {}> => {
+export const fetchUser = async (userId: number): Promise<User | {}> => {
   try {
-    // const response = await axios.get<User>(`http://localhost:8080/users/${userId}`);
-    // console.log(response.data);
+    const response = await axios.get<User>(`http://localhost:8080/users/${userId}`);
+    console.log(response.data);
 
     // Sample return data
-    const sampleUser: User = {
-      id: 1,
-      canvas_user_id: 1234,
-      email: 'john.doe@example.com',
-      first_name: 'John',
-      last_name: 'Doe',
-      canvas_login_id: 'jdoe',
-      access_token: 'sampleAccessToken',
-      refresh_token: 'sampleRefreshToken',
-      token_expiration: '2024-12-31T23:59:59Z',
-      is_active: 1,
-      ical_link: 'http://example.com/calendar.ics',
-      created_at: '2023-01-01T12:00:00Z',
-      updated_at: '2023-10-01T12:00:00Z'
-    };
-    console.log(sampleUser);
-    return sampleUser;
+    // const sampleUser: User = {
+    //   id: 1,
+    //   canvas_user_id: 1234,
+    //   email: 'john.doe@example.com',
+    //   first_name: 'John',
+    //   last_name: 'Doe',
+    //   canvas_login_id: 'jdoe',
+    //   access_token: 'sampleAccessToken',
+    //   refresh_token: 'sampleRefreshToken',
+    //   token_expiration: '2024-12-31T23:59:59Z',
+    //   is_active: 1,
+    //   ical_link: 'http://example.com/calendar.ics',
+    //   created_at: '2023-01-01T12:00:00Z',
+    //   updated_at: '2023-10-01T12:00:00Z'
+    // };
+    // console.log(sampleUser);
+    // return sampleUser;
+    return response.data;
   } catch (error) {
     console.error('Error fetching user:', error);
     return {};
@@ -71,263 +72,260 @@ export const fetchUser = async (): Promise<User | {}> => {
 };
 
 // Fetch courses for a user by ID
-export const fetchCourses = async (): Promise<Course[]> => {
+export const fetchCourses = async (userId: number): Promise<Course[]> => {
   try {
-    // const response = await axios.get<Course[]>(`http://localhost:8080/users/${userId}/courses`);
-    // console.log(response.data);
+    const response = await axios.get<Course[]>(`http://localhost:8080/users/${userId}/courses`);
+    console.log(response.data);
 
     // Sample return data
-    const sampleCourses: Course[] = [
-      {
-        course_id: 508104,
-        course_code: 'CDA3101',
-        created_at,
-        updated_at
-      },
-      {
-        course_id: 507903,
-        course_code: 'COP4533',
-        created_at,
-        updated_at
-      }
-    ];
-    console.log(sampleCourses);
-    return sampleCourses;
+    // const sampleCourses: Course[] = [
+    //   {
+    //     course_id: 508104,
+    //     course_code: 'CDA3101',
+    //     created_at,
+    //     updated_at
+    //   },
+    //   {
+    //     course_id: 507903,
+    //     course_code: 'COP4533',
+    //     created_at,
+    //     updated_at
+    //   }
+    // ];
+    // console.log(sampleCourses);
+    return response.data;
   } catch (error) {
     console.error('Error fetching courses:', error);
     return [];
   }
 };
 
-// Fetch office hours for a user by ID
-export const fetchOfficeHours = async (): Promise<OfficeHour[]> => {
+export const fetchOfficeHours = async (userId: number): Promise<OfficeHour[]> => {
   try {
-    // const response = await axios.get<OfficeHour[]>(`http://localhost:8080/users/${userId}/office-hours`);
-    // console.log(response.data);
+    const response = await axios.get<OfficeHour[]>(`http://localhost:8080/users/${userId}/office-hours`);
+    console.log(response.data);
 
-    // Sample return data
-
-
-    const sampleOfficeHours: OfficeHour[] = [
-      {
-        course_id: 508104,
-        course_code: "CDA3101",
-        host: "Shreyas Adireddy",
-        mode: "remote",
-        link: "https://discord.gg/eXU9Q7J8hm",
-        start_time: "9:35 am",
-        end_time: "10:25 am",
-        day: "monday",
-        created_at,
-        updated_at
-      },
-      {
-        course_id: 508104,
-        course_code: "CDA3101",
-        host: "Chris Tressler",
-        mode: "in-person",
-        location: "MALA5200",
-        start_time: "9:35 am",
-        end_time: "10:25 am",
-        day: "tuesday",
-        created_at,
-        updated_at
-      },
-      {
-        course_id: 508104,
-        course_code: "CDA3101",
-        host: "Shreyas Adireddy",
-        mode: "remote",
-        link: "https://discord.gg/eXU9Q7J8hm",
-        start_time: "9:35 am",
-        end_time: "10:25 am",
-        day: "wednesday",
-        created_at,
-        updated_at
-      },
-      {
-        course_id: 508104,
-        course_code: "CDA3101",
-        host: "Tony Wong",
-        mode: "remote",
-        link: "https://discord.gg/eXU9Q7J8hm",
-        start_time: "9:35 am",
-        end_time: "10:25 am",
-        day: "thursday",
-        created_at,
-        updated_at
-      },
-      {
-        course_id: 508104,
-        course_code: "CDA3101",
-        host: "Anna Albertelli",
-        mode: "in-person",
-        location: "MALA5200",
-        start_time: "9:35 am",
-        end_time: "10:25 am",
-        day: "friday",
-        created_at,
-        updated_at
-      },
-      {
-        course_id: 507903,
-        course_code: "CDA3101",
-        host: "Adam Bracci",
-        mode: "remote",
-        link: "https://discord.gg/eXU9Q7J8hm",
-        start_time: "10:40 am",
-        end_time: "11:30 am",
-        day: "monday",
-        created_at,
-        updated_at
-      },
-      {
-        course_id: 507903,
-        course_code: "CDA3101",
-        host: "Jackie Wang",
-        mode: "in-person",
-        location: "MALA5200",
-        start_time: "10:40 am",
-        end_time: "11:30 am",
-        day: "tuesday",
-        created_at,
-        updated_at
-      },
-      {
-        course_id: 507903,
-        course_code: "CDA3101",
-        host: "Adam Benali",
-        mode: "in-person",
-        location: "MALA5200",
-        start_time: "10:40 am",
-        end_time: "11:30 am",
-        day: "wednesday",
-        created_at,
-        updated_at
-      },
-      {
-        course_id: 507903,
-        course_code: "CDA3101",
-        host: "Tony Wong",
-        mode: "remote",
-        link: "https://discord.gg/eXU9Q7J8hm",
-        start_time: "10:40 am",
-        end_time: "11:30 am",
-        day: "thursday",
-        created_at,
-        updated_at
-      },
-      {
-        course_id: 507903,
-        course_code: "CDA3101",
-        host: "Anna Albertelli",
-        mode: "in-person",
-        location: "MALA5200",
-        start_time: "10:40 am",
-        end_time: "11:30 am",
-        day: "friday",
-        created_at,
-        updated_at
-      },
-      {
-        course_id: 507903,
-        course_code: "CDA3101",
-        host: "Shane Ferrell",
-        mode: "in-person",
-        location: "MALA5200",
-        start_time: "11:45 am",
-        end_time: "12:35 pm",
-        day: "thursday",
-        created_at,
-        updated_at
-      },
-      {
-        course_id: 507903,
-        course_code: "COP3503",
-        host: "Shane Ferrell",
-        mode: "in-person",
-        location: "MALA5200",
-        start_time: "12:50 pm",
-        end_time: "1:40 pm",
-        day: "wednesday",
-        created_at,
-        updated_at
-      },
-      {
-        course_id: 508104,
-        course_code: "COP3503",
-        host: "Ethan King",
-        mode: "in-person",
-        location: "MALA5200",
-        start_time: "1:55 pm",
-        end_time: "2:45 pm",
-        day: "monday",
-        created_at,
-        updated_at
-      },
-      {
-        course_id: 508104,
-        course_code: "COP3503",
-        host: "Brandon Barker",
-        mode: "in-person",
-        location: "MALA5200",
-        start_time: "1:55 pm",
-        end_time: "2:45 pm",
-        day: "tuesday",
-        created_at,
-        updated_at
-      },
-      {
-        course_id: 508104,
-        course_code: "COP3503",
-        host: "Adam Hassan",
-        mode: "in-person",
-        location: "MALA5200",
-        start_time: "1:55 pm",
-        end_time: "2:45 pm",
-        day: "friday",
-        created_at,
-        updated_at
-      },
-      {
-        course_id: 508104,
-        course_code: "COP3503",
-        host: "Chris Tressler",
-        mode: "in-person",
-        location: "MALA5200",
-        start_time: "4:05 pm",
-        end_time: "4:55 pm",
-        day: "monday",
-        created_at,
-        updated_at
-      },
-      {
-        course_id: 508104,
-        course_code: "COP3503",
-        host: "Brandon Barker",
-        mode: "in-person",
-        location: "MALA5200",
-        start_time: "4:05 pm",
-        end_time: "4:55 pm",
-        day: "wednesday",
-        created_at,
-        updated_at
-      },
-      {
-        course_id: 508104,
-        course_code: "COP3503",
-        host: "Adam Bracci",
-        mode: "remote",
-        link: "https://discord.gg/eXU9Q7J8hm",
-        start_time: "4:05 pm",
-        end_time: "4:55 pm",
-        day: "friday",
-        created_at,
-        updated_at
-      },
-    ]
-    console.log(sampleOfficeHours);
-    return sampleOfficeHours;
+    // const sampleOfficeHours: OfficeHour[] = [
+    //   {
+    //     course_id: 508104,
+    //     course_code: "CDA3101",
+    //     host: "Shreyas Adireddy",
+    //     mode: "remote",
+    //     link: "https://discord.gg/eXU9Q7J8hm",
+    //     start_time: "9:35 am",
+    //     end_time: "10:25 am",
+    //     day: "monday",
+    //     created_at,
+    //     updated_at
+    //   },
+    //   {
+    //     course_id: 508104,
+    //     course_code: "CDA3101",
+    //     host: "Chris Tressler",
+    //     mode: "in-person",
+    //     location: "MALA5200",
+    //     start_time: "9:35 am",
+    //     end_time: "10:25 am",
+    //     day: "tuesday",
+    //     created_at,
+    //     updated_at
+    //   },
+    //   {
+    //     course_id: 508104,
+    //     course_code: "CDA3101",
+    //     host: "Shreyas Adireddy",
+    //     mode: "remote",
+    //     link: "https://discord.gg/eXU9Q7J8hm",
+    //     start_time: "9:35 am",
+    //     end_time: "10:25 am",
+    //     day: "wednesday",
+    //     created_at,
+    //     updated_at
+    //   },
+    //   {
+    //     course_id: 508104,
+    //     course_code: "CDA3101",
+    //     host: "Tony Wong",
+    //     mode: "remote",
+    //     link: "https://discord.gg/eXU9Q7J8hm",
+    //     start_time: "9:35 am",
+    //     end_time: "10:25 am",
+    //     day: "thursday",
+    //     created_at,
+    //     updated_at
+    //   },
+    //   {
+    //     course_id: 508104,
+    //     course_code: "CDA3101",
+    //     host: "Anna Albertelli",
+    //     mode: "in-person",
+    //     location: "MALA5200",
+    //     start_time: "9:35 am",
+    //     end_time: "10:25 am",
+    //     day: "friday",
+    //     created_at,
+    //     updated_at
+    //   },
+    //   {
+    //     course_id: 507903,
+    //     course_code: "CDA3101",
+    //     host: "Adam Bracci",
+    //     mode: "remote",
+    //     link: "https://discord.gg/eXU9Q7J8hm",
+    //     start_time: "10:40 am",
+    //     end_time: "11:30 am",
+    //     day: "monday",
+    //     created_at,
+    //     updated_at
+    //   },
+    //   {
+    //     course_id: 507903,
+    //     course_code: "CDA3101",
+    //     host: "Jackie Wang",
+    //     mode: "in-person",
+    //     location: "MALA5200",
+    //     start_time: "10:40 am",
+    //     end_time: "11:30 am",
+    //     day: "tuesday",
+    //     created_at,
+    //     updated_at
+    //   },
+    //   {
+    //     course_id: 507903,
+    //     course_code: "CDA3101",
+    //     host: "Adam Benali",
+    //     mode: "in-person",
+    //     location: "MALA5200",
+    //     start_time: "10:40 am",
+    //     end_time: "11:30 am",
+    //     day: "wednesday",
+    //     created_at,
+    //     updated_at
+    //   },
+    //   {
+    //     course_id: 507903,
+    //     course_code: "CDA3101",
+    //     host: "Tony Wong",
+    //     mode: "remote",
+    //     link: "https://discord.gg/eXU9Q7J8hm",
+    //     start_time: "10:40 am",
+    //     end_time: "11:30 am",
+    //     day: "thursday",
+    //     created_at,
+    //     updated_at
+    //   },
+    //   {
+    //     course_id: 507903,
+    //     course_code: "CDA3101",
+    //     host: "Anna Albertelli",
+    //     mode: "in-person",
+    //     location: "MALA5200",
+    //     start_time: "10:40 am",
+    //     end_time: "11:30 am",
+    //     day: "friday",
+    //     created_at,
+    //     updated_at
+    //   },
+    //   {
+    //     course_id: 507903,
+    //     course_code: "CDA3101",
+    //     host: "Shane Ferrell",
+    //     mode: "in-person",
+    //     location: "MALA5200",
+    //     start_time: "11:45 am",
+    //     end_time: "12:35 pm",
+    //     day: "thursday",
+    //     created_at,
+    //     updated_at
+    //   },
+    //   {
+    //     course_id: 507903,
+    //     course_code: "COP3503",
+    //     host: "Shane Ferrell",
+    //     mode: "in-person",
+    //     location: "MALA5200",
+    //     start_time: "12:50 pm",
+    //     end_time: "1:40 pm",
+    //     day: "wednesday",
+    //     created_at,
+    //     updated_at
+    //   },
+    //   {
+    //     course_id: 508104,
+    //     course_code: "COP3503",
+    //     host: "Ethan King",
+    //     mode: "in-person",
+    //     location: "MALA5200",
+    //     start_time: "1:55 pm",
+    //     end_time: "2:45 pm",
+    //     day: "monday",
+    //     created_at,
+    //     updated_at
+    //   },
+    //   {
+    //     course_id: 508104,
+    //     course_code: "COP3503",
+    //     host: "Brandon Barker",
+    //     mode: "in-person",
+    //     location: "MALA5200",
+    //     start_time: "1:55 pm",
+    //     end_time: "2:45 pm",
+    //     day: "tuesday",
+    //     created_at,
+    //     updated_at
+    //   },
+    //   {
+    //     course_id: 508104,
+    //     course_code: "COP3503",
+    //     host: "Adam Hassan",
+    //     mode: "in-person",
+    //     location: "MALA5200",
+    //     start_time: "1:55 pm",
+    //     end_time: "2:45 pm",
+    //     day: "friday",
+    //     created_at,
+    //     updated_at
+    //   },
+    //   {
+    //     course_id: 508104,
+    //     course_code: "COP3503",
+    //     host: "Chris Tressler",
+    //     mode: "in-person",
+    //     location: "MALA5200",
+    //     start_time: "4:05 pm",
+    //     end_time: "4:55 pm",
+    //     day: "monday",
+    //     created_at,
+    //     updated_at
+    //   },
+    //   {
+    //     course_id: 508104,
+    //     course_code: "COP3503",
+    //     host: "Brandon Barker",
+    //     mode: "in-person",
+    //     location: "MALA5200",
+    //     start_time: "4:05 pm",
+    //     end_time: "4:55 pm",
+    //     day: "wednesday",
+    //     created_at,
+    //     updated_at
+    //   },
+    //   {
+    //     course_id: 508104,
+    //     course_code: "COP3503",
+    //     host: "Adam Bracci",
+    //     mode: "remote",
+    //     link: "https://discord.gg/eXU9Q7J8hm",
+    //     start_time: "4:05 pm",
+    //     end_time: "4:55 pm",
+    //     day: "friday",
+    //     created_at,
+    //     updated_at
+    //   },
+    // ]
+    // console.log(sampleOfficeHours);
+    // return sampleOfficeHours;
+    return response.data.data;
   } catch (error) {
     console.error('Error fetching office hours:', error);
     return [];
