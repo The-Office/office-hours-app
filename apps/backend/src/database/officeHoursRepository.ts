@@ -19,19 +19,11 @@ export class OfficeHourRepository {
     }
   }
 
-  async getCourseOfficeHoursById(id: number): Promise<OfficeHour | null> {
+  async getOfficeHoursByUserId(id: number): Promise<OfficeHour[]> {
     try {
       // Parameterized query to prevent SQL injection
-      const [rows]: [any[], FieldPacket[]] = await this.db.query("SELECT * FROM office_hours WHERE course_id = ?", [id]);
-
-      // Check if rows exist and are in an array-like format
-      if (rows.length === 0) {
-        return null;
-      }
-  
-      // Return the first row as an OfficeHour object
-      // TODO: change logic to return more than one row to return ALL of a classes' office hours
-      return rows[0] as OfficeHour;
+      const [rows]: [any[], FieldPacket[]] = await this.db.query("SELECT office_hours.*, courses.course_code FROM office_hours JOIN user_courses ON office_hours.course_id = user_courses.course_id LEFT JOIN courses ON office_hours.course_id = courses.course_id WHERE user_courses.user_id = ?", [id]);
+      return rows as OfficeHour[];
     } catch (error) {
       console.error("Database query failed:", error);
       throw new Error("Failed to fetch user from the database");

@@ -1,25 +1,25 @@
 import { StatusCodes } from "http-status-codes";
 
-import type { UserCourse } from "@/common/schemas/userCourseSchema";
-import { UserCourseRepository } from "@/database/userCourseRepository";
+import type { Course } from "@/common/schemas/courseSchema";
+import { CourseRepository } from "@/database/courseRepository";
 import { ServiceResponse } from "@/common/schemas/serviceResponse";
 import { logger } from "@/server";
 
 export class UserCourseService {
-  private userCourseRepository: UserCourseRepository;
+  private courseRepository: CourseRepository;
 
-  constructor(repository: UserCourseRepository) {
-    this.userCourseRepository = repository;
+  constructor(repository: CourseRepository) {
+    this.courseRepository = repository;
   }
 
   // Retrieves all courses from the database
-  async findAll(): Promise<ServiceResponse<UserCourse[] | null>> {
+  async findAll(): Promise<ServiceResponse<Course[] | null>> {
     try {
-      const userCourses = await this.userCourseRepository.getAllUserCourses();
-      if (!userCourses || userCourses.length === 0) {
+      const courses = await this.courseRepository.getAllCourses();
+      if (!courses || courses.length === 0) {
         return ServiceResponse.failure("No Courses found", null, StatusCodes.NOT_FOUND);
       }
-      return ServiceResponse.success<UserCourse[]>("Courses found", userCourses);
+      return ServiceResponse.success<Course[]>("Courses found", courses);
     } catch (ex) {
       const errorMessage = `Error finding all courses: $${(ex as Error).message}`;
       logger.error(errorMessage);
@@ -31,13 +31,13 @@ export class UserCourseService {
     }
   }
 
-  async getUserCoursesById(id: number): Promise<ServiceResponse<UserCourse | null>> {
+  async getCoursesByUserId(id: number): Promise<ServiceResponse<Course[] | null>> {
     try {
-      const userCourses = await this.userCourseRepository.getUserCoursesById(id);
-      if (!userCourses) {
-        return ServiceResponse.failure("No Courses found", null, StatusCodes.NOT_FOUND);
+      const courses = await this.courseRepository.getCoursesByUserId(id);
+      if (!courses) {
+      return ServiceResponse.failure("No Courses found", null, StatusCodes.NOT_FOUND);
       }
-      return ServiceResponse.success<UserCourse>("Courses found", userCourses);
+      return ServiceResponse.success<Course[]>("Courses found", courses);
     } catch (ex) {
       const errorMessage = `Error finding all courses: $${(ex as Error).message}`;
       logger.error(errorMessage);

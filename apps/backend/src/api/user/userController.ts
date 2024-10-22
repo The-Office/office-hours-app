@@ -28,16 +28,16 @@ export class UserController {
     return handleServiceResponse(serviceResponse, res);
   };
 
-  public getUserCoursesById: RequestHandler = async (req: Request, res: Response) => {
+  public getCoursesByUserId: RequestHandler = async (req: Request, res: Response) => {
     const id = Number.parseInt(req.params.id as string, 10);
-    const serviceResponse = await this.userCourseService.getUserCoursesById(id);
+    const serviceResponse = await this.userCourseService.getCoursesByUserId(id);
     return handleServiceResponse(serviceResponse, res);
   };
 
-  // officeHourService.getCourseOfficeHoursById
-  public getCourseOfficeHoursById: RequestHandler = async (req: Request, res: Response) => {
+  // officeHourService.getOfficeHoursByUserId
+  public getOfficeHoursByUserId: RequestHandler = async (req: Request, res: Response) => {
     const id = Number.parseInt(req.params.id as string, 10);
-    const serviceResponse = await this.officeHourService.getCourseOfficeHoursById(id);
+    const serviceResponse = await this.officeHourService.getOfficeHoursByUserId(id);
     return handleServiceResponse(serviceResponse, res);
   }
   
