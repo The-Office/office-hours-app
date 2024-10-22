@@ -4,9 +4,10 @@ import { healthCheckRegistry } from "@/api/healthCheck/healthCheckRouter";
 import { userRegistry } from "@/api/user/userRouter";
 import { authRegistry } from "@/api/auth/authRouter";
 import { webScraperRegistry } from "@/api/webScraper/webScraperRouter";
+import { canvasRegistry } from "@/api/canvas/canvasRouter";
 
 export function generateOpenAPIDocument() {
-  const registry = new OpenAPIRegistry([healthCheckRegistry, userRegistry, authRegistry, webScraperRegistry]);
+  const registry = new OpenAPIRegistry([healthCheckRegistry, userRegistry, authRegistry, webScraperRegistry, canvasRegistry]);
   const generator = new OpenApiGeneratorV3(registry.definitions);
 
   return generator.generateDocument({
