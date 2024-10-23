@@ -11,7 +11,7 @@ describe("Web Scraping API endpoints", () => {
 
     expect(response.statusCode).toEqual(StatusCodes.OK);
     expect(result.success).toBeTruthy();
-    expect(result.responseObject).toBeNull();
+    expect(result.data).toBeNull();
     expect(result.message).toEqual("Service is healthy");
   });
 });

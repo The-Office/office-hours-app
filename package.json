@@ -9,5 +9,8 @@
   "scripts": {
     "frontend": "cd apps && cd frontend && bun run dev",
     "backend": "cd apps && cd backend && bun run dev"
+  },
+  "dependencies": {
+    "knex": "^3.1.0"
   }
 }
