@@ -24,7 +24,6 @@ describe("userService", () => {
       access_token: "some-access-token",
       refresh_token: "some-refresh-token",
       token_expiration: new Date(), // Example expiration date
-      role: "student", // Example role
       is_active: true, // Example active status
       ical_link: "https://example.com/ical/alice", // Optional field
       created_at: new Date(),
@@ -40,7 +39,6 @@ describe("userService", () => {
       access_token: "another-access-token",
       refresh_token: undefined, // Optional field can be undefined
       token_expiration: new Date(), // Example expiration date
-      role: "instructor", // Example role
       is_active: true, // Example active status
       ical_link: undefined, // Optional field can be undefined
       created_at: new Date(),
@@ -66,7 +64,7 @@ describe("userService", () => {
       expect(result.statusCode).toEqual(StatusCodes.OK);
       expect(result.success).toBeTruthy();
       expect(result.message).equals("Users found");
-      expect(result.responseObject).toEqual(mockUsers);
+      expect(result.data).toEqual(mockUsers);
     });
 
     it("returns a not found error for no users found", async () => {
@@ -80,7 +78,7 @@ describe("userService", () => {
       expect(result.statusCode).toEqual(StatusCodes.NOT_FOUND);
       expect(result.success).toBeFalsy();
       expect(result.message).equals("No Users found");
-      expect(result.responseObject).toBeNull();
+      expect(result.data).toBeNull();
     });
 
     it("handles errors for getAllUsers", async () => {
@@ -94,7 +92,7 @@ describe("userService", () => {
       expect(result.statusCode).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
       expect(result.success).toBeFalsy();
       expect(result.message).equals("An error occurred while retrieving users.");
-      expect(result.responseObject).toBeNull();
+      expect(result.data).toBeNull();
     });
   });
 
@@ -112,7 +110,7 @@ describe("userService", () => {
       expect(result.statusCode).toEqual(StatusCodes.OK);
       expect(result.success).toBeTruthy();
       expect(result.message).equals("User found");
-      expect(result.responseObject).toEqual(mockUser);
+      expect(result.data).toEqual(mockUser);
     });
 
     it("handles errors for getById", async () => {
@@ -127,7 +125,7 @@ describe("userService", () => {
       expect(result.statusCode).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
       expect(result.success).toBeFalsy();
       expect(result.message).equals("An error occurred while finding user.");
-      expect(result.responseObject).toBeNull();
+      expect(result.data).toBeNull();
     });
 
     it("returns a not found error for non-existent ID", async () => {
@@ -142,7 +140,7 @@ describe("userService", () => {
       expect(result.statusCode).toEqual(StatusCodes.NOT_FOUND);
       expect(result.success).toBeFalsy();
       expect(result.message).equals("User not found");
-      expect(result.responseObject).toBeNull();
+      expect(result.data).toBeNull();
     });
   });
 });

@@ -8,7 +8,6 @@ CREATE TABLE IF NOT EXISTS users (
   access_token VARCHAR(255) NOT NULL,
   refresh_token VARCHAR(255),
   token_expiration DATETIME NOT NULL,
-  role VARCHAR(50) NOT NULL,
   is_active BOOLEAN NOT NULL,
   ical_link VARCHAR(255),
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
