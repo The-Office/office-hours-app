@@ -13,7 +13,7 @@ export class UserCourseService {
   }
 
   // Retrieves all courses from the database
-  async findAll(): Promise<ServiceResponse<Course[] | null>> {
+  async getAll(): Promise<ServiceResponse<Course[] | null>> {
     try {
       const courses = await this.courseRepository.getAllCourses();
       if (!courses || courses.length === 0) {

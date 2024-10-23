@@ -1,5 +1,5 @@
 import { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
-import express, { type Request, type Response, type Router } from "express";
+import express, { type Router } from "express";
 import { z } from "zod";
 
 import { createApiResponse } from "@/api-docs/openAPIResponseBuilders";
@@ -15,14 +15,25 @@ import { CourseRepository } from "@/database/courseRepository";
 import { OfficeHourRepository } from "@/database/officeHoursRepository";
 import { UserCourseService } from "./userCourseService";
 import { OfficeHourService } from "./officeHourService";
+import { FeedbackService } from "./feedbackService";
+import { FeedbackRepository } from "@/database/feedbackRepository";
+import { PostFeedbackSchema } from "@/common/schemas/feedbackSchema";
 
 const userRepository = new UserRepository(db);
-const courseRepository = new CourseRepository(db);
-const officeHourRepository = new OfficeHourRepository(db)
 const userService = new UserService(userRepository);
+
+const courseRepository = new CourseRepository(db);
 const courseService = new UserCourseService(courseRepository);
+
+const officeHourRepository = new OfficeHourRepository(db)
 const officeHourService = new OfficeHourService(officeHourRepository);
-const userController = new UserController(userService, courseService, officeHourService);
+
+const feedbackRepository = new FeedbackRepository(db)
+const feedbackService = new FeedbackService(feedbackRepository);
+
+
+
+const userController = new UserController(userService, courseService, officeHourService, feedbackService);
 
 export const userRegistry = new OpenAPIRegistry();
 export const userRouter: Router = express.Router();
@@ -60,9 +71,18 @@ userRegistry.registerPath({
   responses: createApiResponse(z.array(OfficeHourSchema), "Success"),
 });
 
+userRegistry.registerPath({
+  method: "post",
+  path: "/users/{id}/feedback",
+  tags: ["User"],
+  request: { params: PostFeedbackSchema.shape.params },
+  responses: createApiResponse(z.null(), "Success"),
+});
+
 
 userRouter.get("/", userController.getAllUsers);
 userRouter.get("/:id", validateRequest(GetUserSchema), userController.getUserById);
 userRouter.get("/:id/courses", validateRequest(GetUserSchema), userController.getCoursesByUserId);
 userRouter.get("/:id/office-hours", validateRequest(GetUserSchema), userController.getOfficeHoursByUserId);
+userRouter.post("/:id/feedback", validateRequest(PostFeedbackSchema), userController.storeFeedback);
 

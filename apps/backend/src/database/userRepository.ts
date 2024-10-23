@@ -1,6 +1,5 @@
 import type { User } from "@/common/schemas/userSchema";
-import { FieldPacket, Pool } from 'mysql2/promise';
-
+import { FieldPacket, Pool } from "mysql2/promise";
 
 export class UserRepository {
   private db: Pool;
@@ -28,7 +27,7 @@ export class UserRepository {
       if (rows.length === 0) {
         return null;
       }
-  
+
       // Return the first row as a User object
       return rows[0] as User;
     } catch (error) {
@@ -36,5 +35,4 @@ export class UserRepository {
       throw new Error("Failed to fetch user from the database");
     }
   }
-  
 }

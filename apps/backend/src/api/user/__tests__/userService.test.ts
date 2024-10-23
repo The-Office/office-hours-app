@@ -52,13 +52,13 @@ describe("userService", () => {
     userServiceInstance = new UserService(userRepositoryInstance);
   });
 
-  describe("findAll", () => {
+  describe("getAll", () => {
     it("return all users", async () => {
       // Arrange
       (userRepositoryInstance.getAllUsers as Mock).mockReturnValue(mockUsers);
 
       // Act
-      const result = await userServiceInstance.findAll();
+      const result = await userServiceInstance.getAll();
 
       // Assert
       expect(result.statusCode).toEqual(StatusCodes.OK);
@@ -72,7 +72,7 @@ describe("userService", () => {
       (userRepositoryInstance.getAllUsers as Mock).mockReturnValue(null);
 
       // Act
-      const result = await userServiceInstance.findAll();
+      const result = await userServiceInstance.getAll();
 
       // Assert
       expect(result.statusCode).toEqual(StatusCodes.NOT_FOUND);
@@ -86,7 +86,7 @@ describe("userService", () => {
       (userRepositoryInstance.getAllUsers as Mock).mockRejectedValue(new Error("Database error"));
 
       // Act
-      const result = await userServiceInstance.findAll();
+      const result = await userServiceInstance.getAll();
 
       // Assert
       expect(result.statusCode).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);

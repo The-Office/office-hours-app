@@ -81,11 +81,11 @@ export const fetchOfficeHours = async (userId: number): Promise<OfficeHour[]> =>
   }
 };
 
-export const sendFeedback = async (userId: number, rating: number, feedback: string): Promise<Payload | null> => {
+export const sendFeedback = async (userId: number, rating: number, content: string): Promise<Payload | null> => {
   try {
     const response = await axios.post(`http://localhost:8080/users/${userId}/feedback`, {
       rating,
-      feedback,
+      content,
     });
     const payload = response.data;
     return payload;

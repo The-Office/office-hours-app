@@ -13,7 +13,7 @@ export class OfficeHourService {
   }
 
   // Retrieves all courses from the database
-  async findAll(): Promise<ServiceResponse<OfficeHour[] | null>> {
+  async getAll(): Promise<ServiceResponse<OfficeHour[] | null>> {
     try {
       const officehours = await this.officeHourRepository.getAllOfficeHours();
       if (!officehours || officehours.length === 0) {
