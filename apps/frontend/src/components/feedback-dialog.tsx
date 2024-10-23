@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { sendFeedback } from "@/services/userService";
-import toast from "react-hot-toast"; 
+import toast from "react-hot-toast";
 
 const FeedbackDialog = () => {
     const [rating, setRating] = useState<number>(0);
@@ -23,7 +23,9 @@ const FeedbackDialog = () => {
         console.log("Feedback:", feedback);
         if (rating === 0 || feedback === "") {
             toast.error("Rating and feedback cannot be empty.")
+            return
         }
+
         try {
             const payload = await sendFeedback(55558888, rating, feedback);
             if (payload && payload.statusCode === 200) {
@@ -41,12 +43,18 @@ const FeedbackDialog = () => {
     return (
         <>
             <Dialog>
-                <DialogTrigger>Give Feedback</DialogTrigger>
+                <DialogTrigger className="p-3 rounded-full hover:bg-accent hover:text-muted-foreground transition-all">Leave Feedback</DialogTrigger>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Give Feedback</DialogTitle>
+                        <DialogTitle className="text-center text-xl">Leave Us Feedback!</DialogTitle>
                     </DialogHeader>
-                    <div className="flex">
+                    <hr className="my-4 border-dotted border-1 border-gray-200" />
+                    <Textarea
+                        value={feedback}
+                        onChange={(e) => setFeedback(e.target.value)}
+                        placeholder="Write your feedback here..."
+                    />
+                    <div className="flex items-center justify-center">
                         {[...Array(5)].map((_, i) => {
                             const ratingValue = i + 1;
 
@@ -62,7 +70,7 @@ const FeedbackDialog = () => {
                                     <FaStar
                                         className="star"
                                         color={ratingValue <= (hover || rating) ? "#ffc107" : "#e4e5e9"}
-                                        size={50}
+                                        size={36}
                                         onMouseEnter={() => setHover(ratingValue)}
                                         onMouseLeave={() => setHover(0)}
                                     />
@@ -70,13 +78,6 @@ const FeedbackDialog = () => {
                             );
                         })}
                     </div>
-                    <hr className="my-4 border-dotted border-1 border-gray-300" />
-                    <Textarea
-                        value={feedback}
-                        onChange={(e) => setFeedback(e.target.value)}
-                        placeholder="Write your feedback here..."
-                    />
-
                     <hr className="my-4 border-dotted border-1 border-gray-300" />
                     <Button onClick={handleSubmit}>Submit</Button>
                 </DialogContent>
