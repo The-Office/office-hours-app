@@ -3,13 +3,13 @@ import { columns } from "./columns";
 import { OfficeHour, fetchOfficeHours } from "@/services/userService";
 import { DataTable } from "./data-table";
 
-export default function DemoPage() {
+export default function Table() {
   const [data, setData] = useState<OfficeHour[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     async function fetchData() {
-      const result = await fetchOfficeHours();
+      const result = await fetchOfficeHours(55558888);
       setData(result);
       setLoading(false);
     }
@@ -22,7 +22,7 @@ export default function DemoPage() {
   }
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="py-10  mx-5 md:mx-32">
       <DataTable columns={columns} data={data} />
     </div>
   );
