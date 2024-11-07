@@ -1,5 +1,6 @@
-import canvas_logo from '../assets/canvas-logo.png';
+// import canvas_logo from '../assets/canvas-logo.png';
 import clock_gray_cropped from '../assets/clock-gray-wall-cropped.jpg';
+import LoginButton from './landing-page-login-button.tsx';
 
 const HeroSection = () => {
     return (
@@ -10,10 +11,11 @@ const HeroSection = () => {
                         <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-4">OFFICE HOURS<br></br>MADE EASY</h2>
                         <h3 className="text-xl md:text-2xl mb-4 font-semibold">one import. automatic updates.</h3>
                         <div className="flex justify-center">
-                            <button className="shadow-lg bg-white px-3 py-2 rounded-xl flex items-center hover:bg-gray-50 hover:shadow-md">
+                            {/* <button className="shadow-lg bg-white px-3 py-2 rounded-xl flex items-center hover:bg-gray-50 hover:shadow-md">
                                 <img src={canvas_logo} alt="canvas logo" className="w-10 h-10 mr-2" />
                                 <span className="border-gray-300 text-gray-400 border-l-2 pl-2 text-2xl">LOGIN WITH CANVAS</span>
-                            </button>
+                            </button> */}
+                            <LoginButton />
                         </div>
                     </div>
                 </div>
