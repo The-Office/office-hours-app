@@ -2,7 +2,7 @@ import cors from "cors";
 import express, { type Express } from "express";
 import helmet from "helmet";
 import { pino } from "pino";
-
+import { clerkMiddleware } from "@clerk/express";
 import { openAPIRouter } from "@/api-docs/openAPIRouter";
 import { healthCheckRouter } from "@/api/healthCheck/healthCheckRouter";
 import { userRouter } from "@/api/user/userRouter";
@@ -42,5 +42,8 @@ app.use(openAPIRouter);
 
 // Error handlers
 app.use(errorHandler());
+
+
+app.use(clerkMiddleware)
 
 export { app, logger };

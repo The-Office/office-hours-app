@@ -16,11 +16,9 @@ describe("userService", () => {
   const mockUsers: User[] = [
     {
       id: 1,
-      canvas_user_id: BigInt(12345), // Use BigInt for BIGINT fields
       email: "alice@example.com",
       first_name: "Alice",
       last_name: "Smith", // Added last name
-      canvas_login_id: "alice123", // Added canvas login ID
       access_token: "some-access-token",
       refresh_token: "some-refresh-token",
       token_expiration: new Date(), // Example expiration date
@@ -31,11 +29,9 @@ describe("userService", () => {
     },
     {
       id: 2,
-      canvas_user_id: BigInt(67890), // Use BigInt for BIGINT fields
       email: "bob@example.com",
       first_name: "Bob",
       last_name: "Jones", // Added last name
-      canvas_login_id: "bob123", // Added canvas login ID
       access_token: "another-access-token",
       refresh_token: undefined, // Optional field can be undefined
       token_expiration: new Date(), // Example expiration date
