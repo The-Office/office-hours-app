@@ -1,10 +1,8 @@
 CREATE TABLE IF NOT EXISTS users (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  canvas_user_id BIGINT NOT NULL,
+  id INT PRIMARY KEY,
   email VARCHAR(255) NOT NULL,
   first_name VARCHAR(255) NOT NULL,
   last_name VARCHAR(255) NOT NULL,
-  canvas_login_id VARCHAR(255) NOT NULL,
   access_token VARCHAR(255) NOT NULL,
   refresh_token VARCHAR(255),
   token_expiration DATETIME NOT NULL,
