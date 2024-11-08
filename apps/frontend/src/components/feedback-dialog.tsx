@@ -51,7 +51,7 @@ const FeedbackDialog = () => {
                     <hr className="my-4 border-dotted border-1 border-gray-200" />
                     <Textarea
                         value={feedback}
-                        onChange={(e) => setFeedback(e.target.value)}
+                        onChange={(e) => { setFeedback(e.target.value); }}
                         placeholder="Write your feedback here..."
                     />
                     <div className="flex items-center justify-center">
@@ -64,15 +64,15 @@ const FeedbackDialog = () => {
                                         type="radio"
                                         name="rating"
                                         value={ratingValue}
-                                        onClick={() => setRating(ratingValue)}
+                                        onClick={() => { setRating(ratingValue); }}
                                         className="hidden"
                                     />
                                     <FaStar
                                         className="star"
                                         color={ratingValue <= (hover || rating) ? "#ffc107" : "#e4e5e9"}
                                         size={36}
-                                        onMouseEnter={() => setHover(ratingValue)}
-                                        onMouseLeave={() => setHover(0)}
+                                        onMouseEnter={() => { setHover(ratingValue); }}
+                                        onMouseLeave={() => { setHover(0); }}
                                     />
                                 </label>
                             );

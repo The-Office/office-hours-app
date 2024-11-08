@@ -22,7 +22,7 @@ export class CourseRepository {
   async getByCourseId(id: number): Promise<Course | null> {
     try {
       // Parameterized query to prevent SQL injection
-      const [rows]: [any[], FieldPacket[]] = await this.db.query("SELECT * FROM courses WHERE course_id = ?", [id]);
+      const [rows]: [unknown[], FieldPacket[]] = await this.db.query("SELECT * FROM courses WHERE course_id = ?", [id]);
 
       // Check if rows exist and are in an array-like format
       if (rows.length === 0) {
@@ -50,7 +50,7 @@ export class CourseRepository {
   async getCoursesByUserId(id: number): Promise<Course[]> {
     try {
       // Parameterized query to prevent SQL injection
-      const [rows]: [any[], FieldPacket[]] = await this.db.query(
+      const [rows]: [unknown[], FieldPacket[]] = await this.db.query(
         "SELECT * FROM courses JOIN user_courses ON courses.course_id = user_courses.course_id WHERE user_id = ?",
         [id]
       );

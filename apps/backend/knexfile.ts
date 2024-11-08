@@ -1,8 +1,7 @@
 import 'dotenv/config';  // This loads environment variables from .env
 import type { Knex } from 'knex';
 
-const config: { [key: string]: Knex.Config } = {
-  development: {
+const config: Record<string, Knex.Config> = {  development: {
     client: 'mysql2',
     connection: {
       host: process.env.MYSQL_HOST,

@@ -4,7 +4,7 @@ import type { ZodError, ZodSchema } from "zod";
 
 import { ServiceResponse } from "@/common/schemas/serviceResponse";
 
-export const handleServiceResponse = (serviceResponse: ServiceResponse<any>, response: Response) => {
+export const handleServiceResponse = (serviceResponse: ServiceResponse<unknown>, response: Response) => {
   return response.status(serviceResponse.statusCode).send(serviceResponse);
 };
 

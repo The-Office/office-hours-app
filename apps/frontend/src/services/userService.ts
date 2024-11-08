@@ -42,12 +42,12 @@ export interface Course {
 
 export interface Payload {
   statusCode: number;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   message: string;
 }
 
 // Fetch user by ID
-export const fetchUser = async (userId: number): Promise<User | {}> => {
+export const fetchUser = async (userId: number): Promise<User | object> => {
   try {
     const response = await axios.get(`http://localhost:8080/users/${userId}`);
     const payload = response.data;

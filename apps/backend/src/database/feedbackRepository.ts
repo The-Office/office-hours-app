@@ -10,7 +10,7 @@ export class FeedbackRepository {
   async getAllFeedback(): Promise<Feedback[]> {
     try {
       // Execute the query to select all feedback
-      const [rows]: [any[], FieldPacket[]] = await this.db.query("SELECT * FROM feedback");
+      const [rows]: [unknown[], FieldPacket[]] = await this.db.query("SELECT * FROM feedback");
 
       // Return the rows as an array of Feedback objects
       return rows as Feedback[];

@@ -14,7 +14,7 @@ export default function Table() {
       setLoading(false);
     }
 
-    fetchData();
+    void fetchData();
   }, []);
 
   if (loading) {

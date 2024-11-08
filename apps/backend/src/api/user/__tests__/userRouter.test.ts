@@ -20,7 +20,7 @@ describe("User API Endpoints", () => {
       expect(responseBody.success).toBeTruthy();
       expect(responseBody.message).toContain("Users found");
       expect(responseBody.data.length).toEqual(users.length);
-      responseBody.data.forEach((user, index) => compareUsers(users[index] as User, user));
+      responseBody.data.forEach((user, index) => { compareUsers(users[index] as User, user); });
     });
   });
 
