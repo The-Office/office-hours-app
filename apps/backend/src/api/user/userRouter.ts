@@ -18,6 +18,7 @@ import { OfficeHourService } from "./officeHourService";
 import { FeedbackService } from "./feedbackService";
 import { FeedbackRepository } from "@/database/feedbackRepository";
 import { PostFeedbackSchema } from "@/common/schemas/feedbackSchema";
+import { PostOfficeHour } from "@/common/schemas/officeHoursStoringSchema"
 
 const userRepository = new UserRepository(db);
 const userService = new UserService(userRepository);
@@ -85,4 +86,5 @@ userRouter.get("/:id", validateRequest(GetUserSchema), userController.getUserByI
 userRouter.get("/:id/courses", validateRequest(GetUserSchema), userController.getCoursesByUserId);
 userRouter.get("/:id/office-hours", validateRequest(GetUserSchema), userController.getOfficeHoursByUserId);
 userRouter.post("/:id/feedback", validateRequest(PostFeedbackSchema), userController.storeFeedback);
+userRouter.post("/:id/office-hours-store", validateRequest(PostOfficeHour), userController.storeOfficeHours);
 
