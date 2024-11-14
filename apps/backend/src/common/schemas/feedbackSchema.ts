@@ -6,7 +6,7 @@ import { commonValidations } from "@/common/utils/commonValidation";
 extendZodWithOpenApi(z);
 
 export const FeedbackSchema = z.object({
-  id: z.number().int(),
+  id: z.string(),
   user_id: z.number().int(),
   rating: z.number().int(),
   content: z.string(),

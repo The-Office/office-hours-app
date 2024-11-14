@@ -7,7 +7,7 @@ export async function seed(knex: Knex): Promise<void> {
   // Inserts seed entries
   await knex('users').insert([
     {
-      id: 88884444,
+      id: '88884444ff',
       email: 'johndoe@example.com',
       first_name: 'John',
       last_name: 'Doe',
@@ -18,7 +18,7 @@ export async function seed(knex: Knex): Promise<void> {
       ical_link: 'https://example.com/ical/johndoe',
     },
     {
-      id: 55558888,
+      id: '55558888gg',
       email: 'janedoe@example.com',
       first_name: 'Jane',
       last_name: 'Doe',

@@ -6,7 +6,7 @@ import { commonValidations } from "@/common/utils/commonValidation";
 extendZodWithOpenApi(z);
 
 export const UserSchema = z.object({
-  id: z.number().int(),
+  id: z.string(),
   canvas_user_id: z.bigint(), // BIGINT for Canvas user ID, as it's likely a numeric identifier.
 
   email: z.string().email(), // Email address as a string.
