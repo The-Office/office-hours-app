@@ -15,7 +15,7 @@ describe("userService", () => {
 
   const mockUsers: User[] = [
     {
-      id: 1,
+      id: "lalsk235",
       canvas_user_id: BigInt(12345), // Use BigInt for BIGINT fields
       email: "alice@example.com",
       first_name: "Alice",
@@ -30,7 +30,7 @@ describe("userService", () => {
       updated_at: new Date(),
     },
     {
-      id: 2,
+      id: "8235sdfs",
       canvas_user_id: BigInt(67890), // Use BigInt for BIGINT fields
       email: "bob@example.com",
       first_name: "Bob",
@@ -99,7 +99,7 @@ describe("userService", () => {
   describe("getById", () => {
     it("returns a user for a valid ID", async () => {
       // Arrange
-      const testId = 1;
+      const testId = "8235sdfs";
       const mockUser = mockUsers.find((user) => user.id === testId);
       (userRepositoryInstance.getById as Mock).mockReturnValue(mockUser);
 
@@ -115,7 +115,7 @@ describe("userService", () => {
 
     it("handles errors for getById", async () => {
       // Arrange
-      const testId = 1;
+      const testId = "8235sdfs";
       (userRepositoryInstance.getById as Mock).mockRejectedValue(new Error("Database error"));
 
       // Act
@@ -130,7 +130,7 @@ describe("userService", () => {
 
     it("returns a not found error for non-existent ID", async () => {
       // Arrange
-      const testId = 1;
+      const testId =  "8235sdfs";
       (userRepositoryInstance.getById as Mock).mockReturnValue(null);
 
       // Act

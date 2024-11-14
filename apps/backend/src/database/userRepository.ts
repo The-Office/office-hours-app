@@ -18,7 +18,7 @@ export class UserRepository {
     }
   }
 
-  async getById(id: number): Promise<User | null> {
+  async getById(id: string): Promise<User | null> {
     try {
       // Parameterized query to prevent SQL injection
       const [rows]: [any[], FieldPacket[]] = await this.db.query("SELECT * FROM users WHERE id = ?", [id]);
