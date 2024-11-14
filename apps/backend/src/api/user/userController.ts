@@ -5,7 +5,7 @@ import { UserCourseService } from "./userCourseService";
 import { OfficeHourService } from "./officeHourService";
 import { handleServiceResponse } from "@/common/utils/httpHandlers";
 import { FeedbackService } from "./feedbackService";
-import { ServiceResponse } from "@/common/schemas/serviceResponse";
+// import { ServiceResponse } from "@/common/schemas/serviceResponse";
 
 export class UserController {
   private userService: UserService;
@@ -61,11 +61,15 @@ export class UserController {
 
   public storeOfficeHours: RequestHandler = async (req: Request, res: Response) => { 
     const user_id = Number.parseInt(req.params.id as string, 10);
-    const course_section = req.body.course_section;
+    const host = req.body.host;
+    const mode = req.body.mode;
+    const link = req.body.link;
+    const location = req.body.location;
     const start_time = req.body.start_time;
     const end_time = req.body.end_time;
-    return handleServiceResponse(ServiceResponse.failure("Not implemented yet", 0),res)
-    // const ServiceResponse = await this officeHourStoringService.storeOfficeHours()
-  }
+    const day = req.body.day;
+    const serviceResponse = await this.officeHourService.storeOfficeHours(host, mode, link, location, start_time, end_time);
+    return handleServiceResponse(serviceResponse,res)
+  };
 
 }
