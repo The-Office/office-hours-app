@@ -16,7 +16,18 @@ authRegistry.registerPath({
   responses: createApiResponse(z.null(), "Success"),
 });
 
-authRouter.get("/ok", (_req: Request, res: Response) => {
+authRouter.get("/ok", (req: Request, res: Response) => {
   const serviceResponse = ServiceResponse.success("This is the auth router.", null);
   return handleServiceResponse(serviceResponse, res);
+});
+
+import { clerkClient, requireAuth } from "@clerk/express";
+
+authRouter.get('/protected', requireAuth({ signInUrl: '/sign-in' }), (req, res) => {
+  res.send('This is a protected route')
+})
+
+authRouter.get("/sign-in", (req, res) => {
+  // Assuming you have a template engine installed and are using a Clerk JavaScript SDK on this page
+  res.render("sign-in");
 });
