@@ -10,7 +10,7 @@ import { db } from "@/database/init";
 import { UserService } from "./userService";
 import { UserRepository } from "@/database/userRepository";
 import { CourseSchema } from "@/common/schemas/courseSchema";
-import { OfficeHourSchema } from "@/common/schemas/officeHoursSchema";
+import { OfficeHourSchema, PostOfficeHourSchema } from "@/common/schemas/officeHoursSchema";
 import { CourseRepository } from "@/database/courseRepository";
 import { OfficeHourRepository } from "@/database/officeHoursRepository";
 import { UserCourseService } from "./userCourseService";
@@ -79,10 +79,19 @@ userRegistry.registerPath({
   responses: createApiResponse(z.null(), "Success"),
 });
 
+userRegistry.registerPath({
+  method: "post",
+  path: "/users/{id}/office-hours-store",
+  tags: ["User"],
+  request: { params: PostFeedbackSchema.shape.params },
+  responses: createApiResponse(z.null(), "Success"),
+});
+
 
 userRouter.get("/", userController.getAllUsers);
 userRouter.get("/:id", validateRequest(GetUserSchema), userController.getUserById);
 userRouter.get("/:id/courses", validateRequest(GetUserSchema), userController.getCoursesByUserId);
 userRouter.get("/:id/office-hours", validateRequest(GetUserSchema), userController.getOfficeHoursByUserId);
 userRouter.post("/:id/feedback", validateRequest(PostFeedbackSchema), userController.storeFeedback);
+userRouter.post("/:id/office-hours", validateRequest(PostOfficeHourSchema), userController.storeOfficeHours);
 

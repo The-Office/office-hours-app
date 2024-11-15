@@ -49,4 +49,15 @@ export class OfficeHourService {
     }
   }
 
+  async storeOfficeHours(host: string, mode: string, link: string, location: string, start_time: string, end_time: string): Promise<ServiceResponse<null>> {
+    try {
+      await this.officeHourRepository.storeOfficeHours(host, mode, link, location, start_time, end_time);
+      logger.info("Office hours successfully stored.");
+      return ServiceResponse.success("Office hours successfully stored", null);
+    } catch (ex) {
+      const errorMessage = `Error storing office hours: ${(ex as Error).message}`;
+      logger.error(errorMessage);
+      return ServiceResponse.failure("An error occurred while storing office hours.", null, StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+  }
 }
