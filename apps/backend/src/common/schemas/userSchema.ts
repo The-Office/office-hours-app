@@ -7,12 +7,9 @@ extendZodWithOpenApi(z);
 
 export const UserSchema = z.object({
   id: z.string(),
-  canvas_user_id: z.bigint(), // BIGINT for Canvas user ID, as it's likely a numeric identifier.
-
   email: z.string().email(), // Email address as a string.
   first_name: z.string(), // First name, no length constraint needed.
   last_name: z.string(), // Last name, no length constraint needed.
-  canvas_login_id: z.string(), // Canvas login ID or username.
 
   access_token: z.string(), // OAuth access token, storing as a string.
   refresh_token: z.string().optional(), // Optional OAuth refresh token, storing as a string.
