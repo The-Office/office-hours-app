@@ -6,6 +6,8 @@ import { createApiResponse } from "@/api-docs/openAPIResponseBuilders";
 import { ServiceResponse } from "@/common/schemas/serviceResponse";
 import { handleServiceResponse } from "@/common/utils/httpHandlers";
 
+import { clerkMiddleware } from '@clerk/express';
+
 export const authRegistry = new OpenAPIRegistry();
 export const authRouter: Router = express.Router();
 
@@ -31,3 +33,5 @@ authRouter.get("/sign-in", (req, res) => {
   // Assuming you have a template engine installed and are using a Clerk JavaScript SDK on this page
   res.render("sign-in");
 });
+
+authRouter.use(clerkMiddleware())
