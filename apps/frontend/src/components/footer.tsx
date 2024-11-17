@@ -5,7 +5,7 @@ const Footer = () => {
     const location = useLocation();
   
     return (
-      <div className="footer w-full flex justify-between p-3">
+      <div className="footer w-full flex justify-between p-3 bg-white">
           <div>
               {location.pathname !== '/' && <FeedbackDialog />}
           </div>

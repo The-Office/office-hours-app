@@ -4,7 +4,7 @@ import AccountButton from './account-button.tsx';
 const NavBar = () => {
 
   return (
-    <div className="navbar w-full flex items-center justify-between p-3 z-20 relative">
+    <div className="navbar w-full flex items-center justify-between p-3 z-20 relative bg-white drop-shadow-md">
         <a className="flex items-center" href="/">
             <img src={project_logo} alt="Project Logo" className="h-9 w-9 mr-2" />
             <h1 className="font-extrabold text-lg md:text-3xl lg:text-4xl">SyncrOHnize</h1>
