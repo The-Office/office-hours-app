@@ -50,9 +50,9 @@ export class OfficeHourService {
     }
   }
 
-  async storeOfficeHours(host: string, mode: string, link: string, location: string, start_time: string, end_time: string): Promise<ServiceResponse<null>> {
+  async storeOfficeHours(host: string, mode: string, link: string, location: string, start_time: string, end_time: string, day: string): Promise<ServiceResponse<null>> {
     try {
-      await this.officeHourRepository.storeOfficeHours(host, mode, link, location, start_time, end_time);
+      await this.officeHourRepository.storeOfficeHours(host, mode, link, location, start_time, end_time, day);
       logger.info("Office hours successfully stored.");
       return ServiceResponse.success("Office hours successfully stored", null);
     } catch (ex) {

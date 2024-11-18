@@ -30,9 +30,9 @@ export class OfficeHourRepository {
     }
   }
 
-  async storeOfficeHours(host: string, mode: string, link: string, location: string, start_time: string, end_time: string): Promise<void> {
+  async storeOfficeHours(host: string, mode: string, link: string, location: string, start_time: string, end_time: string, day: string): Promise<void> {
     try {
-      await this.db.execute(`INSERT INTO office_hours (host, mode, link, location, start_time, end_time) VALUES (?, ?, ?, ?, ?, ?)`, [host, mode, link, location, start_time, end_time]);
+      await this.db.execute(`INSERT INTO office_hours (host, mode, link, location, start_time, end_time, day) VALUES (?, ?, ?, ?, ?, ?, ?)`, [host, mode, link, location, start_time, end_time, day]);
     } catch (error) {
       console.error("Failed to insert new office hours:", error);
       throw new Error("An error occurred while inserting new office hours into the database");

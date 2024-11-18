@@ -5,14 +5,12 @@ import { UserCourseService } from "./userCourseService";
 import { OfficeHourService } from "./officeHourService";
 import { handleServiceResponse } from "@/common/utils/httpHandlers";
 import { FeedbackService } from "./feedbackService";
-// import { ServiceResponse } from "@/common/schemas/serviceResponse";
 
 export class UserController {
   private userService: UserService;
   private userCourseService: UserCourseService;
   private officeHourService: OfficeHourService;
   private feedbackService: FeedbackService;
-  // private officeHourStoreService: OfficeHourStoreService;
 
   constructor(
     userService: UserService,
@@ -59,7 +57,6 @@ export class UserController {
   };
 
   public storeOfficeHours: RequestHandler = async (req: Request, res: Response) => { 
-    const user_id = Number.parseInt(req.params.id as string, 10);
     const host = req.body.host;
     const mode = req.body.mode;
     const link = req.body.link;
@@ -67,7 +64,7 @@ export class UserController {
     const start_time = req.body.start_time;
     const end_time = req.body.end_time;
     const day = req.body.day;
-    const serviceResponse = await this.officeHourService.storeOfficeHours(host, mode, link, location, start_time, end_time);
+    const serviceResponse = await this.officeHourService.storeOfficeHours(host, mode, link, location, start_time, end_time, day);
     return handleServiceResponse(serviceResponse,res)
   };
 
