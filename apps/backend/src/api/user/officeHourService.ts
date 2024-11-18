@@ -84,25 +84,51 @@ export class OfficeHourService {
       const ical_file = ical ({ name: `Office Hours for User ${id}` });
 
       for(const oh of officehours) {
-        const descr = 
-        `Course Id: ${oh.course_id}. 
-        Mode: ${oh.mode}.
-        Link: ${oh.link}.`;
-        ical_file.createEvent({
-          
-          start: this.transformTime(oh.day, oh.start_time),
-          end: this.transformTime(oh.day, oh.end_time),
-          summary: `${oh.host}'s Office Hours`,
-          description: descr,
-          location: oh.location,
-          organizer: {
-            name: oh.host,
-          },
-          repeating: {
-            freq: ICalEventRepeatingFreq.WEEKLY, // Repeat every week, until...
-            until: new Date(Date.now() + 3 * 3600 * 1000 * 24 * 7 * 4) // ... 12 weeks from now (approx 1 semester...?)
-          }
-        })
+
+        if(oh.mode === "in-person") {
+          ical_file.createEvent({  
+            start: this.transformTime(oh.day, oh.start_time),
+            end: this.transformTime(oh.day, oh.end_time),
+            summary: `${oh.host}'s Office Hours`,
+            location: oh.location,
+            organizer: {
+              name: oh.host,
+            },
+            repeating: {
+              freq: ICalEventRepeatingFreq.WEEKLY, // Repeat every week, until...
+              until: new Date(Date.now() + 3 * 3600 * 1000 * 24 * 7 * 4) // ... 12 weeks from now (approx 1 semester...?)
+            }
+          })
+        } else if(oh.mode === "hybrid") {
+          ical_file.createEvent({  
+            start: this.transformTime(oh.day, oh.start_time),
+            end: this.transformTime(oh.day, oh.end_time),
+            summary: `${oh.host}'s Office Hours`,
+            url: oh.link,
+            location: oh.location,
+            organizer: {
+              name: oh.host,
+            },
+            repeating: {
+              freq: ICalEventRepeatingFreq.WEEKLY, // Repeat every week, until...
+              until: new Date(Date.now() + 3 * 3600 * 1000 * 24 * 7 * 4) // ... 12 weeks from now (approx 1 semester...?)
+            }
+          })
+        } else if(oh.mode === "remote") {
+          ical_file.createEvent({  
+            start: this.transformTime(oh.day, oh.start_time),
+            end: this.transformTime(oh.day, oh.end_time),
+            summary: `${oh.host}'s Office Hours`,
+            url: oh.link,
+            organizer: {
+              name: oh.host,
+            },
+            repeating: {
+              freq: ICalEventRepeatingFreq.WEEKLY, // Repeat every week, until...
+              until: new Date(Date.now() + 3 * 3600 * 1000 * 24 * 7 * 4) // ... 12 weeks from now (approx 1 semester...?)
+            }
+          })
+        }
 
       }
 
