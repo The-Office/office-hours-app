@@ -11,14 +11,16 @@ export class OfficeHourRepository {
 
   async getAllOfficeHours(): Promise<OfficeHour[]> {
     try {
-      const [rows] = await this.db.query("SELECT * FROM office_hours");
+      const [rows] = await this.db.query(
+        "SELECT office_hours.*, courses.course_code FROM office_hours LEFT JOIN courses ON office_hours.course_id = courses.course_id"
+      );
       return rows as OfficeHour[];
     } catch (error) {
       console.error("Database query failed:", error);
       throw error;
     }
   }
-
+  
   async getOfficeHoursByUserId(id: string): Promise<OfficeHour[]> {
     try {
       // Parameterized query to prevent SQL injection
