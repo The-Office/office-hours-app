@@ -49,4 +49,7 @@ export class UserService {
     }
   }
 
+  async saveUserIdToDatabase(id: string): Promise<void> {
+    await this.userRepository.saveUserIdToDatabase(id);
+  }
 }

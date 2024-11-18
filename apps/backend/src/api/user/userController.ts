@@ -29,8 +29,13 @@ export class UserController {
     return handleServiceResponse(serviceResponse, res);
   };
 
+  public saveUserIdToDatabase: RequestHandler = async (req: Request, res: Response) => {
+    const user_id = req.params.id;
+    await this.userService.saveUserIdToDatabase(user_id);
+  };
+
   public getUserById: RequestHandler = async (req: Request, res: Response) => {
-    const user_id = Number.parseInt(req.params.id as string, 10);
+    const user_id = req.params.id;
     const serviceResponse = await this.userService.getById(user_id);
     return handleServiceResponse(serviceResponse, res);
   };

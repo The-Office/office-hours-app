@@ -18,6 +18,23 @@ export class UserRepository {
     }
   }
 
+  async saveUserIdToDatabase(id: string): Promise<void> {
+    try {
+      // check if user already exists by clerk user id
+      const [rows]: [any[], FieldPacket[]] = await this.db.query("SELECT * FROM users WHERE id = ?", [id]);
+
+      if (rows.length > 0) {
+        console.log("user with clerk id ${user_id} already exists");
+        return;
+      }
+
+      const [result] = await this.db.query("INSERT INTO users (id) Values (?)", [id]);
+    } catch (err) {
+      console.error("error saving user id to database", err);
+      throw new Error("failed to save user id");
+    }
+  }
+
   async getById(id: string): Promise<User | null> {
     try {
       // Parameterized query to prevent SQL injection
