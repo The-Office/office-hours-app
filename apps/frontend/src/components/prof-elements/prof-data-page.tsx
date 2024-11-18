@@ -1,10 +1,9 @@
 {/* Functionality similar to page.tsx goes here */}
+import { AddHoursForm } from './prof-form-fields.tsx';
+
 const ProfDataTable = () => {
   return (
-    <div>
-      <h1>Prof Data Page</h1>
-      <p>This is a placeholder for the Prof Data Page.</p>
-    </div>
+    <AddHoursForm />
   );
 };
 
