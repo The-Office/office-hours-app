@@ -3,20 +3,21 @@ import express, { type Router } from "express";
 import { z } from "zod";
 
 import { createApiResponse } from "@/api-docs/openAPIResponseBuilders";
-import { GetUserSchema, UserSchema } from "@/common/schemas/userSchema";
 import { validateRequest } from "@/common/utils/httpHandlers";
 import { UserController } from "./userController";
 import { db } from "@/database/init";
 import { UserService } from "./userService";
 import { UserRepository } from "@/database/userRepository";
-import { CourseSchema } from "@/common/schemas/courseSchema";
-import { OfficeHourSchema, PostOfficeHourSchema } from "@/common/schemas/officeHoursSchema";
 import { CourseRepository } from "@/database/courseRepository";
 import { OfficeHourRepository } from "@/database/officeHoursRepository";
 import { UserCourseService } from "./userCourseService";
 import { OfficeHourService } from "./officeHourService";
 import { FeedbackService } from "./feedbackService";
 import { FeedbackRepository } from "@/database/feedbackRepository";
+import { GetUserSchema, UserSchema } from "@/common/schemas/userSchema";
+import { CourseSchema } from "@/common/schemas/courseSchema";
+import { OfficeHourSchema, PostOfficeHourSchema } from "@/common/schemas/officeHoursSchema";
+import { IcalSchema, GetIcalSchema } from "@/common/schemas/icalFileSchema";
 import { PostFeedbackSchema } from "@/common/schemas/feedbackSchema";
 
 const userRepository = new UserRepository(db);
@@ -92,6 +93,7 @@ userRouter.get("/", userController.getAllUsers);
 userRouter.get("/:id", validateRequest(GetUserSchema), userController.getUserById);
 userRouter.get("/:id/courses", validateRequest(GetUserSchema), userController.getCoursesByUserId);
 userRouter.get("/:id/office-hours", validateRequest(GetUserSchema), userController.getOfficeHoursByUserId);
+userRouter.get("/:id/ical-file", validateRequest(GetIcalSchema), userController.getIcalFileByUserId);
 userRouter.post("/:id/feedback", validateRequest(PostFeedbackSchema), userController.storeFeedback);
 userRouter.post("/:id/office-hours", validateRequest(PostOfficeHourSchema), userController.storeOfficeHours);
 

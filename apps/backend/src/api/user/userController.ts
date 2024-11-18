@@ -43,13 +43,17 @@ export class UserController {
     return handleServiceResponse(serviceResponse, res);
   };
 
-  // officeHourService.getOfficeHoursByUserId
   public getOfficeHoursByUserId: RequestHandler = async (req: Request, res: Response) => {
     const user_id = Number.parseInt(req.params.id as string, 10);
     const serviceResponse = await this.officeHourService.getOfficeHoursByUserId(user_id);
     return handleServiceResponse(serviceResponse, res);
   };
 
+  public getIcalFileByUserId: RequestHandler = async (req: Request, res: Response) => {
+    const user_id = Number.parseInt(req.params.id as string, 10);
+    const serviceResponse = await this.officeHourService.getIcalFileByUserId(user_id);
+    return handleServiceResponse(serviceResponse, res);
+  }
 
   public storeFeedback: RequestHandler = async (req: Request, res: Response) => {
     const user_id = Number.parseInt(req.params.id as string, 10);

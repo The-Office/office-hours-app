@@ -4,6 +4,7 @@ import type { OfficeHour } from "@/common/schemas/officeHoursSchema";
 import { OfficeHourRepository } from "@/database/officeHoursRepository";
 import { ServiceResponse } from "@/common/schemas/serviceResponse";
 import { logger } from "@/server";
+import ical, { ICalCalendar, ICalCalendarMethod } from 'ical-generator';
 
 export class OfficeHourService {
   private officeHourRepository: OfficeHourRepository;
@@ -39,10 +40,39 @@ export class OfficeHourService {
       }
       return ServiceResponse.success<OfficeHour[]>("Office hours found", officehours);
     } catch (ex) {
-      const errorMessage = `Error finding all office hours: $${(ex as Error).message}`;
+      const errorMessage = `Error finding office hour by id: $${(ex as Error).message}`;
       logger.error(errorMessage);
       return ServiceResponse.failure(
         "An error occurred while retrieving office hours.",
+        null,
+        StatusCodes.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async getIcalFileByUserId(id: number): Promise<ServiceResponse<ICalCalendar | null>> {
+    try {
+      const officehours = await this.officeHourRepository.getOfficeHoursByUserId(id);
+      if(!officehours) {
+        return ServiceResponse.failure("No office hours found", null, StatusCodes.NOT_FOUND)
+      }
+      const icalFile = ical ({ name: `Office Hours for User ${id}` });
+
+      for(const oh of officehours) {
+        icalFile.createEvent({
+          start: new Date(oh.start_time),
+          end: new Date(oh.end_time),
+          description: `Course Id: ${oh.course_id}. \nHost: ${oh.host}. \nMode: ${oh.mode}. \nLink: ${oh.link}`,
+          location: oh.location
+        })
+
+      }
+      return ServiceResponse.success<ICalCalendar>("Office hours found", icalFile);
+    } catch (ex) {
+      const errorMessage = `Error in generating office hour ical file by id: $${(ex as Error).message}`;
+      logger.error(errorMessage);
+      return ServiceResponse.failure(
+        "An error occurred while retrieving and storing office hours to ical file.",
         null,
         StatusCodes.INTERNAL_SERVER_ERROR,
       );
