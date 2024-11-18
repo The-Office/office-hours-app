@@ -29,37 +29,30 @@ export class UserController {
     return handleServiceResponse(serviceResponse, res);
   };
 
-  public saveUserIdToDatabase: RequestHandler = async (req: Request, res: Response) => {
-    const user_id = req.params.id;
-    await this.userService.saveUserIdToDatabase(user_id);
-  };
-
-  public getUserById: RequestHandler = async (req: Request, res: Response) => {
-    const user_id = req.params.id;
-    const serviceResponse = await this.userService.getById(user_id);
-    return handleServiceResponse(serviceResponse, res);
+  public getUser: RequestHandler = async (req: Request, res: Response) => {
+      const user_id = req.auth.userId;
+      const serviceResponse = await this.userService.getById(user_id);
+      return handleServiceResponse(serviceResponse, res);
   };
 
   public getCoursesByUserId: RequestHandler = async (req: Request, res: Response) => {
-    const user_id = Number.parseInt(req.params.id as string, 10);
+    const user_id = req.auth.userId;
     const serviceResponse = await this.userCourseService.getCoursesByUserId(user_id);
     return handleServiceResponse(serviceResponse, res);
   };
 
   // officeHourService.getOfficeHoursByUserId
   public getOfficeHoursByUserId: RequestHandler = async (req: Request, res: Response) => {
-    const user_id = Number.parseInt(req.params.id as string, 10);
+    const user_id = req.auth.userId;
     const serviceResponse = await this.officeHourService.getOfficeHoursByUserId(user_id);
     return handleServiceResponse(serviceResponse, res);
   };
 
-
   public storeFeedback: RequestHandler = async (req: Request, res: Response) => {
-    const user_id = Number.parseInt(req.params.id as string, 10);
+    const user_id = req.auth.userId;
     const content = req.body.content;
     const rating = req.body.rating;
     const serviceResponse = await this.feedbackService.storeFeedback(user_id, rating, content);
     return handleServiceResponse(serviceResponse, res);
   };
-
 }

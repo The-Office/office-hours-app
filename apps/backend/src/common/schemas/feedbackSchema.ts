@@ -1,8 +1,6 @@
 import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi";
 import { z } from "zod";
 
-import { commonValidations } from "@/common/utils/commonValidation";
-
 extendZodWithOpenApi(z);
 
 export const FeedbackSchema = z.object({
@@ -18,9 +16,6 @@ export type Feedback = z.infer<typeof FeedbackSchema>;
 
 
 export const PostFeedbackSchema = z.object({
-  params: z.object({
-    id: commonValidations.id,  // `id` from the route parameters
-  }),
   body: z.object({
     content: z.string().min(1, "Content cannot be empty"),  // `content` field from the JSON body
     rating: z.number().int().min(1, "Rating must be at least 1").max(5, "Rating must be at most 5"),  // `rating` field (integer between 1 and 5)

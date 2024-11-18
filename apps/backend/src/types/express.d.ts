@@ -8,7 +8,7 @@ declare global {
   namespace Express {
     interface Request {
       auth: {
-        user_id: string;
+        userId: string;
         // Add any other fields you expect to use from Clerk
         // Example: email: string;
       };

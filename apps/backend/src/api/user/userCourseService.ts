@@ -31,7 +31,7 @@ export class UserCourseService {
     }
   }
 
-  async getCoursesByUserId(id: number): Promise<ServiceResponse<Course[] | null>> {
+  async getCoursesByUserId(id: string): Promise<ServiceResponse<Course[] | null>> {
     try {
       const courses = await this.courseRepository.getCoursesByUserId(id);
       if (!courses) {

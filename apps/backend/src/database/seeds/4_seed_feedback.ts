@@ -7,7 +7,7 @@ export async function seed(knex: Knex): Promise<void> {
   // Inserts seed entries
   await knex('feedback').insert([
     {
-      user_id: '55558888ff',
+      user_id: '88884444ff',
       rating: 5,
       content: "Great course! Very informative and well-structured.",
       created_at: new Date(),

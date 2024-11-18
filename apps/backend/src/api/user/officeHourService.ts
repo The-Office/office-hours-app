@@ -31,7 +31,7 @@ export class OfficeHourService {
     }
   }
 
-  async getOfficeHoursByUserId(id: number): Promise<ServiceResponse<OfficeHour[] | null>> {
+  async getOfficeHoursByUserId(id: string): Promise<ServiceResponse<OfficeHour[] | null>> {
     try {
       const officehours = await this.officeHourRepository.getOfficeHoursByUserId(id);
       if (!officehours) {

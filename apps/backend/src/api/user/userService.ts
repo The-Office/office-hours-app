@@ -1,6 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 
 import type { User } from "@/common/schemas/userSchema";
+import { clerkClient } from "@clerk/clerk-sdk-node";
 import { UserRepository } from "@/database/userRepository";
 import { ServiceResponse } from "@/common/schemas/serviceResponse";
 import { logger } from "@/server";
@@ -35,7 +36,7 @@ export class UserService {
     try {
       const user = await this.userRepository.getById(id);
       if (!user) {
-        return ServiceResponse.failure("No User found", null, StatusCodes.NOT_FOUND);
+        return this.storeUser(id);
       }
       return ServiceResponse.success<User>("User found", user);
     } catch (ex) {
@@ -49,7 +50,20 @@ export class UserService {
     }
   }
 
-  async saveUserIdToDatabase(id: string): Promise<void> {
-    await this.userRepository.saveUserIdToDatabase(id);
+  async storeUser(id: string): Promise<ServiceResponse<User | null>> {
+    const clerkUser = await clerkClient.users.getUser(id);
+    if (!clerkUser) {
+      return ServiceResponse.failure("No Clerk User found", null, StatusCodes.NOT_FOUND);
+    }
+
+    const email = clerkUser.primaryEmailAddress?.emailAddress || "";
+    const imageUrl = clerkUser.imageUrl;
+    const firstName = clerkUser.firstName || "";
+    const lastName = clerkUser.lastName || "";
+    const user =  await this.userRepository.storeUser(id, imageUrl, firstName, lastName, email);
+    if (!user) {
+      return ServiceResponse.failure("Error storing user", null, StatusCodes.NOT_FOUND);
+    }
+    return ServiceResponse.success<User>("User stored", user);
   }
 }

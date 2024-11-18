@@ -1,4 +1,5 @@
 import type { User } from "@/common/schemas/userSchema";
+import type { User as ClerkUser } from "@clerk/clerk-sdk-node";
 import { FieldPacket, Pool } from "mysql2/promise";
 
 export class UserRepository {
@@ -18,20 +19,27 @@ export class UserRepository {
     }
   }
 
-  async saveUserIdToDatabase(id: string): Promise<void> {
+  async storeUser(id: string, imageUrl: string, firstName: string, lastName: string, email: string): Promise<User> {
     try {
-      // check if user already exists by clerk user id
-      const [rows]: [any[], FieldPacket[]] = await this.db.query("SELECT * FROM users WHERE id = ?", [id]);
+      let [rows]: [any[], FieldPacket[]] = await this.db.query("SELECT * FROM users WHERE id = ?", [id]);
 
       if (rows.length > 0) {
-        console.log("user with clerk id ${user_id} already exists");
-        return;
+        console.log(`User with clerk id ${id} already exists`);
+        return rows[0] as User;
       }
 
-      const [result] = await this.db.query("INSERT INTO users (id) Values (?)", [id]);
+      const [result] = await this.db.query("INSERT INTO users (id, img_url, first_name, last_name, email) VALUES (?, ?, ?, ?, ?)", [
+        id,
+        imageUrl,
+        firstName,
+        lastName,
+        email,
+      ]);
+      rows = await this.db.query("SELECT * FROM users WHERE id = ?", [id]);
+      return rows[0] as User;
     } catch (err) {
-      console.error("error saving user id to database", err);
-      throw new Error("failed to save user id");
+      console.error("Error saving user to database", err);
+      throw new Error("Failed to save user");
     }
   }
 
