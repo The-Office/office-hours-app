@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { columns } from "./columns";
 import { OfficeHour, fetchOfficeHours } from "@/services/userService";
 import { DataTable } from "./data-table";
+import { Loader2 } from "lucide-react";
 
 export default function Table() {
   const [data, setData] = useState<OfficeHour[]>([]);
@@ -18,7 +19,14 @@ export default function Table() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <>
+        <div className="flex justify-center items-center h-64">
+          <Loader2 className="animate-spin" size={48}/>
+          Loading...
+        </div>
+      </>
+    )
   }
 
   return (
