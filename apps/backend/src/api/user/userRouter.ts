@@ -5,6 +5,8 @@ import { UserController } from "./userController";
 import { db } from "@/database/init";
 import { UserService } from "./userService";
 import { UserRepository } from "@/database/userRepository";
+import { CourseSchema } from "@/common/schemas/courseSchema";
+import { OfficeHourSchema, PostOfficeHourSchema } from "@/common/schemas/officeHoursSchema";
 import { CourseRepository } from "@/database/courseRepository";
 import { OfficeHourRepository } from "@/database/officeHoursRepository";
 import { UserCourseService } from "./userCourseService";

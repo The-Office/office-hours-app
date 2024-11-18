@@ -29,5 +29,14 @@ export class OfficeHourRepository {
       throw new Error("Failed to fetch user from the database");
     }
   }
+
+  async storeOfficeHours(host: string, mode: string, link: string, location: string, start_time: string, end_time: string): Promise<void> {
+    try {
+      await this.db.execute(`INSERT INTO office_hours (host, mode, link, location, start_time, end_time) VALUES (?, ?, ?, ?, ?, ?)`, [host, mode, link, location, start_time, end_time]);
+    } catch (error) {
+      console.error("Failed to insert new office hours:", error);
+      throw new Error("An error occurred while inserting new office hours into the database");
+    }
+  }
   
 }
