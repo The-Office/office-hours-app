@@ -11,7 +11,7 @@ export const UserSchema = z.object({
   first_name: z.string().nullable(),
   last_name: z.string().nullable(),
   img_url: z.string().nullable(),
-  role: z.enum(['professor', 'teaching_assistant', 'user']).default('user'),
+  role: z.enum(['professor', 'teaching_assistant', 'student']).default('student'),
   ical_link: z.string().nullable(),
   created_at: z.date(),
   updated_at: z.date()

@@ -8,8 +8,8 @@ export const env = cleanEnv(process.env, {
   HOST: host({ devDefault: testOnly("localhost") }),
   PORT: port({ devDefault: testOnly(3000) }),
   CORS_ORIGIN: str({ devDefault: testOnly("http://localhost:3000") }),
-  COMMON_RATE_LIMIT_MAX_REQUESTS: num({ devDefault: testOnly(1000) }),
-  COMMON_RATE_LIMIT_WINDOW_MS: num({ devDefault: testOnly(1000) }),
+  COMMON_RATE_LIMIT_MAX_REQUESTS: num({ devDefault: testOnly(10000) }),
+  COMMON_RATE_LIMIT_WINDOW_MS: num({ devDefault: testOnly(10000) }),
 
   MYSQL_USER: str(), // No default here since it's required
   MYSQL_PASSWORD: str(), // Password is required
