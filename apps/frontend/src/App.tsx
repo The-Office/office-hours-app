@@ -1,5 +1,7 @@
 import LandingPage from './components/landing-page.tsx';
 import Dashboard from './components/dashboard.tsx';
+import ModifyPage from './components/prof-dashboard.tsx';
+
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { SignedIn, SignedOut } from '@clerk/clerk-react';
@@ -26,6 +28,18 @@ const App = () => {
                 <>
                   <SignedIn>
                       <Dashboard />
+                  </SignedIn>
+                  <SignedOut>
+                      <Navigate to="/" />
+                  </SignedOut>
+                </>
+              } />
+          <Route 
+              path="/prof-dashboard" 
+              element={
+                <>
+                  <SignedIn>
+                      <ModifyPage />
                   </SignedIn>
                   <SignedOut>
                       <Navigate to="/" />
