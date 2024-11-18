@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS feedback (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT,
+  user_id VARCHAR(255),
   rating INT,
   content TEXT,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,

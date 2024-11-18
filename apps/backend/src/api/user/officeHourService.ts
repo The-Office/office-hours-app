@@ -31,9 +31,10 @@ export class OfficeHourService {
     }
   }
 
-  async getOfficeHoursByUserId(id: number): Promise<ServiceResponse<OfficeHour[] | null>> {
+  async getOfficeHoursByUserId(id: string): Promise<ServiceResponse<OfficeHour[] | null>> {
     try {
-      const officehours = await this.officeHourRepository.getOfficeHoursByUserId(id);
+      // const officehours = await this.officeHourRepository.getOfficeHoursByUserId(id);
+      const officehours = await this.officeHourRepository.getAllOfficeHours();
       if (!officehours) {
         return ServiceResponse.failure("No office hours found", null, StatusCodes.NOT_FOUND);
       }
@@ -49,9 +50,9 @@ export class OfficeHourService {
     }
   }
 
-  async storeOfficeHours(host: string, mode: string, link: string, location: string, start_time: string, end_time: string): Promise<ServiceResponse<null>> {
+  async storeOfficeHours(host: string, mode: string, link: string, location: string, start_time: string, end_time: string, day: string): Promise<ServiceResponse<null>> {
     try {
-      await this.officeHourRepository.storeOfficeHours(host, mode, link, location, start_time, end_time);
+      await this.officeHourRepository.storeOfficeHours(host, mode, link, location, start_time, end_time, day);
       logger.info("Office hours successfully stored.");
       return ServiceResponse.success("Office hours successfully stored", null);
     } catch (ex) {

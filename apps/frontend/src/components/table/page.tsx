@@ -1,29 +1,33 @@
-import { useEffect, useState } from "react";
 import { columns } from "./columns";
-import { OfficeHour, fetchOfficeHours } from "@/services/userService";
+import { fetchOfficeHours, fetchUser } from "@/services/userService";
 import { DataTable } from "./data-table";
+import { Loader2 } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Table() {
-  const [data, setData] = useState<OfficeHour[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const { data: user } = useQuery({
+    queryKey: ['user'],
+    queryFn: fetchUser
+  });
 
-  useEffect(() => {
-    async function fetchData() {
-      const result = await fetchOfficeHours(55558888);
-      setData(result);
-      setLoading(false);
-    }
+  const { data: officeHours = [], isLoading } = useQuery({
+    queryKey: ['officeHours'],
+    queryFn: fetchOfficeHours,
+    enabled: !!user
+  });
 
-    fetchData();
-  }, []);
-
-  if (loading) {
-    return <div>Loading...</div>;
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Loader2 className="animate-spin" size={48}/>
+        Loading...
+      </div>
+    );
   }
 
   return (
-    <div className="py-10  mx-5 md:mx-32">
-      <DataTable columns={columns} data={data} />
+    <div className="py-10 mx-5 md:mx-32">
+      <DataTable columns={columns} data={officeHours} />
     </div>
   );
 }

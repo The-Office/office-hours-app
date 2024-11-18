@@ -3,6 +3,7 @@
 import * as React from "react"
 import { DataTablePagination } from "@/components/ui/data-table-pagination"
 import { DataTableViewOptions } from "@/components/ui/data-table-view-options"
+import { Button } from "@/components/ui/button"
 
 import {
     ColumnDef,
@@ -39,8 +40,8 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
-
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
+    const [rowSelection, setRowSelection] = React.useState({})
 
     const table = useReactTable({
         data,
@@ -52,10 +53,12 @@ export function DataTable<TData, TValue>({
         onColumnFiltersChange: setColumnFilters,
         getFilteredRowModel: getFilteredRowModel(),
         onColumnVisibilityChange: setColumnVisibility,
+        onRowSelectionChange: setRowSelection,
         state: {
             sorting,
             columnFilters,
             columnVisibility,
+            rowSelection,
         },
     })
 
@@ -124,9 +127,11 @@ export function DataTable<TData, TValue>({
                     </TableBody>
                 </Table>
             </div>
-            <div className="my-3">
+            <div className="my-3 flex justify-between">
                 <DataTablePagination table={table} />
+                <Button variant="outline">Create Calendar Link</Button>
             </div>
+            {console.log(table.getState().rowSelection)} 
         </>
     )
 }

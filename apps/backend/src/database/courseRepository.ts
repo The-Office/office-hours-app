@@ -47,7 +47,7 @@ export class CourseRepository {
     }
   }
 
-  async getCoursesByUserId(id: number): Promise<Course[]> {
+  async getCoursesByUserId(id: string): Promise<Course[]> {
     try {
       // Parameterized query to prevent SQL injection
       const [rows]: [any[], FieldPacket[]] = await this.db.query(
