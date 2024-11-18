@@ -5,6 +5,7 @@ import { UserCourseService } from "./userCourseService";
 import { OfficeHourService } from "./officeHourService";
 import { handleServiceResponse } from "@/common/utils/httpHandlers";
 import { FeedbackService } from "./feedbackService";
+import { ServiceResponse } from "@/common/schemas/serviceResponse";
 // import { ServiceResponse } from "@/common/schemas/serviceResponse";
 
 export class UserController {
@@ -53,6 +54,7 @@ export class UserController {
     const user_id = Number.parseInt(req.params.id as string, 10);
     const serviceResponse = await this.officeHourService.getIcalFileByUserId(user_id);
     return handleServiceResponse(serviceResponse, res);
+
   }
 
   public storeFeedback: RequestHandler = async (req: Request, res: Response) => {

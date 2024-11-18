@@ -84,7 +84,7 @@ userRegistry.registerPath({
   method: "post",
   path: "/users/{id}/office-hours-store",
   tags: ["User"],
-  request: { params: PostFeedbackSchema.shape.params },
+  request: { params: PostOfficeHourSchema.shape.params },
   responses: createApiResponse(z.null(), "Success"),
 });
 

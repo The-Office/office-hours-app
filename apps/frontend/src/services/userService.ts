@@ -94,3 +94,11 @@ export const sendFeedback = async (userId: number, rating: number, content: stri
     return null;
   }
 };
+
+export const getIcalFile = async (userId: number) => {
+  try {
+    await axios.get(`http://localhost:8080/users/${userId}/ical-file`);
+  } catch(error) {
+    console.error("Error fetching ical files:", error);
+  }
+}

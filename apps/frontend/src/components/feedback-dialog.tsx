@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { FaStar } from "react-icons/fa";
-import { sendFeedback } from "@/services/userService";
+import { sendFeedback, getIcalFile } from "@/services/userService";
 import toast from "react-hot-toast";
 
 const FeedbackDialog = () => {
@@ -39,6 +39,15 @@ const FeedbackDialog = () => {
             toast.error("An error occurred. Please try again later."); // Show error toast on exception
         }
     };
+
+    const handleIcalDownload = async() => {
+        try {
+            await getIcalFile(55558888);
+            toast.success("Acquired ical file succesfully! :)")
+        } catch(error) {
+            toast.error("An error occurred when downloading the file. Please try again later.")
+        }
+    }
 
     return (
         <>
@@ -80,6 +89,7 @@ const FeedbackDialog = () => {
                     </div>
                     <hr className="my-4 border-dotted border-1 border-gray-300" />
                     <Button onClick={handleSubmit}>Submit</Button>
+                    <Button onClick={handleIcalDownload}>Download Ical</Button>
                 </DialogContent>
             </Dialog>
         </>

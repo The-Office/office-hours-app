@@ -13,6 +13,7 @@ export const OfficeHourSchema = z.object({
   link: z.string().url(),
   start_time: z.string(),
   end_time: z.string(),
+  day: z.enum(['monday', 'tuesday','wednesday','thursday','friday']),
   created_at: z.date(),
   updated_at: z.date(),
 });
@@ -25,9 +26,7 @@ export type OfficeHour = z.infer<typeof OfficeHourSchema>;
 // });
 
 export const PostOfficeHourSchema = z.object({
-  params: z.object({
-    id: commonValidations.id,  // `id` from the route parameters
-  }),
+  params: z.object({}),
   body: z.object({
     host: z.string().min(1, "Must have a host"),
     mode: z.string().min(1, "Must have a modality"),
