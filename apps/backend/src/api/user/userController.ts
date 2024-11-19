@@ -80,7 +80,7 @@ export class UserController {
   };
 
   public getIcalFileByUserId: RequestHandler = async (req: Request, res: Response) => {
-    const user_id = Number.parseInt(req.params.id as string, 10);
+    const user_id = req.auth.userId;
     const serviceResponse = await this.officeHourService.getIcalFileByUserId(user_id);
     return handleServiceResponse(serviceResponse, res);
 

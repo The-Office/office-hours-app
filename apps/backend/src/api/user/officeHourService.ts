@@ -4,7 +4,7 @@ import type { OfficeHour, OfficeHourSchema } from "@/common/schemas/officeHoursS
 import { OfficeHourRepository } from "@/database/officeHoursRepository";
 import { ServiceResponse } from "@/common/schemas/serviceResponse";
 import { logger } from "@/server";
-import ical, { ICalCalendar, ICalEventRepeatingFreq } from 'ical-generator';
+import ical, { ICalEventRepeatingFreq } from 'ical-generator';
 import { z } from "zod";
 
 export class OfficeHourService {
@@ -77,7 +77,7 @@ export class OfficeHourService {
     }
   }
 
-  async getIcalFileByUserId(id: number): Promise<ServiceResponse<string | null>> {
+  async getIcalFileByUserId(id: string): Promise<ServiceResponse<string | null>> {
     try {
       const officehours = await this.officeHourRepository.getOfficeHoursByUserId(id);
       if(!officehours) {
@@ -86,7 +86,6 @@ export class OfficeHourService {
       const ical_file = ical ({ name: `Office Hours for User ${id}` });
 
       for(const oh of officehours) {
-
         if(oh.mode === "in-person") {
           ical_file.createEvent({  
             start: this.transformTime(oh.day, oh.start_time),

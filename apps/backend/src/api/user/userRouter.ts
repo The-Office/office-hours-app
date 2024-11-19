@@ -11,10 +11,6 @@ import { UserCourseService } from "./userCourseService";
 import { OfficeHourService } from "./officeHourService";
 import { FeedbackService } from "./feedbackService";
 import { FeedbackRepository } from "@/database/feedbackRepository";
-import { GetUserSchema, UserSchema } from "@/common/schemas/userSchema";
-import { CourseSchema } from "@/common/schemas/courseSchema";
-import { OfficeHourSchema, PostOfficeHourSchema } from "@/common/schemas/officeHoursSchema";
-import { IcalSchema, GetIcalSchema } from "@/common/schemas/icalFileSchema";
 import { PostFeedbackSchema } from "@/common/schemas/feedbackSchema";
 import { PostOfficeHourSchema } from "@/common/schemas/officeHoursSchema";
 import { StoreCourseSchema } from "@/common/schemas/courseSchema";
@@ -50,5 +46,6 @@ userRouter.post("/office-hours", validateRequest(PostOfficeHourSchema), userCont
 userRouter.post("/courses", validateRequest(StoreCourseSchema), userController.storeCourse);
 userRouter.post("/me", userController.storeUser);
 userRouter.get("/courses/:course_id", userController.getCourse);
-userRouter.get("/ical-file", validateRequest(GetIcalSchema), userController.getIcalFileByUserId);
+userRouter.get("/ical-file", userController.getIcalFileByUserId);
+
 

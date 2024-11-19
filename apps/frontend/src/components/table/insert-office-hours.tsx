@@ -65,7 +65,7 @@ const formSchema = z.object({
     end_time: z.string().min(1, {
         message: "Field cannot be empty.",
     }),
-    mode: z.enum(["in-person", "online", "hybrid"], {
+    mode: z.enum(["in-person", "remote", "hybrid"], {
         required_error: "You need to select a mode.",
     }),
     location: z.string()
@@ -101,11 +101,11 @@ const formSchema = z.object({
                 path: ["location"]
             });
         }
-    } else if (data.mode === "online") {
+    } else if (data.mode === "remote") {
         if (!data.link || data.link.length === 0) {
             ctx.addIssue({
                 code: z.ZodIssueCode.custom,
-                message: "Link is required for online.",
+                message: "Link is required for remote.",
                 path: ["link"]
             });
         }
@@ -385,7 +385,7 @@ export function InsertOfficeHoursForm() {
                                             </FormControl>
                                             <SelectContent>
                                                 <SelectItem value="in-person">In-person</SelectItem>
-                                                <SelectItem value="online">Online</SelectItem>
+                                                <SelectItem value="remote">Remote</SelectItem>
                                                 <SelectItem value="hybrid">Hybrid</SelectItem>
                                             </SelectContent>
                                         </Select>
@@ -410,7 +410,7 @@ export function InsertOfficeHoursForm() {
                                 />
                             )}
 
-                            {["online", "hybrid"].includes(mode) && (
+                            {["remote", "hybrid"].includes(mode) && (
                                 <FormField
                                     control={form.control}
                                     name="link"
