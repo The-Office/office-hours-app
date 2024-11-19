@@ -10,6 +10,8 @@ export default function Table() {
     queryFn: fetchUser
   });
 
+  const admin = ["admin", "professor", "teaching_assistant"].includes(user?.role || "")
+
   const { data: officeHours = [], isLoading } = useQuery({
     queryKey: ['officeHours'],
     queryFn: fetchOfficeHours,
@@ -27,7 +29,7 @@ export default function Table() {
 
   return (
     <div className="py-10 mx-5 md:mx-32">
-      <DataTable columns={columns} data={officeHours} />
+      <DataTable columns={columns} data={officeHours} admin={admin}/>
     </div>
   );
 }

@@ -7,12 +7,14 @@ export async function seed(knex: Knex): Promise<void> {
   // Inserts seed entries
   await knex('courses').insert([
     {
-      course_id: 508104,
+      course_id: 8371,
       course_code: 'CDA3101',
+      title: "Introduction to Computer Organization",
     },
     {
-      course_id: 507903,
+      course_id: 7699,
       course_code: 'COP4533',
+      title: "Algorithm Abstraction and Design",
     }
   ]);
 }

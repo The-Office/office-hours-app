@@ -14,7 +14,3 @@ export const UserCourseSchema = z.object({
 
 export type UserCourse = z.infer<typeof UserCourseSchema>;
 
-// // Input Validation for 'GET users/:id' endpoint
-// export const GetCourseSchema = z.object({
-//   params: z.object({ id: commonValidations.id }),
-// });

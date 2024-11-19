@@ -19,7 +19,7 @@ export class UserRepository {
     }
   }
 
-  async storeUser(id: string, imageUrl: string, firstName: string, lastName: string, email: string): Promise<User> {
+  async storeUser(id: string, imageUrl: string, firstName: string, lastName: string, email: string, role: string): Promise<User> {
     try {
       let [rows]: [any[], FieldPacket[]] = await this.db.query("SELECT * FROM users WHERE id = ?", [id]);
 
@@ -28,12 +28,13 @@ export class UserRepository {
         return rows[0] as User;
       }
 
-      const [result] = await this.db.query("INSERT INTO users (id, img_url, first_name, last_name, email) VALUES (?, ?, ?, ?, ?)", [
+      const [result] = await this.db.query("INSERT INTO users (id, img_url, first_name, last_name, email, role) VALUES (?, ?, ?, ?, ?, ?)", [
         id,
         imageUrl,
         firstName,
         lastName,
         email,
+        role
       ]);
       rows = await this.db.query("SELECT * FROM users WHERE id = ?", [id]);
       return rows[0] as User;

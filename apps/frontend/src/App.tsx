@@ -3,7 +3,7 @@ import Dashboard from './components/dashboard.tsx';
 import AdminDashboard from './components/prof-dashboard.tsx';
 
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from './components/ui/toaster.tsx';
 import { SignedIn, SignedOut } from '@clerk/clerk-react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchUser } from './services/userService.ts';
@@ -34,7 +34,8 @@ const App = () => {
             element={
               <>
                 <SignedIn>
-                  {user ? (user.role == "student" ? <Dashboard /> : <AdminDashboard />) : <Navigate to="/" />}
+                  {/* {user ? (user.role == "student" ? <Dashboard /> : <AdminDashboard />) : <Navigate to="/" />} */}
+                  <Dashboard />
                 </SignedIn>
                 <SignedOut>
                   <Navigate to="/" />

@@ -28,24 +28,47 @@ import {
 } from "@/components/ui/table"
 
 import { Input } from "@/components/ui/input"
+import { AddHoursForm } from "../prof-elements/prof-form-fields"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
+    admin: boolean
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
+    admin,
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
 
+    // Function to capitalize cell content
+    const capitalizeCell = (content: any): any => {
+        if (typeof content === 'string' && content.length > 0) {
+            return content[0].toUpperCase() + content.slice(1)
+        }
+        return content
+    }
+
+    // Modify columns to capitalize cell content
+    const capitalizedColumns = React.useMemo(() => 
+        columns.map(column => ({
+            ...column,
+            cell: ({ getValue }: { getValue: () => unknown }) => {
+                const value = getValue()
+                return capitalizeCell(value)
+            }
+        })),
+        [columns]
+    )
+
     const table = useReactTable({
         data,
-        columns,
+        columns: capitalizedColumns,
         getCoreRowModel: getCoreRowModel(),
         onSortingChange: setSorting,
         getPaginationRowModel: getPaginationRowModel(),
@@ -81,6 +104,7 @@ export function DataTable<TData, TValue>({
                     }
                     className="max-w-sm"
                 />
+                {admin && <AddHoursForm />}
                 <DataTableViewOptions table={table} />
             </div>
             <div className="rounded-md border">
