@@ -45,11 +45,11 @@ const formSchema = z.object({
         message: "Course ID is required.",
     }),
     course_code: z.string()
-    .min(1, { message: "Course code is required." })
-    .regex(
-        /^[A-Z]{3}[0-9]{4}C?$/,
-        'Course code must be 3 uppercase letters followed by 4 numbers, with optional C at end (e.g., COP3503 or COP3503C)'
-    ),
+        .min(1, { message: "Course code is required." })
+        .regex(
+            /^[A-Z]{3}[0-9]{4}C?$/,
+            'Course code must be 3 uppercase letters followed by 4 numbers, with optional C at end (e.g., COP3503 or COP3503C)'
+        ),
     title: z.string().min(1, {
         message: "Course title is required.",
     }),
@@ -126,7 +126,7 @@ export function InsertOfficeHoursForm() {
             location: "",
             link: "",
             start_time: "",
-            end_time: "",   
+            end_time: "",
         },
     })
 
@@ -143,7 +143,7 @@ export function InsertOfficeHoursForm() {
     };
 
     const handleSelectClass = (selectedClass: SearchClass) => {
-        
+
         form.reset({
             ...form.getValues(),
             course_id: parseInt(selectedClass.key, 10),
@@ -178,7 +178,7 @@ export function InsertOfficeHoursForm() {
     // }
 
     const onSubmit = async (data: z.infer<typeof formSchema>) => {
-        
+
         const existingCourse = await fetchCourseById(data.course_id);
         if (!existingCourse) {
             const course = await storeCourse(data);
@@ -205,8 +205,11 @@ export function InsertOfficeHoursForm() {
     return (
         <>
             <Dialog>
-                <DialogTrigger className="p-2 rounded-full hover:bg-accent hover:text-accent-foreground transition-all">
-                    <Plus className="h-5 w-5" />
+                <DialogTrigger>
+                    <Button variant="outline">
+                        <Plus className="h-5 w-5" />
+                        Insert
+                    </Button>
                 </DialogTrigger>
                 <DialogContent className="min-w-96">
                     <DialogHeader>

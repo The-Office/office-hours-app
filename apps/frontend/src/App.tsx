@@ -1,6 +1,5 @@
 import LandingPage from './components/landing-page.tsx';
 import Dashboard from './components/dashboard.tsx';
-import AdminDashboard from './components/prof-dashboard.tsx';
 
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from './components/ui/toaster.tsx';
@@ -34,20 +33,7 @@ const App = () => {
             element={
               <>
                 <SignedIn>
-                  {/* {user ? (user.role == "student" ? <Dashboard /> : <AdminDashboard />) : <Navigate to="/" />} */}
                   <Dashboard />
-                </SignedIn>
-                <SignedOut>
-                  <Navigate to="/" />
-                </SignedOut>
-              </>
-            } />
-          <Route
-            path="/prof-dashboard"
-            element={
-              <>
-                <SignedIn>
-                  <AdminDashboard />
                 </SignedIn>
                 <SignedOut>
                   <Navigate to="/" />
