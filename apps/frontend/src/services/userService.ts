@@ -17,12 +17,12 @@ export interface OfficeHour {
   course_id: number;
   course_code: string;
   host: string;
-  mode: "remote" | "in-person" | "hybrid";
+  mode: string;
   link?: string;
   location?: string;
   start_time: string;
   end_time: string;
-  day: "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday" | "Sunday";  
+  day: string;
   created_at: string;
   updated_at: string;
 }
