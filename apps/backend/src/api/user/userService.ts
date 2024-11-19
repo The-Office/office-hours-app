@@ -40,7 +40,7 @@ export class UserService {
       }
       return ServiceResponse.success<User>("User found", user);
     } catch (ex) {
-      const errorMessage = `Error finding all user: $${(ex as Error).message}`;
+      const errorMessage = `Error finding user: ${(ex as Error).message}`;
       logger.error(errorMessage);
       return ServiceResponse.failure(
         "An error occurred while retrieving user.",

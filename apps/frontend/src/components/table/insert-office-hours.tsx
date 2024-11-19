@@ -205,11 +205,9 @@ export function InsertOfficeHoursForm() {
     return (
         <>
             <Dialog>
-                <DialogTrigger>
-                    <Button variant="outline">
-                        <Plus className="h-5 w-5" />
-                        Insert
-                    </Button>
+                <DialogTrigger className="inline-flex items-center justify-center gap-2 rounded-md bg-background px-3 py-2 text-sm font-medium border border-input hover:bg-accent hover:text-accent-foreground">
+                    Insert
+                    <Plus className="h-5 w-5" />
                 </DialogTrigger>
                 <DialogContent className="min-w-96 overflow-y-scroll max-h-screen">
                     <DialogHeader>
