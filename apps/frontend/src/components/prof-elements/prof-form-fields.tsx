@@ -23,9 +23,6 @@ import {
 import { Input } from "@/components/ui/input"
 
 const formSchema = z.object({
-    username: z.string().min(1, {
-      message: "Field cannot be empty.",
-    }),
     course: z.string().min(1, {
       message: "Field cannot be empty.",
     }),
@@ -58,10 +55,10 @@ export function AddHoursForm() {
     })
 
     // 2. Define a submit handler.
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        // Do something with the form values.
+    function onSubmit(data: z.infer<typeof formSchema>) {
+        // Do something with the form data.
         // ✅ This will be type-safe and validated.
-        console.log(values)
+        console.log(data)
         console.log("hi")
     }
 
