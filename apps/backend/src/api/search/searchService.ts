@@ -15,7 +15,6 @@ export class SearchService {
   async searchDirectory(params: z.infer<typeof DirectorySearchSchema>): Promise<ServiceResponse<DirectoryPerson[]>> {
     // This ensures params has all fields with at least empty strings
     const validatedParams = DirectorySearchSchema.parse(params);
-    console.log(validatedParams);
 
     try {
       const response = await axios.get('https://www.directory.ufl.edu/search/', {

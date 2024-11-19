@@ -112,7 +112,7 @@ const formSchema = z.object({
     }
 });
 
-export function AddHoursForm() {
+export function InsertOfficeHoursForm() {
     const [searchResults, setSearchResults] = useState<SearchClass[]>([]);
     const [isFocused, setIsFocused] = useState(false);
     const { toast } = useToast();

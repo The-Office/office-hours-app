@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/table"
 
 import { Input } from "@/components/ui/input"
-import { AddHoursForm } from "../prof-elements/prof-form-fields"
+import { InsertOfficeHoursForm } from "./insert-office-hours"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -85,7 +85,7 @@ export function DataTable<TData, TValue>({
                     }
                     className="max-w-sm"
                 />
-                {admin && <AddHoursForm />}
+                {admin && <InsertOfficeHoursForm />}
                 <DataTableViewOptions table={table} />
             </div>
             <div className="rounded-md border">
@@ -136,7 +136,6 @@ export function DataTable<TData, TValue>({
                 <DataTablePagination table={table} />
                 <Button variant="outline">Create Calendar Link</Button>
             </div>
-            {console.log(table.getState().rowSelection)} 
         </>
     )
 }
