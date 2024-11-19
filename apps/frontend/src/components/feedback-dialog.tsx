@@ -40,15 +40,6 @@ const FeedbackDialog = () => {
         }
     };
 
-    const handleIcalDownload = async() => {
-        try {
-            await getIcalFile(55558888);
-            toast.success("Acquired ical file succesfully! :)")
-        } catch(error) {
-            toast.error("An error occurred when downloading the file. Please try again later.")
-        }
-    }
-
     return (
         <>
             <Dialog>
@@ -89,7 +80,6 @@ const FeedbackDialog = () => {
                     </div>
                     <hr className="my-4 border-dotted border-1 border-gray-300" />
                     <Button onClick={handleSubmit}>Submit</Button>
-                    <Button onClick={handleIcalDownload}>Download Ical</Button>
                 </DialogContent>
             </Dialog>
         </>
