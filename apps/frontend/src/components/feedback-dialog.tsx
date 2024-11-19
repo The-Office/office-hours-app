@@ -27,7 +27,7 @@ const FeedbackDialog = () => {
         }
 
         try {
-            const payload = await sendFeedback(55558888, rating, feedback);
+            const payload = await sendFeedback(rating, feedback);
             if (payload && payload.statusCode === 200) {
                 toast.success("Feedback submitted successfully!"); // Show success toast
                 setFeedback("");

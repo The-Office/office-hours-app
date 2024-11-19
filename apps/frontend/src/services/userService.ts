@@ -6,7 +6,7 @@ export interface User {
   first_name: string | null;
   last_name: string | null;
   img_url: string | null;
-  role: 'professor' | 'teaching_assistant' | 'student';
+  role: 'admin' | 'professor' | 'teaching_assistant' | 'student';
   ical_link: string | null;
   created_at: string;
   updated_at: string;
@@ -22,7 +22,7 @@ export interface OfficeHour {
   location?: string;
   start_time: string;
   end_time: string;
-  day: "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday" | "sunday";
+  day: "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday" | "Sunday";  
   created_at: string;
   updated_at: string;
 }
@@ -40,6 +40,17 @@ export interface Payload {
   message: string;
 }
 
+export const storeUser = async (): Promise<User | null> => {
+  try {
+    const response = await api.post(`/users/me`);
+    const payload = response.data;
+    return payload;
+  } catch (error) {
+    console.error("Error storing user:", error);
+    return null;
+  }
+}
+
 // Fetch user by ID
 export const fetchUser = async (): Promise<User | null> => {
   try {
@@ -47,6 +58,10 @@ export const fetchUser = async (): Promise<User | null> => {
     const payload = response.data;
     return payload.data;
   } catch (error) {
+    const user = await storeUser();
+    if (user) {
+      return user;
+    }
     console.error("Error fetching user:", error);
     return null;
   }
@@ -63,6 +78,17 @@ export const fetchCourses = async (): Promise<Course[]> => {
     return [];
   }
 };
+
+export const fetchCourseById = async (courseId: number): Promise<Course | null> => {
+  try {
+    const response = await api.get(`/users/courses/${courseId}`);
+    const payload = response.data;
+    return payload.data;
+  } catch (error) {
+    console.error("Error fetching course:", error);
+    return null;
+  }
+}
 
 export const fetchOfficeHours = async (): Promise<OfficeHour[]> => {
   try {
@@ -88,3 +114,25 @@ export const sendFeedback = async (rating: number, content: string): Promise<Pay
     return null;
   }
 };
+
+export const storeOfficeHour = async (officeHour: Record<string, any>): Promise<Payload | null> => {
+  try {
+    const response = await api.post(`/users/office-hours`, officeHour);
+    const payload = response.data;
+    return payload;
+  } catch (error) {
+    console.error("Error storing office hour:", error);
+    return null;
+  }
+}
+
+export const storeCourse = async (course: Record<string, any>): Promise<Payload | null> => {
+  try {
+    const response = await api.post(`/users/courses`, course);
+    const payload = response.data;
+    return payload;
+  } catch (error) {
+    console.error("Error storing course:", error);
+    return null;
+  }
+}
