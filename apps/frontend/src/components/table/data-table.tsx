@@ -46,29 +46,10 @@ export function DataTable<TData, TValue>({
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
 
-    // Function to capitalize cell content
-    const capitalizeCell = (content: any): any => {
-        if (typeof content === 'string' && content.length > 0) {
-            return content[0].toUpperCase() + content.slice(1)
-        }
-        return content
-    }
-
-    // Modify columns to capitalize cell content
-    const capitalizedColumns = React.useMemo(() => 
-        columns.map(column => ({
-            ...column,
-            cell: ({ getValue }: { getValue: () => unknown }) => {
-                const value = getValue()
-                return capitalizeCell(value)
-            }
-        })),
-        [columns]
-    )
 
     const table = useReactTable({
         data,
-        columns: capitalizedColumns,
+        columns,
         getCoreRowModel: getCoreRowModel(),
         onSortingChange: setSorting,
         getPaginationRowModel: getPaginationRowModel(),
