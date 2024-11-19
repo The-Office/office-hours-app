@@ -1,34 +1,28 @@
-import axios from "axios";
-// const created_at = '2023-10-01T09:00:00Z'
-// const updated_at = '2023-10-15T09:00:00Z'
+import api from "./api";
 
 export interface User {
-  id: number;
-  canvas_user_id: number;
+  id: string;
   email: string;
-  first_name: string;
-  last_name: string;
-  canvas_login_id: string;
-  access_token: string;
-  refresh_token: string;
-  token_expiration: string;
-  is_active: number;
-  ical_link: string;
+  first_name: string | null;
+  last_name: string | null;
+  img_url: string | null;
+  role: 'admin' | 'professor' | 'teaching_assistant' | 'student';
+  ical_link: string | null;
   created_at: string;
   updated_at: string;
 }
 
 export interface OfficeHour {
-  id?: number;
+  id: number;
   course_id: number;
   course_code: string;
   host: string;
-  mode: "remote" | "in-person" | "hybrid";
+  mode: string;
   link?: string;
   location?: string;
   start_time: string;
   end_time: string;
-  day: "monday" | "tuesday" | "wednesday" | "thursday" | "friday" | "saturday" | "sunday";
+  day: string;
   created_at: string;
   updated_at: string;
 }
@@ -46,22 +40,37 @@ export interface Payload {
   message: string;
 }
 
-// Fetch user by ID
-export const fetchUser = async (userId: number): Promise<User | {}> => {
+export const storeUser = async (): Promise<User | null> => {
   try {
-    const response = await axios.get(`http://localhost:8080/users/${userId}`);
+    const response = await api.post(`/users/me`);
+    const payload = response.data;
+    return payload;
+  } catch (error) {
+    console.error("Error storing user:", error);
+    return null;
+  }
+}
+
+// Fetch user by ID
+export const fetchUser = async (): Promise<User | null> => {
+  try {
+    const response = await api.get("/users/me");
     const payload = response.data;
     return payload.data;
   } catch (error) {
+    const user = await storeUser();
+    if (user) {
+      return user;
+    }
     console.error("Error fetching user:", error);
-    return {};
+    return null;
   }
 };
 
 // Fetch courses for a user by ID
-export const fetchCourses = async (userId: number): Promise<Course[]> => {
+export const fetchCourses = async (): Promise<Course[]> => {
   try {
-    const response = await axios.get(`http://localhost:8080/users/${userId}/courses`);
+    const response = await api.get(`/users/me/courses`);
     const payload = response.data;
     return payload.data;
   } catch (error) {
@@ -70,9 +79,20 @@ export const fetchCourses = async (userId: number): Promise<Course[]> => {
   }
 };
 
-export const fetchOfficeHours = async (userId: number): Promise<OfficeHour[]> => {
+export const fetchCourseById = async (courseId: number): Promise<Course | null> => {
   try {
-    const response = await axios.get(`http://localhost:8080/users/${userId}/office-hours`);
+    const response = await api.get(`/users/courses/${courseId}`);
+    const payload = response.data;
+    return payload.data;
+  } catch (error) {
+    console.error("Error fetching course:", error);
+    return null;
+  }
+}
+
+export const fetchOfficeHours = async (): Promise<OfficeHour[]> => {
+  try {
+    const response = await api.get(`/users/me/office-hours`);
     const payload = response.data;
     return payload.data;
   } catch (error) {
@@ -81,9 +101,9 @@ export const fetchOfficeHours = async (userId: number): Promise<OfficeHour[]> =>
   }
 };
 
-export const sendFeedback = async (userId: number, rating: number, content: string): Promise<Payload | null> => {
+export const sendFeedback = async (rating: number, content: string): Promise<Payload | null> => {
   try {
-    const response = await axios.post(`http://localhost:8080/users/${userId}/feedback`, {
+    const response = await api.post(`/users/feedback`, {
       rating,
       content,
     });
@@ -100,5 +120,27 @@ export const getIcalFile = async (userId: number) => {
     await axios.get(`http://localhost:8080/users/${userId}/ical-file`);
   } catch(error) {
     console.error("Error fetching ical files:", error);
+  }
+}
+
+export const storeOfficeHour = async (officeHour: Record<string, any>): Promise<Payload | null> => {
+  try {
+    const response = await api.post(`/users/office-hours`, officeHour);
+    const payload = response.data;
+    return payload;
+  } catch (error) {
+    console.error("Error storing office hour:", error);
+    return null;
+  }
+}
+
+export const storeCourse = async (course: Record<string, any>): Promise<Payload | null> => {
+  try {
+    const response = await api.post(`/users/courses`, course);
+    const payload = response.data;
+    return payload;
+  } catch (error) {
+    console.error("Error storing course:", error);
+    return null;
   }
 }

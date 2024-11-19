@@ -1,22 +1,58 @@
 import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi";
 import { z } from "zod";
 
-import { commonValidations } from "@/common/utils/commonValidation";
-
 extendZodWithOpenApi(z);
 
-export const OfficeHourSchema = z.object({
-  course_id: z.number().int(),
-  host: z.string(),
-  mode: z.enum(['remote', 'in-person', 'hybrid']),
-  location: z.string(),
-  link: z.string().url(),
-  start_time: z.string(),
-  end_time: z.string(),
-  day: z.enum(['monday', 'tuesday','wednesday','thursday','friday']),
-  created_at: z.date(),
-  updated_at: z.date(),
-});
+export const OfficeHourSchema = z
+  .object({
+    course_id: z.number().int(),
+    host: z.string().min(1),
+    day: z.enum(["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]),
+    start_time: z
+      .string()
+      .min(1, "Must have a start time")
+      .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Must be in 24-hour format (HH:mm)"),
+    end_time: z
+      .string()
+      .min(1, "Must have an end time")
+      .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Must be in 24-hour format (HH:mm)"), // 00:00 to 12:00 am/pm
+    mode: z.enum(["in-person", "online", "hybrid"]),
+    location: z
+      .string()
+      .regex(/^[A-Z]+[0-9]+$/)
+      .optional(),
+    link: z.union([z.string().url(), z.string().length(0)]).optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.mode === "hybrid") {
+      if (!data.location || data.location.length === 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["location"],
+        });
+      }
+      if (!data.link || data.link.length === 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["link"],
+        });
+      }
+    } else if (data.mode === "in-person") {
+      if (!data.location || data.location.length === 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["location"],
+        });
+      }
+    } else if (data.mode === "online") {
+      if (!data.link || data.link.length === 0) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["link"],
+        });
+      }
+    }
+  });
 
 export type OfficeHour = z.infer<typeof OfficeHourSchema>;
 
@@ -26,11 +62,5 @@ export type OfficeHour = z.infer<typeof OfficeHourSchema>;
 // });
 
 export const PostOfficeHourSchema = z.object({
-  params: z.object({}),
-  body: z.object({
-    host: z.string().min(1, "Must have a host"),
-    mode: z.string().min(1, "Must have a modality"),
-    start_time: z.string().min(1, "Must have a start time").regex(/^([0-9]|[1][0-2]):([0-5]\d) [ap]m$/, "Must be of valid time format"), // `startTime` field from the JSON body. Regex for a time from 00:00 to 12:00 am/pm
-    end_time: z.string().min(1, "Must have an end time").regex(/^([0-9]|[1][0-2]):([0-5]\d) [ap]m$/, "Must be of valid time format"), // `endTime` field from the JSON body. Regex for a time from 00:00 to 12:00 am/pm
-  }),
+  body: OfficeHourSchema,
 });

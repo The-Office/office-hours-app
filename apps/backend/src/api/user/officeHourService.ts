@@ -1,10 +1,11 @@
 import { StatusCodes } from "http-status-codes";
 
-import type { OfficeHour } from "@/common/schemas/officeHoursSchema";
+import type { OfficeHour, OfficeHourSchema } from "@/common/schemas/officeHoursSchema";
 import { OfficeHourRepository } from "@/database/officeHoursRepository";
 import { ServiceResponse } from "@/common/schemas/serviceResponse";
 import { logger } from "@/server";
 import ical, { ICalCalendar, ICalEventRepeatingFreq } from 'ical-generator';
+import { z } from "zod";
 
 export class OfficeHourService {
   private officeHourRepository: OfficeHourRepository;
@@ -57,9 +58,10 @@ export class OfficeHourService {
     }
   }
 
-  async getOfficeHoursByUserId(id: number): Promise<ServiceResponse<OfficeHour[] | null>> {
+  async getOfficeHoursByUserId(id: string): Promise<ServiceResponse<OfficeHour[] | null>> {
     try {
-      const officehours = await this.officeHourRepository.getOfficeHoursByUserId(id);
+      // const officehours = await this.officeHourRepository.getOfficeHoursByUserId(id);
+      const officehours = await this.officeHourRepository.getAllOfficeHours();
       if (!officehours) {
         return ServiceResponse.failure("No office hours found", null, StatusCodes.NOT_FOUND);
       }
@@ -149,15 +151,8 @@ export class OfficeHourService {
     }
   }
 
-  async storeOfficeHours(host: string, mode: string, link: string, location: string, start_time: string, end_time: string): Promise<ServiceResponse<null>> {
-    try {
-      await this.officeHourRepository.storeOfficeHours(host, mode, link, location, start_time, end_time);
-      logger.info("Office hours successfully stored.");
-      return ServiceResponse.success("Office hours successfully stored", null);
-    } catch (ex) {
-      const errorMessage = `Error storing office hours: ${(ex as Error).message}`;
-      logger.error(errorMessage);
-      return ServiceResponse.failure("An error occurred while storing office hours.", null, StatusCodes.INTERNAL_SERVER_ERROR);
-    }
+  async storeOfficeHour(data: z.infer<typeof OfficeHourSchema>): Promise<ServiceResponse<OfficeHour | null>> {
+    const response = await this.officeHourRepository.storeOfficeHour(data);
+    return response;
   }
 }

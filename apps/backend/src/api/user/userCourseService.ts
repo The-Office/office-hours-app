@@ -23,30 +23,42 @@ export class UserCourseService {
     } catch (ex) {
       const errorMessage = `Error finding all courses: $${(ex as Error).message}`;
       logger.error(errorMessage);
-      return ServiceResponse.failure(
-        "An error occurred while retrieving courses.",
-        null,
-        StatusCodes.INTERNAL_SERVER_ERROR,
-      );
+      return ServiceResponse.failure("An error occurred while retrieving courses.", null, StatusCodes.INTERNAL_SERVER_ERROR);
     }
   }
 
-  async getCoursesByUserId(id: number): Promise<ServiceResponse<Course[] | null>> {
+  async getCoursesByUserId(id: string): Promise<ServiceResponse<Course[] | null>> {
     try {
-      const courses = await this.courseRepository.getCoursesByUserId(id);
+      // const courses = await this.courseRepository.getCoursesByUserId(id);
+      const courses = await this.courseRepository.getAllCourses();
       if (!courses) {
-      return ServiceResponse.failure("No Courses found", null, StatusCodes.NOT_FOUND);
+        return ServiceResponse.failure("No Courses found", null, StatusCodes.NOT_FOUND);
       }
       return ServiceResponse.success<Course[]>("Courses found", courses);
     } catch (ex) {
       const errorMessage = `Error finding all courses: $${(ex as Error).message}`;
       logger.error(errorMessage);
-      return ServiceResponse.failure(
-        "An error occurred while retrieving courses.",
-        null,
-        StatusCodes.INTERNAL_SERVER_ERROR,
-      );
+      return ServiceResponse.failure("An error occurred while retrieving courses.", null, StatusCodes.INTERNAL_SERVER_ERROR);
     }
   }
 
+  async getByCourseId(course_id: number): Promise<ServiceResponse<Course | null>> {
+    try {
+      const course = await this.courseRepository.getByCourseId(course_id);
+      console.log(course);
+      if (!course) {
+        return ServiceResponse.failure("No Course found", null, StatusCodes.NOT_FOUND);
+      }
+      return ServiceResponse.success<Course>("Course found", course);
+    } catch (ex) {
+      const errorMessage = `Error finding course: $${(ex as Error).message}`;
+      logger.error(errorMessage);
+      return ServiceResponse.failure("An error occurred while retrieving course.", null, StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async storeCourse(course_id: number, course_code: string, title: string): Promise<ServiceResponse<Course | null>> {
+    const response = await this.courseRepository.storeCourse(course_id, course_code, title);
+    return response;
+  }
 }

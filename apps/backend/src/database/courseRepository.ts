@@ -1,6 +1,8 @@
 import type { Course } from "@/common/schemas/courseSchema";
+import { ServiceResponse } from "@/common/schemas/serviceResponse";
 import { UserCourse } from "@/common/schemas/userCourseSchema";
-import { FieldPacket, Pool } from "mysql2/promise";
+import { StatusCodes } from "http-status-codes";
+import { FieldPacket, Pool, QueryResult, ResultSetHeader, RowDataPacket } from "mysql2/promise";
 
 export class CourseRepository {
   private db: Pool;
@@ -47,7 +49,7 @@ export class CourseRepository {
     }
   }
 
-  async getCoursesByUserId(id: number): Promise<Course[]> {
+  async getCoursesByUserId(id: string): Promise<Course[]> {
     try {
       // Parameterized query to prevent SQL injection
       const [rows]: [any[], FieldPacket[]] = await this.db.query(
@@ -64,6 +66,43 @@ export class CourseRepository {
     } catch (error) {
       console.error("Database query failed:", error);
       throw new Error("Failed to fetch user's courses from the database");
+    }
+  }
+
+  async storeCourse(course_id: number, course_code: string, title: string): Promise<ServiceResponse<Course | null>> {
+    course_code = course_code.replace(/\s+/g, '');
+    try {
+      // Insert the course
+      const [result] = await this.db.execute<ResultSetHeader>(
+        "INSERT INTO courses (course_id, course_code, title) VALUES (?, ?, ?)", 
+        [course_id, course_code, title]
+      );
+      
+      // Fetch the newly inserted course
+      const [rows] = await this.db.execute<RowDataPacket[]>(
+        "SELECT * FROM courses WHERE course_id = ?",
+        [course_id]
+      );
+      
+      if (!rows || rows.length === 0) {
+        return ServiceResponse.failure(
+          "Course was created but could not be retrieved",
+          null,
+          StatusCodes.INTERNAL_SERVER_ERROR
+        );
+      }
+
+      return ServiceResponse.success(
+        "Course stored successfully", 
+        rows[0] as Course
+      );
+    } catch (error) {
+      console.error("Database query failed:", error);
+      return ServiceResponse.failure(
+        "Failed to store course", 
+        null, 
+        StatusCodes.INTERNAL_SERVER_ERROR
+      );
     }
   }
 }

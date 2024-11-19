@@ -42,6 +42,12 @@ export function DataTableViewOptions<TData>({
               typeof column.accessorFn !== "undefined" && column.getCanHide()
           )
           .map((column) => {
+            function snakeToTitle(snakeCase: string) {
+              return snakeCase
+                  .split('_')
+                  .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                  .join(' ');
+          }
             return (
               <DropdownMenuCheckboxItem
                 key={column.id}
@@ -49,7 +55,7 @@ export function DataTableViewOptions<TData>({
                 checked={column.getIsVisible()}
                 onCheckedChange={(value) => column.toggleVisibility(!!value)}
               >
-                {column.id}
+                {snakeToTitle(column.id)}
               </DropdownMenuCheckboxItem>
             )
           })}

@@ -27,7 +27,7 @@ export class FeedbackService {
     }
   }
 
-  async storeFeedback(user_id: number, rating: number, content: string): Promise<ServiceResponse<null>> {
+  async storeFeedback(user_id: string, rating: number, content: string): Promise<ServiceResponse<null>> {
     try {
       await this.feedbackRepository.createFeedback(user_id, rating, content);
       logger.info("Feedback successfully stored.");

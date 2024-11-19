@@ -14,17 +14,13 @@ bun run frontend
 ```
 
 To run the backend:
-
-MAKE SURE YOU COPY `.env.template` INTO A NEW FILE CALLED `.env` RIGHT NEXT TO IT FIRST.
-
-Then, run:
-```bash
-
 ```bash
 bun run backend
 ```
 
-This project was created using `bun init` in bun v0.4.0. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+MAKE SURE YOU COPY `.env.template` INTO A NEW FILE `.env` NEXT TO IT WITH FILLED IN VALUES.
+
+
 
 The backend is stored in `/apps/backend`, and the frontend is stored in `/apps/frontend`. The main file for backend is `index.ts` and the main file for frontend is `App.tsx`. These probably should not be modified much.
 
@@ -64,12 +60,34 @@ git pull origin main
 ```
 
 ### Database
-**Migrate up**:
+
+To use the below bun commands, first run:
 ```
-npx knex migrate:latest 
+cd /apps/backend
 ```
 
-**Migrate down**:
+Look in `package.json` for commands.
+
+**Migrate up**:
+```
+npx knex migrate:latest
+// or
+bun mig-up
+```
+
+**Migrate down (DELETES ALL OF THE DATA!!!)**:
 ```
 npx knex migrate:rollback 
+// or
+bun mig-down
+```
+
+**Seed (DELETES ALL OF THE DATA!!!)**:
+```
+bun seed
+```
+
+**Run all 3**:
+```
+bun db-reset
 ```

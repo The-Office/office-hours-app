@@ -20,7 +20,7 @@ export class FeedbackRepository {
     }
   }
 
-  async createFeedback(user_id: number, rating: number, content: string): Promise<void> {
+  async createFeedback(user_id: string, rating: number, content: string): Promise<void> {
     try {
       await this.db.execute(`INSERT INTO feedback (user_id, rating, content) VALUES (?, ?, ?)`, [user_id, rating, content]);
     } catch (error) {
