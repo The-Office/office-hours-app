@@ -29,9 +29,15 @@ const formSchema = z.object({
     host: z.string().min(1, {
       message: "Field cannot be empty.",
     }),
-    days: z.enum(["M", "T", "W", "Th", "F", "Sa", "Su"], {
+    days: z.enum(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], {
         required_error: "You need to select a day.",
       }),
+    start: z.string().min(1, {
+        message: "Field cannot be empty.",
+    }),
+    end: z.string().min(1, {
+        message: "Field cannot be empty.",
+    }),
     mode: z.enum(["in-person", "online"], {
         required_error: "You need to select a mode.",
       }),
@@ -112,17 +118,45 @@ export function AddHoursForm() {
                             </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                                <SelectItem value="M">Monday</SelectItem>
-                                <SelectItem value="T">Tuesday</SelectItem>
-                                <SelectItem value="W">Wednesday</SelectItem>
-                                <SelectItem value="Th">Thursday</SelectItem>
-                                <SelectItem value="F">Friday</SelectItem>
-                                <SelectItem value="Sa">Saturday</SelectItem>
-                                <SelectItem value="Su">Sunday</SelectItem>
+                                <SelectItem value="Monday">Monday</SelectItem>
+                                <SelectItem value="Tuesday">Tuesday</SelectItem>
+                                <SelectItem value="Wednesday">Wednesday</SelectItem>
+                                <SelectItem value="Thursday">Thursday</SelectItem>
+                                <SelectItem value="Friday">Friday</SelectItem>
+                                <SelectItem value="Saturday">Saturday</SelectItem>
+                                <SelectItem value="Sunday">Sunday</SelectItem>
                             </SelectContent>
                         </Select>
                         <FormMessage />
                         </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="start"
+                    render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>Start Time</FormLabel>
+                        <FormControl>
+                            <Input placeholder="start time..." {...field} />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="end"
+                    render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>End Time</FormLabel>
+                        <FormControl>
+                            <Input placeholder="end time..." {...field} />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
                     )}
                 />
 
