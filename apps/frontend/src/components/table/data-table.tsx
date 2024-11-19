@@ -29,6 +29,8 @@ import {
 
 import { Input } from "@/components/ui/input"
 import { InsertOfficeHoursForm } from "./insert-office-hours"
+import { getIcalFile } from "@/services/userService"
+import { useToast } from "@/hooks/use-toast"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -45,7 +47,7 @@ export function DataTable<TData, TValue>({
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
-
+    const { toast } = useToast()
 
     const table = useReactTable({
         data,
@@ -65,6 +67,27 @@ export function DataTable<TData, TValue>({
             rowSelection,
         },
     })
+
+    const handleDownloadClick = async() => {
+        try {
+            const payload = await getIcalFile();    
+            if (payload && payload.statusCode === 200) {
+                const dataUrl = payload.data;
+            
+                const a = document.createElement("a");
+                a.href = dataUrl;
+                a.download = "office_hours.ics";
+                
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            } else {
+                throw new Error("Failed to get iCal file");
+            }
+        } catch(error) {
+            console.error("iCal download error:", error);
+        }
+    }
 
     return (
         <>
@@ -134,7 +157,7 @@ export function DataTable<TData, TValue>({
             </div>
             <div className="my-3 flex justify-between">
                 <DataTablePagination table={table} />
-                <Button variant="outline">Create Calendar Link</Button>
+                <Button variant="outline" onClick={handleDownloadClick}>Download iCal</Button>
             </div>
         </>
     )

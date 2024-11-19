@@ -16,7 +16,7 @@ export const OfficeHourSchema = z
       .string()
       .min(1, "Must have an end time")
       .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Must be in 24-hour format (HH:mm)"), // 00:00 to 12:00 am/pm
-    mode: z.enum(["in-person", "online", "hybrid"]),
+    mode: z.enum(["in-person", "remote", "hybrid"]),
     location: z
       .string()
       .regex(/^[A-Z]+[0-9]+$/)
@@ -44,7 +44,7 @@ export const OfficeHourSchema = z
           path: ["location"],
         });
       }
-    } else if (data.mode === "online") {
+    } else if (data.mode === "remote") {
       if (!data.link || data.link.length === 0) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,

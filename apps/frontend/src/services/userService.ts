@@ -36,7 +36,7 @@ export interface Course {
 
 export interface Payload {
   statusCode: number;
-  data: Record<string, any>;
+  data: any;
   message: string;
 }
 
@@ -114,6 +114,17 @@ export const sendFeedback = async (rating: number, content: string): Promise<Pay
     return null;
   }
 };
+
+export const getIcalFile = async (): Promise<Payload | null> => {
+  try {
+    const response = await api.get(`http://localhost:8080/users/ical-file`);
+    const payload = response.data;
+    return payload;
+  } catch(error) {
+    console.error("Error fetching ical files:", error);
+    return null;
+  }
+}
 
 export const storeOfficeHour = async (officeHour: Record<string, any>): Promise<Payload | null> => {
   try {
