@@ -211,7 +211,7 @@ export function InsertOfficeHoursForm() {
                         Insert
                     </Button>
                 </DialogTrigger>
-                <DialogContent className="min-w-96">
+                <DialogContent className="min-w-96 overflow-y-scroll max-h-screen">
                     <DialogHeader>
                         <DialogTitle className="text-center text-xl">Create Office Hours</DialogTitle>
                     </DialogHeader>
