@@ -1,9 +1,10 @@
 import { StatusCodes } from "http-status-codes";
 
-import type { OfficeHour } from "@/common/schemas/officeHoursSchema";
+import type { OfficeHour, OfficeHourSchema } from "@/common/schemas/officeHoursSchema";
 import { OfficeHourRepository } from "@/database/officeHoursRepository";
 import { ServiceResponse } from "@/common/schemas/serviceResponse";
 import { logger } from "@/server";
+import { z } from "zod";
 
 export class OfficeHourService {
   private officeHourRepository: OfficeHourRepository;
@@ -50,15 +51,8 @@ export class OfficeHourService {
     }
   }
 
-  async storeOfficeHours(host: string, mode: string, link: string, location: string, start_time: string, end_time: string, day: string): Promise<ServiceResponse<null>> {
-    try {
-      await this.officeHourRepository.storeOfficeHours(host, mode, link, location, start_time, end_time, day);
-      logger.info("Office hours successfully stored.");
-      return ServiceResponse.success("Office hours successfully stored", null);
-    } catch (ex) {
-      const errorMessage = `Error storing office hours: ${(ex as Error).message}`;
-      logger.error(errorMessage);
-      return ServiceResponse.failure("An error occurred while storing office hours.", null, StatusCodes.INTERNAL_SERVER_ERROR);
-    }
+  async storeOfficeHour(data: z.infer<typeof OfficeHourSchema>): Promise<ServiceResponse<OfficeHour | null>> {
+    const response = await this.officeHourRepository.storeOfficeHour(data);
+    return response;
   }
 }

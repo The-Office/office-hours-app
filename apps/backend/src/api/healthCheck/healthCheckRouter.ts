@@ -4,7 +4,7 @@ import { handleServiceResponse } from "@/common/utils/httpHandlers";
 
 export const healthCheckRouter: Router = express.Router();
 
-healthCheckRouter.get("/ok", (_req: Request, res: Response) => {
+healthCheckRouter.get("/", (_req: Request, res: Response) => {
   const serviceResponse = ServiceResponse.success("Service is healthy", null);
   return handleServiceResponse(serviceResponse, res);
 });

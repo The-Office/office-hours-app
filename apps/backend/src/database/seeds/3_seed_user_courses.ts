@@ -8,19 +8,19 @@ export async function seed(knex: Knex): Promise<void> {
   await knex('user_courses').insert([
     {
       user_id: '88884444ff',
-      course_id: 508104,
+      course_id: 8371,
     },
     {
       user_id: '88884444ff',
-      course_id: 507903,
+      course_id: 7699,
     },
     {
       user_id: '55558888gg',
-      course_id: 508104,
+      course_id: 8371,
     },
     {
       user_id: '55558888gg',
-      course_id: 507903,
+      course_id: 7699,
     }
   ]);
 }

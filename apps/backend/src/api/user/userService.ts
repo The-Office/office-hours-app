@@ -36,7 +36,7 @@ export class UserService {
     try {
       const user = await this.userRepository.getById(id);
       if (!user) {
-        return this.storeUser(id);
+        return ServiceResponse.failure("No User found", null, StatusCodes.NOT_FOUND);
       }
       return ServiceResponse.success<User>("User found", user);
     } catch (ex) {
@@ -50,7 +50,7 @@ export class UserService {
     }
   }
 
-  async storeUser(id: string): Promise<ServiceResponse<User | null>> {
+  async storeUser(id: string, role: string): Promise<ServiceResponse<User | null>> {
     const clerkUser = await clerkClient.users.getUser(id);
     if (!clerkUser) {
       return ServiceResponse.failure("No Clerk User found", null, StatusCodes.NOT_FOUND);
@@ -60,7 +60,7 @@ export class UserService {
     const imageUrl = clerkUser.imageUrl;
     const firstName = clerkUser.firstName || "";
     const lastName = clerkUser.lastName || "";
-    const user =  await this.userRepository.storeUser(id, imageUrl, firstName, lastName, email);
+    const user =  await this.userRepository.storeUser(id, imageUrl, firstName, lastName, email, role);
     if (!user) {
       return ServiceResponse.failure("Error storing user", null, StatusCodes.NOT_FOUND);
     }
