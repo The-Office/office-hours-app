@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { FaStar } from "react-icons/fa";
-import { sendFeedback } from "@/services/userService";
+import { sendFeedback, getIcalFile } from "@/services/userService";
 import toast from "react-hot-toast";
 
 const FeedbackDialog = () => {

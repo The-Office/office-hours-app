@@ -48,4 +48,6 @@ userRouter.delete("/office-hours", validateRequest(DeleteOfficeHoursScehma), use
 userRouter.post("/courses", validateRequest(StoreCourseSchema), userController.storeCourse);
 userRouter.post("/me", userController.storeUser);
 userRouter.get("/courses/:course_id", userController.getCourse);
+userRouter.get("/ical-file", userController.getIcalFileByUserId);
+
 

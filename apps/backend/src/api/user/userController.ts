@@ -7,7 +7,6 @@ import { OfficeHourService } from "./officeHourService";
 import { handleServiceResponse } from "@/common/utils/httpHandlers";
 import { FeedbackService } from "./feedbackService";
 import { SearchService } from "../search/searchService";
-import { ServiceResponse } from "@/common/schemas/serviceResponse";
 
 export class UserController {
   private userService: UserService;
@@ -77,6 +76,13 @@ export class UserController {
     const serviceResponse = await this.officeHourService.getOfficeHoursByUserId(user_id);
     return handleServiceResponse(serviceResponse, res);
   };
+
+  public getIcalFileByUserId: RequestHandler = async (req: Request, res: Response) => {
+    const user_id = req.auth.userId;
+    const serviceResponse = await this.officeHourService.getIcalFileByUserId(user_id);
+    return handleServiceResponse(serviceResponse, res);
+
+  }
 
   public storeFeedback: RequestHandler = async (req: Request, res: Response) => {
     const user_id = req.auth.userId;

@@ -12,6 +12,7 @@ const App = () => {
     queryKey: ['user'],
     queryFn: fetchUser
   });
+  
 
   return (
     <>
