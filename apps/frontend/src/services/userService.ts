@@ -126,6 +126,17 @@ export const storeOfficeHour = async (officeHour: Record<string, any>): Promise<
   }
 }
 
+export const deleteOfficeHours = async(officeHour: Record<string, any>): Promise<Payload | null> => {
+  try {
+    const response = await api.delete(`/users/office-hours`, officeHour);
+    const payload = response.data;
+    return payload;
+  } catch(error) {
+    console.error("Error deleting office hour:", error);
+    return null;
+  }
+}
+
 export const storeCourse = async (course: Record<string, any>): Promise<Payload | null> => {
   try {
     const response = await api.post(`/users/courses`, course);

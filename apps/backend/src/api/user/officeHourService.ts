@@ -51,8 +51,14 @@ export class OfficeHourService {
     }
   }
 
+  async deleteOfficeHours(officeHourIds: any): Promise<ServiceResponse<null>> {
+    const response = await this.officeHourRepository.deleteOfficeHours(officeHourIds);
+    return response;
+  }
+
   async storeOfficeHour(data: z.infer<typeof OfficeHourSchema>): Promise<ServiceResponse<OfficeHour | null>> {
     const response = await this.officeHourRepository.storeOfficeHour(data);
     return response;
   }
+
 }
