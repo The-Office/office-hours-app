@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder # Use the builder stage
+    volumes:
+      - ./frontend:/app/frontend
+      - /app/frontend/node_modules
+    ports:
+      - "4173:4173"
+    environment:
+      - NODE_ENV=development
+    command: sh -c "cd frontend && bun run dev"
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    volumes:
+      - ./backend:/app/backend
+      - /app/backend/node_modules
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=development
+      - PORT=8080
+    command: sh -c "cd backend && bun run dev"
+
+  # Production configuration with Nginx
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - frontend
+      - backend
+    profiles:
+      - production
+
+  # Production services
+  frontend-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    expose:
+      - "4173"
+    environment:
+      - NODE_ENV=production
+    profiles:
+      - production
+
+  backend-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    expose:
+      - "8080"
+    environment:
+      - NODE_ENV=production
+      - PORT=8080
+    profiles:
+      - production

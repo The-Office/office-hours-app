@@ -41,6 +41,8 @@ userRouter.use(ClerkExpressRequireAuth());
 userRouter.get("/", userController.getAllUsers);
 userRouter.get("/me", userController.getUser);
 userRouter.get("/me/courses", userController.getCoursesByUserId);
+userRouter.post("/me/courses/:course_id", userController.storeUserCourse);
+userRouter.delete("/me/courses/:course_id", userController.deleteUserCourse);
 userRouter.get("/me/office-hours", userController.getOfficeHoursByUserId);
 userRouter.post("/feedback", validateRequest(PostFeedbackSchema), userController.storeFeedback);
 userRouter.post("/office-hours", validateRequest(PostOfficeHourSchema), userController.storeOfficeHour);

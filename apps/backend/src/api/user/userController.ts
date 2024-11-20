@@ -70,6 +70,20 @@ export class UserController {
     const serviceResponse = await this.userCourseService.getCoursesByUserId(user_id);
     return handleServiceResponse(serviceResponse, res);
   };
+  
+  public deleteUserCourse: RequestHandler = async (req: Request, res: Response) => {
+    const user_id = req.auth.userId;
+    const course_id = Number(req.params.course_id);
+    const serviceResponse = await this.userCourseService.deleteUserCourse(user_id, course_id);
+    return handleServiceResponse(serviceResponse, res);
+  }
+
+  public storeUserCourse: RequestHandler = async (req: Request, res: Response) => {
+    const user_id = req.auth.userId;
+    const course_id = Number(req.params.course_id);
+    const serviceResponse = await this.userCourseService.storeUserCourse(user_id, course_id);
+    return handleServiceResponse(serviceResponse, res);
+  }
 
   public getOfficeHoursByUserId: RequestHandler = async (req: Request, res: Response) => {
     const user_id = req.auth.userId;
@@ -81,7 +95,6 @@ export class UserController {
     const user_id = req.auth.userId;
     const serviceResponse = await this.officeHourService.getIcalFileByUserId(user_id);
     return handleServiceResponse(serviceResponse, res);
-
   }
 
   public storeFeedback: RequestHandler = async (req: Request, res: Response) => {

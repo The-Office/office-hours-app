@@ -70,39 +70,71 @@ export class CourseRepository {
   }
 
   async storeCourse(course_id: number, course_code: string, title: string): Promise<ServiceResponse<Course | null>> {
-    course_code = course_code.replace(/\s+/g, '');
+    course_code = course_code.replace(/\s+/g, "");
     try {
       // Insert the course
-      const [result] = await this.db.execute<ResultSetHeader>(
-        "INSERT INTO courses (course_id, course_code, title) VALUES (?, ?, ?)", 
-        [course_id, course_code, title]
-      );
-      
+      const [result] = await this.db.execute<ResultSetHeader>("INSERT INTO courses (course_id, course_code, title) VALUES (?, ?, ?)", [
+        course_id,
+        course_code,
+        title,
+      ]);
+
       // Fetch the newly inserted course
-      const [rows] = await this.db.execute<RowDataPacket[]>(
-        "SELECT * FROM courses WHERE course_id = ?",
-        [course_id]
-      );
-      
+      const [rows] = await this.db.execute<RowDataPacket[]>("SELECT * FROM courses WHERE course_id = ?", [course_id]);
+
       if (!rows || rows.length === 0) {
-        return ServiceResponse.failure(
-          "Course was created but could not be retrieved",
-          null,
-          StatusCodes.INTERNAL_SERVER_ERROR
-        );
+        return ServiceResponse.failure("Course was created but could not be retrieved", null, StatusCodes.INTERNAL_SERVER_ERROR);
       }
 
-      return ServiceResponse.success(
-        "Course stored successfully", 
-        rows[0] as Course
-      );
+      return ServiceResponse.success("Course stored successfully", rows[0] as Course);
     } catch (error) {
       console.error("Database query failed:", error);
-      return ServiceResponse.failure(
-        "Failed to store course", 
-        null, 
-        StatusCodes.INTERNAL_SERVER_ERROR
-      );
+      return ServiceResponse.failure("Failed to store course", null, StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async storeUserCourse(user_id: string, course_id: number): Promise<ServiceResponse<UserCourse | null>> {
+    try {
+      // Insert the user course
+      const [result] = await this.db.execute<ResultSetHeader>("INSERT INTO user_courses (user_id, course_id) VALUES (?, ?)", [user_id, course_id]);
+
+      // Fetch the newly inserted user course
+      const [rows] = await this.db.execute<RowDataPacket[]>("SELECT * FROM user_courses WHERE user_id = ? AND course_id = ?", [user_id, course_id]);
+
+      if (!rows || rows.length === 0) {
+        return ServiceResponse.failure("User course was created but could not be retrieved", null, StatusCodes.INTERNAL_SERVER_ERROR);
+      }
+
+      return ServiceResponse.success("User course stored successfully", rows[0] as UserCourse);
+    } catch (error) {
+      console.error("Database query failed:", error);
+      return ServiceResponse.failure("Failed to store user course", null, StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async deleteUserCourse(user_id: string, course_id: number): Promise<ServiceResponse<UserCourse | null>> {
+    try {
+      // Delete the user course
+      const [rows] = await this.db.execute<RowDataPacket[]>("SELECT * FROM user_courses WHERE user_id = ? AND course_id = ?", [user_id, course_id]);
+
+      if (!rows || rows.length === 0) {
+        return ServiceResponse.failure("User course could not be retrieved", null, StatusCodes.INTERNAL_SERVER_ERROR);
+      }
+
+      const userCourse = rows[0] as UserCourse;
+
+
+      const [result] = await this.db.execute<ResultSetHeader>("DELETE FROM user_courses WHERE user_id = ? AND course_id = ?", [user_id, course_id]);
+
+      // Check if the user course was deleted
+      if (result.affectedRows === 0) {
+        return ServiceResponse.failure("User course not found", null, StatusCodes.NOT_FOUND);
+      }
+
+      return ServiceResponse.success("User course deleted successfully", null);
+    } catch (error) {
+      console.error("Database query failed:", error);
+      return ServiceResponse.failure("Failed to delete user course", null, StatusCodes.INTERNAL_SERVER_ERROR);
     }
   }
 }
