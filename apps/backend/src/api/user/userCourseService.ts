@@ -4,6 +4,7 @@ import type { Course } from "@/common/schemas/courseSchema";
 import { CourseRepository } from "@/database/courseRepository";
 import { ServiceResponse } from "@/common/schemas/serviceResponse";
 import { logger } from "@/server";
+import { UserCourse } from "@/common/schemas/userCourseSchema";
 
 export class UserCourseService {
   private courseRepository: CourseRepository;
@@ -40,6 +41,16 @@ export class UserCourseService {
       logger.error(errorMessage);
       return ServiceResponse.failure("An error occurred while retrieving courses.", null, StatusCodes.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  async storeUserCourse(user_id: string, course_id: number): Promise<ServiceResponse<UserCourse | null>> {
+    const response = await this.courseRepository.storeUserCourse(user_id, course_id);
+    return response;
+  }
+
+  async deleteUserCourse(user_id: string, course_id: number): Promise<ServiceResponse<UserCourse | null>> {
+    const response = await this.courseRepository.deleteUserCourse(user_id, course_id);
+    return response;
   }
 
   async getByCourseId(course_id: number): Promise<ServiceResponse<Course | null>> {
