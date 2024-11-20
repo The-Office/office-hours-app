@@ -1,4 +1,4 @@
-import { DeleteOfficeHoursScehma, OfficeHour, OfficeHourSchema } from "@/common/schemas/officeHoursSchema";
+import { OfficeHour, OfficeHourSchema } from "@/common/schemas/officeHoursSchema";
 import { ServiceResponse } from "@/common/schemas/serviceResponse";
 import { StatusCodes } from "http-status-codes";
 import { FieldPacket, Pool, ResultSetHeader, RowDataPacket } from 'mysql2/promise';

@@ -21,7 +21,7 @@ export const OfficeHourSchema = z
       .string()
       .regex(/^[A-Z]+[0-9]+$/)
       .optional(),
-    link: z.union([z.string().url(), z.string().length(0)]).optional(),
+    link: (z.union([z.string().url(), z.string().length(0)])).optional(),
   })
   .superRefine((data, ctx) => {
     if (data.mode === "hybrid") {
@@ -65,6 +65,3 @@ export const PostOfficeHourSchema = z.object({
   body: OfficeHourSchema,
 });
 
-export const DeleteOfficeHoursScehma = z.object({
-  body: OfficeHourSchema,
-})

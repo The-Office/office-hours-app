@@ -14,7 +14,6 @@ import { FeedbackRepository } from "@/database/feedbackRepository";
 import { PostFeedbackSchema } from "@/common/schemas/feedbackSchema";
 import { PostOfficeHourSchema } from "@/common/schemas/officeHoursSchema";
 import { StoreCourseSchema } from "@/common/schemas/courseSchema";
-import { DeleteOfficeHoursScehma } from "@/common/schemas/officeHoursSchema";
 import { SearchService } from "../search/searchService";
 
 const userRepository = new UserRepository(db);
@@ -44,7 +43,7 @@ userRouter.get("/me/courses", userController.getCoursesByUserId);
 userRouter.get("/me/office-hours", userController.getOfficeHoursByUserId);
 userRouter.post("/feedback", validateRequest(PostFeedbackSchema), userController.storeFeedback);
 userRouter.post("/office-hours", validateRequest(PostOfficeHourSchema), userController.storeOfficeHour);
-userRouter.delete("/office-hours", validateRequest(DeleteOfficeHoursScehma), userController.deleteOfficeHours);
+userRouter.delete("/office-hours", userController.deleteOfficeHours);
 userRouter.post("/courses", validateRequest(StoreCourseSchema), userController.storeCourse);
 userRouter.post("/me", userController.storeUser);
 userRouter.get("/courses/:course_id", userController.getCourse);
