@@ -1,4 +1,4 @@
-import { OfficeHour, OfficeHourSchema } from "@/common/schemas/officeHoursSchema";
+import { DeleteOfficeHoursScehma, OfficeHour, OfficeHourSchema } from "@/common/schemas/officeHoursSchema";
 import { ServiceResponse } from "@/common/schemas/serviceResponse";
 import { StatusCodes } from "http-status-codes";
 import { FieldPacket, Pool, ResultSetHeader, RowDataPacket } from 'mysql2/promise';
@@ -96,6 +96,45 @@ export class OfficeHourRepository {
       return ServiceResponse.failure(
         "An unexpected error occurred while creating office hours",
         null,
+        StatusCodes.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
+  async deleteOfficeHours(officeHourIds: any): Promise<ServiceResponse<null>> {
+
+    try {
+
+      if(typeof officeHourIds === "string") {
+
+        for(const num of officeHourIds.split(',').map(Number)) {
+
+          this.db.query(
+            "DELETE FROM office_hours WHERE id = ?",
+            [num]
+          );
+
+        }
+
+        return ServiceResponse.success(
+          "Successfully deleted office hours from database.", 
+          null
+        );
+
+      } else {
+        
+        return ServiceResponse.failure(
+          "An issue arose with the query provided",
+          null,
+          StatusCodes.BAD_REQUEST
+        )
+
+      }
+
+    } catch(error) {
+      return ServiceResponse.failure(
+        "An unexpected error occurred while deleting office hours", 
+        null, 
         StatusCodes.INTERNAL_SERVER_ERROR
       );
     }

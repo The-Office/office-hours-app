@@ -77,6 +77,10 @@ export class OfficeHourService {
     }
   }
 
+  async deleteOfficeHours(officeHourIds: any): Promise<ServiceResponse<null>> {
+    const response = await this.officeHourRepository.deleteOfficeHours(officeHourIds);
+    return response;
+  }
   async getIcalFileByUserId(id: string): Promise<ServiceResponse<string | null>> {
     try {
       const officehours = await this.officeHourRepository.getOfficeHoursByUserId(id);
@@ -154,4 +158,5 @@ export class OfficeHourService {
     const response = await this.officeHourRepository.storeOfficeHour(data);
     return response;
   }
+
 }

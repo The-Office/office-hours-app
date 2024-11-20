@@ -64,3 +64,7 @@ export type OfficeHour = z.infer<typeof OfficeHourSchema>;
 export const PostOfficeHourSchema = z.object({
   body: OfficeHourSchema,
 });
+
+export const DeleteOfficeHoursScehma = z.object({
+  body: OfficeHourSchema,
+})

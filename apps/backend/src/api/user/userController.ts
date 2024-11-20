@@ -7,8 +7,6 @@ import { OfficeHourService } from "./officeHourService";
 import { handleServiceResponse } from "@/common/utils/httpHandlers";
 import { FeedbackService } from "./feedbackService";
 import { SearchService } from "../search/searchService";
-import { ServiceResponse } from "@/common/schemas/serviceResponse";
-// import { ServiceResponse } from "@/common/schemas/serviceResponse";
 
 export class UserController {
   private userService: UserService;
@@ -98,12 +96,20 @@ export class UserController {
     return handleServiceResponse(serviceResponse, res);
   };
 
+  public deleteOfficeHours: RequestHandler = async (req: Request, res: Response) => {
+    const user_id = req.auth.userId;
+    let office_hour_ids = req.query.office_hour_ids;
+    const serviceResponse = await this.officeHourService.deleteOfficeHours(office_hour_ids);
+    return handleServiceResponse(serviceResponse, res);
+  }
+
   public storeCourse: RequestHandler = async (req: Request, res: Response) => {
     const user_id = req.auth.userId;
     const { course_id, course_code, title } = req.body;
     const serviceResponse = await this.userCourseService.storeCourse(course_id, course_code, title);
     return handleServiceResponse(serviceResponse, res);
   };
+
   public getCourse: RequestHandler = async (req: Request, res: Response) => {
     const user_id = req.auth.userId;
     const course_id = Number(req.params.course_id);
