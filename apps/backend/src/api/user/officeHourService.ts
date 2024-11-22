@@ -81,9 +81,10 @@ export class OfficeHourService {
     const response = await this.officeHourRepository.deleteOfficeHours(officeHourIds);
     return response;
   }
-  async getIcalFileByUserId(id: string): Promise<ServiceResponse<string | null>> {
+  
+  async getIcalFileByUserId(id: string, officeHourIds: any): Promise<ServiceResponse<string | null>> {
     try {
-      const officehours = await this.officeHourRepository.getOfficeHoursByUserId(id);
+      const officehours = await this.officeHourRepository.getOfficeHoursByUserId(id, officeHourIds);
       if(!officehours) {
         return ServiceResponse.failure("No office hours found", null, StatusCodes.NOT_FOUND)
       }

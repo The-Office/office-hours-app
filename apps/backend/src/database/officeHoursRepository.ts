@@ -24,11 +24,17 @@ export class OfficeHourRepository {
     }
   }
   
-  async getOfficeHoursByUserId(id: string): Promise<OfficeHour[]> {
+  async getOfficeHoursByUserId(id: string, officeHourIds?: any): Promise<OfficeHour[]> {
     try {
       // Parameterized query to prevent SQL injection
-      const [rows]: [any[], FieldPacket[]] = await this.db.query("SELECT office_hours.*, courses.course_code FROM office_hours JOIN user_courses ON office_hours.course_id = user_courses.course_id LEFT JOIN courses ON office_hours.course_id = courses.course_id WHERE user_courses.user_id = ?", [id]);
-      return rows as OfficeHour[];
+      if(typeof officeHourIds !== undefined) {
+        const [rows]: [any[], FieldPacket[]] = await this.db.query("SELECT office_hours.*, courses.course_code FROM office_hours JOIN user_courses ON office_hours.course_id = user_courses.course_id LEFT JOIN courses ON office_hours.course_id = courses.course_id WHERE user_courses.user_id = ? AND office_hours.id = ?", [id, officeHourIds]);
+        return rows as OfficeHour[];
+      }
+      else {
+        const [rows]: [any[], FieldPacket[]] = await this.db.query("SELECT office_hours.*, courses.course_code FROM office_hours JOIN user_courses ON office_hours.course_id = user_courses.course_id LEFT JOIN courses ON office_hours.course_id = courses.course_id WHERE user_courses.user_id = ?", [id]);
+        return rows as OfficeHour[];
+      }
     } catch (error) {
       console.error("Database query failed:", error);
       throw new Error("Failed to fetch user from the database");
