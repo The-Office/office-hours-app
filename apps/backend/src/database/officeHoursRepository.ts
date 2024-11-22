@@ -28,7 +28,9 @@ export class OfficeHourRepository {
     try {
       // Parameterized query to prevent SQL injection
       if(typeof officeHourIds !== undefined) {
-        const [rows]: [any[], FieldPacket[]] = await this.db.query("SELECT office_hours.*, courses.course_code FROM office_hours JOIN user_courses ON office_hours.course_id = user_courses.course_id LEFT JOIN courses ON office_hours.course_id = courses.course_id WHERE user_courses.user_id = ? AND office_hours.id = ?", [id, officeHourIds]);
+        const idNumberValues = officeHourIds.split(",").map((id: string) => parseInt(id.trim(), 10));
+        const numOfIds = idNumberValues.map(() => "?").join(",");
+        const [rows]: [any[], FieldPacket[]] = await this.db.query(`SELECT * FROM office_hours WHERE office_hours.id IN (${numOfIds})`, idNumberValues);
         return rows as OfficeHour[];
       }
       else {
