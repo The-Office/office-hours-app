@@ -29,8 +29,9 @@ import {
 
 import { Input } from "@/components/ui/input"
 import { InsertOfficeHoursForm } from "./insert-office-hours"
-import { getIcalFile } from "@/services/userService"
+import { deleteOfficeHours, fetchOfficeHours, getIcalFile, OfficeHour } from "@/services/userService"
 import { useToast } from "@/hooks/use-toast"
+import { useQuery } from "@tanstack/react-query"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -48,6 +49,11 @@ export function DataTable<TData, TValue>({
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
     const { toast } = useToast()
+    
+    const { refetch } = useQuery({
+        queryKey: ['officeHours'],
+        queryFn: fetchOfficeHours,
+      });
 
     const table = useReactTable({
         data,
@@ -68,7 +74,7 @@ export function DataTable<TData, TValue>({
         },
     })
 
-    const handleDownloadClick = async() => {
+    const handleDownloadClick = async () => {
         try {
             const payload = await getIcalFile();    
             if (payload && payload.statusCode === 200) {
@@ -88,6 +94,26 @@ export function DataTable<TData, TValue>({
             console.error("iCal download error:", error);
         }
     }
+      
+    const handleDeleteClick = async () => {
+        const indices = Object.keys(rowSelection) // "['0', '1', '2']"
+        const rows = data.filter((_, index) => indices.includes(index.toString())) as OfficeHour[]
+        const ids = rows.map((row) => row.id)
+        console.log(ids)
+        await deleteOfficeHours(ids)
+        await refetch()
+        setRowSelection({})
+    };
+      
+    const DeleteButton = () => {
+        const numSelected = Object.keys(rowSelection).length;
+    
+        return (
+        <Button variant="outline" size="sm" onClick={handleDeleteClick}>
+            Delete {numSelected} Selected
+        </Button>
+        );
+    };
 
     return (
         <>
@@ -109,6 +135,7 @@ export function DataTable<TData, TValue>({
                     className="max-w-sm"
                 />
                 {admin && <InsertOfficeHoursForm />}
+                {admin && Object.keys(rowSelection).length > 0 && (<DeleteButton />)}
                 <DataTableViewOptions table={table} />
             </div>
             <div className="rounded-md border">

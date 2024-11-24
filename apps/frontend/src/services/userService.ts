@@ -94,7 +94,22 @@ export const fetchOfficeHours = async (): Promise<OfficeHour[]> => {
   try {
     const response = await api.get(`/users/me/office-hours`);
     const payload = response.data;
-    return payload.data;
+    const officeHours = payload.data as OfficeHour[];
+    return officeHours.map(item => ({
+      ...item,
+      day: item.day.charAt(0).toUpperCase() + item.day.slice(1),
+      mode: item.mode.charAt(0).toUpperCase() + item.mode.slice(1),
+      start_time: new Date(`2000-01-01T${item.start_time}`).toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+      }),
+      end_time: new Date(`2000-01-01T${item.end_time}`).toLocaleTimeString('en-US', {
+        hour: 'numeric', 
+        minute: '2-digit',
+        hour12: true
+      })
+    }))
   } catch (error) {
     console.error("Error fetching office hours:", error);
     return [];
@@ -137,9 +152,12 @@ export const storeOfficeHour = async (officeHour: Record<string, any>): Promise<
   }
 }
 
-export const deleteOfficeHours = async(officeHour: Record<string, any>): Promise<Payload | null> => {
+export const deleteOfficeHours = async(ids: number[]): Promise<Payload | null> => {
   try {
-    const response = await api.delete(`/users/office-hours`, officeHour);
+    const response = await api.delete('users/office-hours', {
+      params: {
+        ids: ids.join(',')
+      }});
     const payload = response.data;
     return payload;
   } catch(error) {
