@@ -49,6 +49,7 @@ userRouter.delete("/office-hours", userController.deleteOfficeHours);
 userRouter.post("/courses", validateRequest(StoreCourseSchema), userController.storeCourse);
 userRouter.post("/me", userController.storeUser);
 userRouter.get("/courses/:course_id", userController.getCourse);
-userRouter.get("/ical-file", userController.getIcalFileByUserId);
+userRouter.get("/me/ical-file", userController.getIcalFileByUserId);
+userRouter.get("/ical-file", userController.getIcalFileByDatabaseId);
 
 

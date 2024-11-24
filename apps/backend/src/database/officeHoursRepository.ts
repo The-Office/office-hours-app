@@ -34,6 +34,20 @@ export class OfficeHourRepository {
       throw new Error("Failed to fetch user from the database");
     }
   }
+
+  async getOfficeHoursByDatabaseId(officeHourIds: any): Promise<OfficeHour[]> {
+    try {
+      // Parameterized query to prevent SQL injection
+      const idNumberValues = officeHourIds.split(",").map((id: string) => parseInt(id.trim(), 10));
+      const numOfIds = idNumberValues.map(() => "?").join(",");
+      const [rows]: [any[], FieldPacket[]] = await this.db.query(`SELECT * FROM office_hours WHERE office_hours.id IN (${numOfIds})`, idNumberValues);
+      return rows as OfficeHour[];
+    } catch (error) {
+      console.error("Database query failed:", error);
+      throw new Error("Failed to fetch user from the database");
+    }
+  }
+
   async storeOfficeHour(data: z.infer<typeof OfficeHourSchema>): Promise<ServiceResponse<OfficeHour | null>> {
     try {
       const validated = OfficeHourSchema.parse(data);

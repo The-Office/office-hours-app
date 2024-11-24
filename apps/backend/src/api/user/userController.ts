@@ -7,6 +7,7 @@ import { OfficeHourService } from "./officeHourService";
 import { handleServiceResponse } from "@/common/utils/httpHandlers";
 import { FeedbackService } from "./feedbackService";
 import { SearchService } from "../search/searchService";
+import { ServiceResponse } from "@/common/schemas/serviceResponse";
 
 export class UserController {
   private userService: UserService;
@@ -90,6 +91,16 @@ export class UserController {
     const serviceResponse = await this.officeHourService.getOfficeHoursByUserId(user_id);
     return handleServiceResponse(serviceResponse, res);
   };
+
+  public getIcalFileByDatabaseId: RequestHandler = async (req: Request, res: Response) => {
+    if(typeof req.query.ids !== undefined) {
+      let office_hour_ids = req.query.ids;
+      const serviceResponse = await this.officeHourService.getIcalFileByDatabaseId(office_hour_ids);
+      return handleServiceResponse(serviceResponse, res);
+    } else {
+      return handleServiceResponse(ServiceResponse.failure("Missing query parameters", null), res);
+    }
+  }
 
   public getIcalFileByUserId: RequestHandler = async (req: Request, res: Response) => {
     const user_id = req.auth.userId;
