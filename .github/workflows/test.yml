@@ -2,12 +2,12 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ production ]
+    branches: [ main ]
   pull_request:
     branches: [ production ]
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -71,48 +71,3 @@ jobs:
           ghcr.io/the-office/main-service:${{ github.sha }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
-    
-    # - name: Run Trivy vulnerability scanner
-    #   uses: aquasecurity/trivy-action@master
-    #   with:
-    #     image-ref: 'ghcr.io/the-office/main-service:latest'
-    #     format: 'table'
-    #     exit-code: '1'
-    #     ignore-unfixed: true
-    #     severity: 'CRITICAL,HIGH'
-
-    - name: Install SSH key
-      uses: webfactory/ssh-agent@v0.8.0
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-    
-    - name: Add known hosts
-      run: |
-        mkdir -p ~/.ssh
-        ssh-keyscan -H ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
-        
-    - name: Deploy to production
-      if: github.ref == 'refs/heads/production'
-      env:
-        DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-        DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-      run: |
-        scp -r deploy/ $DEPLOY_USER@$DEPLOY_HOST:~/
-        ssh $DEPLOY_USER@$DEPLOY_HOST "
-          # Install Docker if not present
-          if ! command -v docker &> /dev/null; then
-            sudo yum update -y
-            sudo yum install -y docker
-            sudo systemctl start docker
-            sudo systemctl enable docker
-            sudo usermod -aG docker ${{ secrets.DEPLOY_USER }}
-            newgrp docker
-          fi
-          if ! command -v docker-compose &> /dev/null; then
-            sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-            sudo chmod +x /usr/local/bin/docker-compose
-          fi
-          
-          cd deploy
-          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-          docker compose pull && docker compose up -d"
