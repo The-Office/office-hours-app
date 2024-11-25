@@ -21,7 +21,7 @@ services:
     volumes:
       - ./apps/frontend/.env.prod:/app/apps/frontend/.env.prod:ro
       - ./apps/backend/.env.prod:/app/apps/backend/.env.prod:ro
-    command: sh -c "cd apps/frontend && bun run start:prod & cd apps/backend && bun run start:prod"
+    command: sh -c "cd apps/frontend && bun run start & cd apps/backend && bun run start"
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
