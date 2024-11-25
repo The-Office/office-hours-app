@@ -30,7 +30,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { InsertOfficeHoursForm } from "./insert-office-hours"
 import { deleteOfficeHours, fetchOfficeHours, getIcalFile, OfficeHour } from "@/services/userService"
-import { useToast } from "@/hooks/use-toast"
+// import { useToast } from "@/hooks/use-toast"
 import { useQuery } from "@tanstack/react-query"
 
 interface DataTableProps<TData, TValue> {
@@ -48,7 +48,7 @@ export function DataTable<TData, TValue>({
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
-    const { toast } = useToast()
+    // const { toast } = useToast()
     
     const { refetch } = useQuery({
         queryKey: ['officeHours'],

@@ -1,50 +1,37 @@
-# Build stage
-FROM oven/bun:1.0 as builder
+FROM oven/bun:latest as builder
 
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
+# Copy only root package files for dependency caching
+COPY package.json ./
 COPY bun.lockb ./
-COPY frontend/package*.json ./frontend/
-COPY backend/package*.json ./backend/
+COPY apps/frontend/package.json ./apps/frontend/
+COPY apps/backend/package.json ./apps/backend/
 
-# Install dependencies
+# Install all dependencies
 RUN bun install
 
-# Copy source code
+# Copy all source code and workspace files
 COPY . .
 
-# Build frontend
-RUN cd frontend && bun run build
+# Build both applications
+RUN cd apps/frontend && bun run build
+RUN cd apps/backend && bun run build
 
-# Build backend (if you have a build step)
-RUN cd backend && bun run build
-
-# Production stage
-FROM oven/bun:1.0
+# Production image
+FROM oven/bun:slim
 
 WORKDIR /app
 
-# Copy only the necessary built files
-COPY --from=builder /app/frontend/dist /app/frontend/dist
-COPY --from=builder /app/backend/package.json /app/backend/
-COPY --from=builder /app/backend/dist /app/backend/dist
-COPY --from=builder /app/package.json ./
-COPY --from=builder /app/bun.lockb ./
+# Copy only what's needed for production
+COPY package.json ./
+COPY bun.lockb ./
 
-# Install only production dependencies
+# Install production dependencies
 RUN bun install --production
 
-# Expose ports
-EXPOSE 3000 8080
+# Copy built assets
+COPY --from=builder /app/apps/frontend/dist ./apps/frontend/dist
+COPY --from=builder /app/apps/backend/dist ./apps/backend/dist
 
-# Create start script for production
-RUN echo '#!/bin/sh\n\
-trap "kill 0" EXIT\n\
-cd frontend && bunx vite preview --port 3000 --host & \
-cd backend && PORT=8080 node dist/index.js' > /app/start.sh
-
-RUN chmod +x /app/start.sh
-
-CMD ["/app/start.sh"]
+EXPOSE 4173 8080
