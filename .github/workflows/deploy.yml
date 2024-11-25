@@ -97,8 +97,7 @@ jobs:
         DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
         DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
       run: |
-        scp docker-compose.yml $DEPLOY_USER@$DEPLOY_HOST:~/
-        scp nginx/conf.d/default.conf $DEPLOY_USER@$DEPLOY_HOST:~/nginx/conf.d/
+        scp -r deploy/ $DEPLOY_USER@$DEPLOY_HOST:~/
         ssh $DEPLOY_USER@$DEPLOY_HOST "
           # Install Docker if not present
           if ! command -v docker &> /dev/null; then
@@ -107,18 +106,9 @@ jobs:
             sudo systemctl start docker
             sudo systemctl enable docker
             sudo usermod -aG docker ${{ secrets.DEPLOY_USER }}
+            newgrp docker
           fi
-
-          # Install Docker Compose if not present
-          if ! command -v docker-compose &> /dev/null; then
-            sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
-            sudo chmod +x /usr/local/bin/docker-compose
-          fi
-
-          # Copy docker-compose.yml if it doesn't exist
-          [ ! -f docker-compose.yml ] && echo '$(cat docker-compose.yml)' > docker-compose.yml
-          [ ! -d nginx ] && mkdir -p nginx/conf.d
-
-          # Pull and run
+          
+          cd deploy
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
           docker compose pull && docker compose up -d"
