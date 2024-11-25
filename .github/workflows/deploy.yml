@@ -92,49 +92,10 @@ jobs:
       run: |
         mkdir -p ~/.ssh
         ssh-keyscan -H ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
-    
     - name: Deploy to production
       if: github.ref == 'refs/heads/production'
       env:
         DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
         DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
       run: |
-        echo "Deploying version sha-${{ github.sha }} to production..."
-        
-        # Create deployment script
-        cat << 'EOF' > deploy.sh
-        #!/bin/bash
-        set -e
-        
-        export IMAGE_NAME="ghcr.io/the-office/main-service"
-        export IMAGE_TAG="sha-${{ github.sha }}"
-        
-        # Pull the latest images
-        docker compose pull
-        
-        # Bring down the existing services
-        docker compose down --remove-orphans
-        
-        # Start the new services
-        docker compose up -d
-        
-        # Wait for health check
-        echo "Waiting for service to be healthy..."
-        timeout 60s bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:8080/health)" != "200" ]]; do sleep 5; done' || exit 1
-        
-        # Clean up old images
-        docker image prune -f
-        EOF
-        
-        # Create directory structure on server
-        ssh $DEPLOY_USER@$DEPLOY_HOST "mkdir -p /app/apps/frontend /app/apps/backend"
-        
-        # Copy deployment files to server
-        scp docker-compose.yml deploy.sh $DEPLOY_USER@$DEPLOY_HOST:/app/
-        scp apps/backend/.env.prod $DEPLOY_USER@$DEPLOY_HOST:/app/apps/backend/
-        scp apps/frontend/.env.prod $DEPLOY_USER@$DEPLOY_HOST:/app/apps/frontend/
-        
-        # Execute deployment
-        ssh $DEPLOY_USER@$DEPLOY_HOST "cd /app && chmod +x deploy.sh && ./deploy.sh"
-        
-        echo "Deployment completed successfully!"
+        ssh $DEPLOY_USER@$DEPLOY_HOST "docker compose pull && docker compose up -d"

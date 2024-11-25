@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   app:
-    image: ${IMAGE_NAME:-ghcr.io/the-office/main-service}:${IMAGE_TAG:-latest}
+    image: ghcr.io/the-office/main-service:latest
     ports:
       - "4173:4173" # Frontend
       - "8080:8080" # Backend
