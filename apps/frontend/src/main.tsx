@@ -10,6 +10,8 @@ if (!PUBLISHABLE_KEY) {
   throw new Error('Add your Clerk publishable key to the .env.local file')
 }
 
+console.log('Publishable key:', PUBLISHABLE_KEY)
+
 const queryClient = new QueryClient()
 
 createRoot(document.getElementById('root')!).render(

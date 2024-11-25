@@ -1,0 +1,140 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ production ]
+  pull_request:
+    branches: [ production ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Create backend env file
+      run: |
+        {
+          echo "NODE_ENV=production"
+          echo "PORT=8080"
+          echo "HOST=localhost"
+          echo "CORS_ORIGIN=http://localhost:*"
+          echo "COMMON_RATE_LIMIT_WINDOW_MS=240"
+          echo "COMMON_RATE_LIMIT_MAX_REQUESTS=60"
+          echo "MYSQL_USER=${{ secrets.MYSQL_USER }}"
+          echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}"
+          echo "MYSQL_HOST=${{ secrets.MYSQL_HOST }}"
+          echo "MYSQL_PORT=${{ secrets.MYSQL_PORT }}"
+          echo "MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}"
+          echo "CLERK_PUBLISHABLE_KEY=${{ secrets.CLERK_PUBLISHABLE_KEY }}"
+          echo "CLERK_SECRET_KEY=${{ secrets.CLERK_SECRET_KEY }}"
+        } > apps/backend/.env.prod
+    
+    - name: Create frontend env file
+      run: |
+        {
+          echo "VITE_CLERK_PUBLISHABLE_KEY=${{ secrets.CLERK_PUBLISHABLE_KEY }}"
+        } > apps/frontend/.env.prod
+    
+    - name: Extract metadata (tags, labels) for Docker
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: |
+          ghcr.io/the-office/main-service
+        tags: |
+          type=sha,prefix=
+          type=ref,event=branch
+          type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'production') }}
+    
+    - name: Build and push Docker images
+      uses: docker/bake-action@v4
+      with:
+        push: true
+        files: |
+          ./docker-compose.yml
+          ${{ steps.meta.outputs.bake-file }}
+        set: |
+          *.cache-from=type=gha
+          *.cache-to=type=gha,mode=max
+      env:
+        DOCKER_BUILDKIT: 1
+    
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'ghcr.io/the-office/main-service:sha-${{ github.sha }}'
+        format: 'table'
+        exit-code: '1'
+        ignore-unfixed: true
+        severity: 'CRITICAL,HIGH'
+
+    - name: Install SSH key
+      uses: webfactory/ssh-agent@v0.8.0
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+    
+    - name: Add known hosts
+      run: |
+        mkdir -p ~/.ssh
+        ssh-keyscan -H ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
+    
+    - name: Deploy to production
+      if: github.ref == 'refs/heads/production'
+      env:
+        DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+        DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+      run: |
+        echo "Deploying version sha-${{ github.sha }} to production..."
+        
+        # Create deployment script
+        cat << 'EOF' > deploy.sh
+        #!/bin/bash
+        set -e
+        
+        export IMAGE_NAME="ghcr.io/the-office/main-service"
+        export IMAGE_TAG="sha-${{ github.sha }}"
+        
+        # Pull the latest images
+        docker compose pull
+        
+        # Bring down the existing services
+        docker compose down --remove-orphans
+        
+        # Start the new services
+        docker compose up -d
+        
+        # Wait for health check
+        echo "Waiting for service to be healthy..."
+        timeout 60s bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:8080/health)" != "200" ]]; do sleep 5; done' || exit 1
+        
+        # Clean up old images
+        docker image prune -f
+        EOF
+        
+        # Create directory structure on server
+        ssh $DEPLOY_USER@$DEPLOY_HOST "mkdir -p /app/apps/frontend /app/apps/backend"
+        
+        # Copy deployment files to server
+        scp docker-compose.yml deploy.sh $DEPLOY_USER@$DEPLOY_HOST:/app/
+        scp apps/backend/.env.prod $DEPLOY_USER@$DEPLOY_HOST:/app/apps/backend/
+        scp apps/frontend/.env.prod $DEPLOY_USER@$DEPLOY_HOST:/app/apps/frontend/
+        
+        # Execute deployment
+        ssh $DEPLOY_USER@$DEPLOY_HOST "cd /app && chmod +x deploy.sh && ./deploy.sh"
+        
+        echo "Deployment completed successfully!"
