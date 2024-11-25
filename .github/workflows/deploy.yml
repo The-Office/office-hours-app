@@ -108,12 +108,8 @@ jobs:
             sudo usermod -aG docker ${{ secrets.DEPLOY_USER }}
             newgrp docker
           fi
-          if ! command -v docker-compose &> /dev/null; then
-            sudo curl -L "https://github.com/docker/compose/releases/download/v2.30.3/docker-compose-$(uname -s)-$(uname -m)"  -o /usr/local/bin/docker-compose
-            sudo mv /usr/local/bin/docker-compose /usr/bin/docker-compose
-            sudo chmod +x /usr/bin/docker-compose 
-          fi
+
           
           cd deploy
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-          docker compose pull && docker compose up -d"
+          docker-compose pull && docker-compose up -d"
