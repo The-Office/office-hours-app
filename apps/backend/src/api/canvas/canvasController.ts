@@ -4,8 +4,8 @@ import { env } from "@/common/utils/envConfig";
 import { CanvasService } from "./canvasService";
 import { handleServiceResponse } from "@/common/utils/httpHandlers";
 
-const { CANVAS_API_TOKEN } = env;
 
+const CANVAS_API_TOKEN = "";
 export class CanvasController {
   private canvasService: CanvasService;
 
