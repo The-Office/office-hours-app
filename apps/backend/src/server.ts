@@ -29,13 +29,16 @@ app.use(rateLimiter);
 // Request logging
 app.use(requestLogger);
 
-// Routes
-app.use("/health", healthCheckRouter);
-app.use("/users", userRouter);
-app.use("/web-scraper", webScraperRouter);
-app.use("/canvas", canvasRouter);
-app.use("/search", searchRouter);
+const apiRouter = express.Router();
 
+// Routes
+apiRouter.use("/health", healthCheckRouter);
+apiRouter.use("/users", userRouter);
+apiRouter.use("/web-scraper", webScraperRouter);
+apiRouter.use("/canvas", canvasRouter);
+apiRouter.use("/search", searchRouter);
+
+app.use("/api", apiRouter);
 // Error handlers
 app.use(errorHandler());
 
