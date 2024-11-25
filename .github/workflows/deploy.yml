@@ -61,18 +61,16 @@ jobs:
           type=ref,event=branch
           type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'production') }}
     
-    - name: Build and push Docker images
-      uses: docker/bake-action@v4
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
       with:
+        context: .
         push: true
-        files: |
-          ./docker-compose.yml
-          ${{ steps.meta.outputs.bake-file }}
-        set: |
-          *.cache-from=type=gha
-          *.cache-to=type=gha,mode=max
-      env:
-        DOCKER_BUILDKIT: 1
+        tags: |
+          ghcr.io/the-office/main-service:latest
+          ghcr.io/the-office/main-service:${{ github.sha }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
     
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
