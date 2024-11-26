@@ -2,6 +2,6 @@ import axios from 'axios';
 
 const api = axios.create({
   withCredentials: true,
-  baseURL: 'http://localhost:8080/api'
+  baseURL: process.env.VITE_API_URL
 });
 export default api;
