@@ -46,7 +46,7 @@ jobs:
       run: |
         {
           echo "VITE_CLERK_PUBLISHABLE_KEY=${{ secrets.CLERK_PUBLISHABLE_KEY }}"
-          echo "VITE_API_URL=https://synchrohnize.me/api/api"
+          echo "VITE_API_URL=https://synchropoophnize.me/api"
         } > apps/frontend/.env.production
     
     - name: Build and push Docker image
