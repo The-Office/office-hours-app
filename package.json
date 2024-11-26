@@ -7,11 +7,12 @@
     "apps/*"
   ],
   "scripts": {
-    "start": "bun run start:all",
-    "start:all": "bun --hot run backend:prod & bun --hot run frontend:prod",
     "frontend": "cd apps/frontend && bun run dev",
-    "frontend:prod": "cd apps/frontend && bun run build && bun run preview",
     "backend": "cd apps/backend && bun run dev",
-    "backend:prod": "cd apps/backend && bun run prod"
+
+    "start": "bun run start:all",
+    "start:all": "bun --hot run start:backend & bun --hot run start:frontend",
+    "start:backend": "cd apps/backend && bun run start",
+    "start:frontend": "cd apps/frontend && bun run preview"
   }
 }
