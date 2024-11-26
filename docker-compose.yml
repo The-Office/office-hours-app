@@ -1,0 +1,19 @@
+services:
+  app:
+    image: ghcr.io/the-office/main-service:latest
+    expose:
+      - "4173"
+      - "8080"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - app-network
+    command: >
+      bun install -g concurrently && 
+      concurrently 
+      "cd apps/backend && bun run start" 
+      "cd apps/frontend && bun run preview"
+
+networks:
+  app-network:
+    driver: bridge

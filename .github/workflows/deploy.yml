@@ -14,10 +14,8 @@ jobs:
       packages: write
     
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
+    - name: Checkout code
+      uses: actions/checkout@v4
     
     - name: Log in to GitHub Container Registry
       uses: docker/login-action@v3
@@ -50,17 +48,6 @@ jobs:
           echo "VITE_CLERK_PUBLISHABLE_KEY=${{ secrets.CLERK_PUBLISHABLE_KEY }}"
         } > apps/frontend/.env.prod
     
-    - name: Extract metadata (tags, labels) for Docker
-      id: meta
-      uses: docker/metadata-action@v5
-      with:
-        images: |
-          ghcr.io/the-office/main-service
-        tags: |
-          type=sha,prefix=
-          type=ref,event=branch
-          type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'production') }}
-    
     - name: Build and push Docker image
       uses: docker/build-push-action@v5
       with:
@@ -68,18 +55,6 @@ jobs:
         push: true
         tags: |
           ghcr.io/the-office/main-service:latest
-          ghcr.io/the-office/main-service:${{ github.sha }}
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
-    
-    # - name: Run Trivy vulnerability scanner
-    #   uses: aquasecurity/trivy-action@master
-    #   with:
-    #     image-ref: 'ghcr.io/the-office/main-service:latest'
-    #     format: 'table'
-    #     exit-code: '1'
-    #     ignore-unfixed: true
-    #     severity: 'CRITICAL,HIGH'
 
     - name: Install SSH key
       uses: webfactory/ssh-agent@v0.8.0
@@ -97,7 +72,7 @@ jobs:
         DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
         DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
       run: |
-        scp -r deploy/ $DEPLOY_USER@$DEPLOY_HOST:~/
+        scp -r deploy/* $DEPLOY_USER@$DEPLOY_HOST:~/
         ssh $DEPLOY_USER@$DEPLOY_HOST "
           # Install Docker if not present
           if ! command -v docker &> /dev/null; then
@@ -109,7 +84,5 @@ jobs:
             newgrp docker
           fi
 
-          
-          cd deploy
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
           docker-compose pull && docker-compose up -d"
