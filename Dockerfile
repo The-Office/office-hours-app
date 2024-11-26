@@ -26,6 +26,8 @@ WORKDIR /app
 # Copy only what's needed for production
 COPY package.json ./
 COPY bun.lockb ./
+COPY apps/frontend/package.json ./apps/frontend/
+COPY apps/backend/package.json ./apps/backend/
 
 # Install production dependencies
 RUN bun install
