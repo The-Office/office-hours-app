@@ -4,7 +4,6 @@
   "license": "MIT",
   "main": "index.ts",
   "private": true,
-  "type": "module",
   "scripts": {
     "dev": "tsx watch --clear-screen=false src/index.ts | pino-pretty",
     "prod": "tsx watch --clear-screen=false --env-file=.env.production src/index.ts | pino-pretty",

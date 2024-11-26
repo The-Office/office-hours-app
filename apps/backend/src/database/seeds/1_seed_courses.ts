@@ -15,6 +15,12 @@ export async function seed(knex: Knex): Promise<void> {
       course_id: 7699,
       course_code: 'COP4533',
       title: "Algorithm Abstraction and Design",
+    },
+    {
+      course_id: 10279,
+      course_code: 'CEN3031',
+      title: "Introduction to Software Engineering",
     }
+
   ]);
 }
