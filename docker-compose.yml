@@ -1,23 +1,15 @@
 services:
   app:
     image: ghcr.io/the-office/main-service:latest
-    expose:
-      - "4173"
-      - "8080"
+    ports:
+      - "8080:8080"
+      - "4173:4173"
     environment:
       - NODE_ENV=production
     networks:
       - app-network
     tty: true        # Keep container running
     stdin_open: true # Enable interactive mode
-    command: >
-      sh -c "
-        bun install -g concurrently &&
-        cd /app &&
-        concurrently
-        \"cd apps/backend && bun install && bun run start\"
-        \"cd apps/frontend && bun install && bun run preview\"
-      "
 
 networks:
   app-network:
