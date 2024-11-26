@@ -84,5 +84,6 @@ jobs:
           fi
 
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-          mkdir -p app && cd app && docker-compose pull && docker-compose up -d
+          mkdir -p app
+          cd app && docker-compose pull && docker-compose up -d
         "
