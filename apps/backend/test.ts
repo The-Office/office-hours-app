@@ -6,7 +6,7 @@ const execAsync = promisify(exec);
 
 async function createOrgSecrets() {
   try {
-    const envContent = readFileSync('.env.prod', 'utf-8');
+    const envContent = readFileSync('.env.production', 'utf-8');
     const envVars = envContent
       .split('\n')
       .filter(line => line && !line.startsWith('#'))

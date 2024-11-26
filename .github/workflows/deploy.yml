@@ -40,13 +40,13 @@ jobs:
           echo "MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}"
           echo "CLERK_PUBLISHABLE_KEY=${{ secrets.CLERK_PUBLISHABLE_KEY }}"
           echo "CLERK_SECRET_KEY=${{ secrets.CLERK_SECRET_KEY }}"
-        } > apps/backend/.env.prod
+        } > apps/backend/.env.production
     
     - name: Create frontend env file
       run: |
         {
           echo "VITE_CLERK_PUBLISHABLE_KEY=${{ secrets.CLERK_PUBLISHABLE_KEY }}"
-        } > apps/frontend/.env.prod
+        } > apps/frontend/.env.production
     
     - name: Build and push Docker image
       uses: docker/build-push-action@v5
