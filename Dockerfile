@@ -9,7 +9,7 @@ COPY apps/frontend/package.json ./apps/frontend/
 COPY apps/backend/package.json ./apps/backend/
 
 # Install all dependencies
-RUN bun install --frozen-lockfile
+RUN bun install --production
 
 # Copy all source code and workspace files
 COPY . .
@@ -28,7 +28,7 @@ COPY package.json ./
 COPY bun.lockb ./
 
 # Install production dependencies
-RUN bun install --frozen-lockfile --production
+RUN bun install --production
 
 # Copy built assets
 COPY --from=builder /app/apps/frontend/dist ./apps/frontend/dist
