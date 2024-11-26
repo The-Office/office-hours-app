@@ -1,6 +1,9 @@
 services:
   app:
     image: ghcr.io/the-office/main-service:latest
+    env_file:
+      - ./apps/backend/.env.production
+      - ./apps/frontend/.env.production
     ports:
       - "8080:8080"
       - "4173:4173"

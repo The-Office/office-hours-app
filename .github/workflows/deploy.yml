@@ -73,6 +73,8 @@ jobs:
         DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
       run: |
         scp -r docker-compose.yml $DEPLOY_USER@$DEPLOY_HOST:~/app/docker-compose.yml
+        scp -r apps/backend/.env.production $DEPLOY_USER@$DEPLOY_HOST:~/app/apps/backend/.env.production
+        scp -r apps/frontend/.env.production $DEPLOY_USER@$DEPLOY_HOST:~/app/apps/frontend/.env.production
         ssh $DEPLOY_USER@$DEPLOY_HOST "
           if ! command -v docker &> /dev/null; then
             sudo yum update -y
