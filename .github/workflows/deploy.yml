@@ -97,7 +97,7 @@ jobs:
         DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
         DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
       run: |
-        scp -r deploy/* $DEPLOY_USER@$DEPLOY_HOST:~/
+        scp -r deploy/ $DEPLOY_USER@$DEPLOY_HOST:~/
         ssh $DEPLOY_USER@$DEPLOY_HOST "
           # Install Docker if not present
           if ! command -v docker &> /dev/null; then
@@ -112,6 +112,4 @@ jobs:
           
           cd deploy
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-          chmod +x init-letsencrypt.sh
-          ./init-letsencrypt.sh
           docker-compose pull && docker-compose up -d"
