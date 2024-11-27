@@ -18,15 +18,10 @@ export const db = mysql.createPool({
 (async () => {
   try {
     // Log the connection details for debugging
-    console.log(`MYSQL HOST: ${MYSQL_HOST}`);
-    console.log(`MYSQL PORT: ${MYSQL_PORT}`);
-    console.log(`MYSQL USER: ${MYSQL_USER}`);
-    console.log(`MYSQL PASSWORD: ${MYSQL_PASSWORD}`);
-
     // Get a connection from the pool and test it with a simple query
     const connection = await db.getConnection();
     await connection.query("SELECT 1"); // Simple query to check if the connection works
-    console.log("Database connected.");
+    console.log("Successfully connected to database.");
     connection.release(); // Release the connection back to the pool
   } catch (err: unknown) {
     // Check if err is an instance of Error
