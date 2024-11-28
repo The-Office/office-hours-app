@@ -15,6 +15,7 @@ import { PostFeedbackSchema } from "@/common/schemas/feedbackSchema";
 import { PostOfficeHourSchema } from "@/common/schemas/officeHoursSchema";
 import { StoreCourseSchema } from "@/common/schemas/courseSchema";
 import { SearchService } from "../search/searchService";
+import { adminAuth } from "@/common/middleware/adminAuth";
 
 const userRepository = new UserRepository(db);
 const userService = new UserService(userRepository);
@@ -37,19 +38,29 @@ export const userRouter: Router = express.Router();
 
 
 userRouter.use(ClerkExpressRequireAuth());
-userRouter.get("/", userController.getAllUsers);
-userRouter.get("/me", userController.getUser);
-userRouter.get("/me/courses", userController.getCoursesByUserId);
-userRouter.post("/me/courses/:course_id", userController.storeUserCourse);
-userRouter.delete("/me/courses/:course_id", userController.deleteUserCourse);
-userRouter.get("/me/office-hours", userController.getOfficeHoursByUserId);
-userRouter.post("/feedback", validateRequest(PostFeedbackSchema), userController.storeFeedback);
-userRouter.post("/office-hours", validateRequest(PostOfficeHourSchema), userController.storeOfficeHour);
-userRouter.delete("/office-hours", userController.deleteOfficeHours);
-userRouter.post("/courses", validateRequest(StoreCourseSchema), userController.storeCourse);
-userRouter.post("/me", userController.storeUser);
-userRouter.get("/courses/:course_id", userController.getCourse);
-userRouter.get("/me/ical-file", userController.getIcalFileByUserId);
-userRouter.get("/ical-file", userController.getIcalFileByDatabaseId);
+userRouter.get('/', adminAuth(userService), userController.getAllUsers);
+userRouter.get('/me', userController.getUser);
+userRouter.post('/me', userController.storeUser);
 
+// Courses
+userRouter.get('/courses/:course_id', userController.getCourse);
+userRouter.get('/courses', userController.getAllCourses);
+userRouter.post('/courses', adminAuth(userService), validateRequest(StoreCourseSchema), userController.storeCourse);
+
+// User Courses
+userRouter.get('/me/courses', userController.getCoursesByUserId);
+userRouter.post('/me/courses/:course_id', userController.storeUserCourse);
+userRouter.delete('/me/courses/:course_id', userController.deleteUserCourse);
+
+// Office Hours
+userRouter.get('/me/office-hours', userController.getOfficeHoursByUserId);
+userRouter.post('/office-hours', adminAuth(userService), validateRequest(PostOfficeHourSchema), userController.storeOfficeHour);
+userRouter.delete('/office-hours', adminAuth(userService), userController.deleteOfficeHours);
+
+// iCal
+userRouter.get('/me/ical-file', userController.getIcalFileByUserId);
+userRouter.get('/ical-file', userController.getIcalFileByIds);
+
+// Feedback
+userRouter.post('/feedback', validateRequest(PostFeedbackSchema), userController.storeFeedback);
 

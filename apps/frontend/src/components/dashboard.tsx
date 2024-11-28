@@ -7,7 +7,7 @@ const Dashboard = () => {
         <>
             <div className="bg-slate-50 flex flex-col">
                 <NavBar />
-                <div className="py-10">
+                <div className="pt-10 h-screen">
                     <Table />
                 </div>
                 <Footer />

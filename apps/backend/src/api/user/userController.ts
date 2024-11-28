@@ -71,20 +71,20 @@ export class UserController {
     const serviceResponse = await this.userCourseService.getCoursesByUserId(user_id);
     return handleServiceResponse(serviceResponse, res);
   };
-  
+
   public deleteUserCourse: RequestHandler = async (req: Request, res: Response) => {
     const user_id = req.auth.userId;
     const course_id = Number(req.params.course_id);
     const serviceResponse = await this.userCourseService.deleteUserCourse(user_id, course_id);
     return handleServiceResponse(serviceResponse, res);
-  }
+  };
 
   public storeUserCourse: RequestHandler = async (req: Request, res: Response) => {
     const user_id = req.auth.userId;
     const course_id = Number(req.params.course_id);
     const serviceResponse = await this.userCourseService.storeUserCourse(user_id, course_id);
     return handleServiceResponse(serviceResponse, res);
-  }
+  };
 
   public getOfficeHoursByUserId: RequestHandler = async (req: Request, res: Response) => {
     const user_id = req.auth.userId;
@@ -92,21 +92,21 @@ export class UserController {
     return handleServiceResponse(serviceResponse, res);
   };
 
-  public getIcalFileByDatabaseId: RequestHandler = async (req: Request, res: Response) => {
-    if(typeof req.query.ids !== undefined) {
+  public getIcalFileByIds: RequestHandler = async (req: Request, res: Response) => {
+    if (typeof req.query.ids !== undefined) {
       let office_hour_ids = req.query.ids;
-      const serviceResponse = await this.officeHourService.getIcalFileByDatabaseId(office_hour_ids);
+      const serviceResponse = await this.officeHourService.getIcalFileByIds(office_hour_ids);
       return handleServiceResponse(serviceResponse, res);
     } else {
       return handleServiceResponse(ServiceResponse.failure("Missing query parameters", null), res);
     }
-  }
+  };
 
   public getIcalFileByUserId: RequestHandler = async (req: Request, res: Response) => {
     const user_id = req.auth.userId;
     const serviceResponse = await this.officeHourService.getIcalFileByUserId(user_id);
     return handleServiceResponse(serviceResponse, res);
-  }
+  };
 
   public storeFeedback: RequestHandler = async (req: Request, res: Response) => {
     const user_id = req.auth.userId;
@@ -116,6 +116,14 @@ export class UserController {
   };
 
   public storeOfficeHour: RequestHandler = async (req: Request, res: Response) => {
+    const user_id = req.auth.userId;
+    const user = await this.userService.getById(user_id);
+    const role = user?.data?.role || "";
+    const authorizedRoles = ["professor", "admin"];
+    if (!authorizedRoles.includes(role)) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
     const serviceResponse = await this.officeHourService.storeOfficeHour(req.body);
     return handleServiceResponse(serviceResponse, res);
   };
@@ -125,7 +133,7 @@ export class UserController {
     let ids = req.query.ids;
     const serviceResponse = await this.officeHourService.deleteOfficeHours(ids);
     return handleServiceResponse(serviceResponse, res);
-  }
+  };
 
   public storeCourse: RequestHandler = async (req: Request, res: Response) => {
     const user_id = req.auth.userId;
@@ -143,6 +151,11 @@ export class UserController {
     }
 
     const serviceResponse = await this.userCourseService.getByCourseId(course_id);
+    return handleServiceResponse(serviceResponse, res);
+  };
+
+  public getAllCourses: RequestHandler = async (_req: Request, res: Response) => {
+    const serviceResponse = await this.userCourseService.getAll();
     return handleServiceResponse(serviceResponse, res);
   };
 }

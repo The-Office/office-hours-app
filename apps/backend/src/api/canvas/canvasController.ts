@@ -1,6 +1,5 @@
 import type { Request, RequestHandler, Response } from "express";
 
-import { env } from "@/common/utils/envConfig";
 import { CanvasService } from "./canvasService";
 import { handleServiceResponse } from "@/common/utils/httpHandlers";
 
