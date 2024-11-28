@@ -30,8 +30,8 @@ export class UserCourseService {
 
   async getCoursesByUserId(id: string): Promise<ServiceResponse<Course[] | null>> {
     try {
-      // const courses = await this.courseRepository.getCoursesByUserId(id);
-      const courses = await this.courseRepository.getAllCourses();
+      const courses = await this.courseRepository.getCoursesByUserId(id);
+      // const courses = await this.courseRepository.getAllCourses();
       if (!courses) {
         return ServiceResponse.failure("No Courses found", null, StatusCodes.NOT_FOUND);
       }

@@ -28,7 +28,7 @@ export default function Table() {
   }
 
   return (
-    <div className="py-10 mx-5 md:mx-32">
+    <div className="py-20 mx-5 md:mx-10">
       <DataTable columns={columns} data={officeHours} admin={admin}/>
     </div>
   );

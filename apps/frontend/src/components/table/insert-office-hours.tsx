@@ -4,6 +4,7 @@ import { useState } from "react";
 import {
     Dialog,
     DialogContent,
+    DialogDescription,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
@@ -39,6 +40,7 @@ import {
 import { TimeField } from "../ui/time-field";
 import { fetchCourseById, storeCourse, storeOfficeHour } from "@/services/userService";
 import { useToast } from "@/hooks/use-toast";
+import { useQueryClient } from "@tanstack/react-query";
 
 const formSchema = z.object({
     course_id: z.number().min(1, {
@@ -116,6 +118,7 @@ export function InsertOfficeHoursForm() {
     const [searchResults, setSearchResults] = useState<SearchClass[]>([]);
     const [isFocused, setIsFocused] = useState(false);
     const { toast } = useToast();
+    const queryClient = useQueryClient();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -186,6 +189,7 @@ export function InsertOfficeHoursForm() {
                 console.error("Failed to create course");
                 return;
             }
+            await queryClient.invalidateQueries({ queryKey: ['courses'] });
         }
 
         const officeHour = await storeOfficeHour(data);
@@ -212,6 +216,9 @@ export function InsertOfficeHoursForm() {
                 <DialogContent className="min-w-96 overflow-y-scroll max-h-screen">
                     <DialogHeader>
                         <DialogTitle className="text-center text-xl">Create Office Hours</DialogTitle>
+                        <DialogDescription className="text-center text-sm text-slate-400">
+                            If you are seeing this, it means you are a verified TA or instructor at UF.
+                        </DialogDescription>
                     </DialogHeader>
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 flex flex-col">

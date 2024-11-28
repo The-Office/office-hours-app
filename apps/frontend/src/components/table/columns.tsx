@@ -31,6 +31,7 @@ export const columns: ColumnDef<OfficeHour>[] = [
   },
   {
     accessorKey: "course_code",
+    // filterFn: 'myMultiFilter',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Course Code" />
     ),
