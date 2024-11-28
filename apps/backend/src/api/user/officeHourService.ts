@@ -60,8 +60,8 @@ export class OfficeHourService {
 
   async getOfficeHoursByUserId(id: string): Promise<ServiceResponse<OfficeHour[] | null>> {
     try {
-      // const officehours = await this.officeHourRepository.getOfficeHoursByUserId(id);
-      const officehours = await this.officeHourRepository.getAllOfficeHours();
+      const officehours = await this.officeHourRepository.getOfficeHoursByUserId(id);
+      // const officehours = await this.officeHourRepository.getAllOfficeHours();
       if (!officehours) {
         return ServiceResponse.failure("No office hours found", null, StatusCodes.NOT_FOUND);
       }
@@ -82,9 +82,9 @@ export class OfficeHourService {
     return response;
   }
 
-  async getIcalFileByDatabaseId(officeHourIds: any): Promise<ServiceResponse<string | null>> {
+  async getIcalFileByIds(officeHourIds: any): Promise<ServiceResponse<string | null>> {
     try {
-      const officehours = await this.officeHourRepository.getOfficeHoursByDatabaseId(officeHourIds);
+      const officehours = await this.officeHourRepository.getOfficeHoursByIds(officeHourIds);
       if(!officehours) {
         return ServiceResponse.failure("No office hours found", null, StatusCodes.NOT_FOUND)
       }

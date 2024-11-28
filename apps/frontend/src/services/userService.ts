@@ -30,6 +30,7 @@ export interface OfficeHour {
 export interface Course {
   course_id: number;
   course_code: string;
+  title: string;
   created_at: string;
   updated_at: string;
 }
@@ -67,8 +68,19 @@ export const fetchUser = async (): Promise<User | null> => {
   }
 };
 
+export const fetchAllCourses = async (): Promise<Course[]> => {
+  try {
+    const response = await api.get(`/users/courses`);
+    const payload = response.data;
+    return payload.data;
+  } catch (error) {
+    console.error("Error fetching courses:", error);
+    return [];
+  }
+}
+
 // Fetch courses for a user by ID
-export const fetchCourses = async (): Promise<Course[]> => {
+export const fetchUserCourses = async (): Promise<Course[]> => {
   try {
     const response = await api.get(`/users/me/courses`);
     const payload = response.data;
@@ -78,6 +90,28 @@ export const fetchCourses = async (): Promise<Course[]> => {
     return [];
   }
 };
+
+export const storeUserCourse = async (courseId: number): Promise<Payload | null> => {
+  try {
+    const response = await api.post(`/users/me/courses/${courseId}`);
+    const payload = response.data;
+    return payload;
+  } catch (error) {
+    console.error("Error storing user course:", error);
+    return null;
+  }
+}
+
+export const deleteUserCourse = async (courseId: number): Promise<Payload | null> => {
+  try {
+    const response = await api.delete(`/users/me/courses/${courseId}`);
+    const payload = response.data;
+    return payload;
+  } catch (error) {
+    console.error("Error deleting user course:", error);
+    return null;
+  }
+}
 
 export const fetchCourseById = async (courseId: number): Promise<Course | null> => {
   try {
@@ -132,11 +166,25 @@ export const sendFeedback = async (rating: number, content: string): Promise<Pay
 
 export const getIcalFile = async (): Promise<Payload | null> => {
   try {
-    const response = await api.get(`http://localhost:8080/users/ical-file`);
+    const response = await api.get(`/users/me/ical-file`);
     const payload = response.data;
     return payload;
   } catch(error) {
-    console.error("Error fetching ical files:", error);
+    console.error("Error fetching ical file:", error);
+    return null;
+  }
+}
+
+export const getIcalFileByIds = async(ids: number[]): Promise<Payload | null> => {
+  try {
+    const response = await api.get('/users/ical-file', {
+      params: {
+        ids: ids.join(',')
+      }});
+    const payload = response.data;
+    return payload;
+  } catch(error) {
+    console.error("Error fetching ical file:", error);
     return null;
   }
 }
