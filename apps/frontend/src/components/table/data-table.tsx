@@ -307,9 +307,9 @@ export function DataTable<TData, TValue>({
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
                                     className={
-                                        (row.original as OfficeHour).mode === 'Remote' ? 'bg-blue-100' :
+                                        (row.original as OfficeHour).mode === 'Remote' ? 'bg-blue-50' :
                                             (row.original as OfficeHour).mode === 'In-person' ? 'bg-green-100' :
-                                                (row.original as OfficeHour).mode === 'Hybrid' ? 'bg-yellow-100' :
+                                                (row.original as OfficeHour).mode === 'Hybrid' ? 'bg-yellow-50' :
                                                     ''
                                     }
                                 >

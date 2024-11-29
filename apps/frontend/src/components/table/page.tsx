@@ -20,9 +20,8 @@ export default function Table() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <Loader2 className="animate-spin" size={48}/>
-        Loading...
+      <div className="flex justify-center items-center h-screen">
+        <Loader2 className="animate-spin" size={64}/>
       </div>
     );
   }
