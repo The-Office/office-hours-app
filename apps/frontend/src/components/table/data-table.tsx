@@ -50,6 +50,7 @@ import { useQuery } from "@tanstack/react-query"
 import { AddCourseInput } from "./add-user-course"
 import { Filter } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import { cn } from "@/lib/utils"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -95,6 +96,8 @@ export function DataTable<TData, TValue>({
             rowSelection,
         },
     })
+
+    console.log(columns.length)
 
 
     const handleDownloadIdsClick = async () => {
@@ -241,10 +244,11 @@ export function DataTable<TData, TValue>({
     };
 
     return (
-        <>
+        <div className={cn(table.getRowModel().rows?.length === 0 && "max-w-screen-lg")}>
             {/* Top section: Search, filters and action buttons */}
-            <div className="flex items-center py-4 gap-4">
-                <div className="flex gap-4">
+            <div className="flex items-end py-4 gap-4">
+                <div className="flex gap-2">
+                    <DataTableViewOptions table={table} />
                     <div className="relative">
                         <Input
                             placeholder="Filter course code..."
@@ -270,11 +274,15 @@ export function DataTable<TData, TValue>({
 
                 </div>
 
-                <div className="flex items-center gap-4 ml-auto">
-                    <AddCourseInput />
-                    {admin && <InsertOfficeHoursForm />}
-                    {admin && <DeleteButton />}
-                    <DataTableViewOptions table={table} />
+                <div className="flex flex-wrap-reverse items-center justify-end gap-4 ml-auto">
+                    {table.getRowModel().rows?.length > 0 &&
+                        <div>
+                            <AddCourseInput empty={false} />
+                        </div>}
+                    <div className="flex gap-2">
+                        {admin && <InsertOfficeHoursForm />}
+                        {admin && <DeleteButton />}
+                    </div>
                 </div>
             </div>
 
@@ -301,7 +309,7 @@ export function DataTable<TData, TValue>({
 
                     {/* Table body with data rows */}
                     <TableBody>
-                        {table.getRowModel().rows?.length ? (
+                        {table.getRowModel().rows?.length > 0 ? (
                             table.getRowModel().rows.map((row) => (
                                 <TableRow
                                     key={row.id}
@@ -329,23 +337,28 @@ export function DataTable<TData, TValue>({
                             // Empty state message
                             <TableRow>
                                 <TableCell colSpan={columns.length} className="h-24 text-center text-muted-foreground">
-                                    Add some of your courses!
+                                    <div className="flex-col flex items-center justify-center gap-2">
+                                        <p>You have no courses yet.</p>
+                                        <div className="max-w-48">
+                                            <AddCourseInput empty={true} />
+                                        </div>
+                                    </div>
                                 </TableCell>
                             </TableRow>
                         )}
                     </TableBody>
-                </Table>
-            </div>
+                </Table >
+            </div >
 
             {/* Bottom section: Pagination controls and iCal download */}
-            <div className="my-3 flex justify-between">
+            < div className="my-3 flex justify-between" >
                 <DataTablePagination table={table} />
                 <div className="flex gap-4">
                     <Button disabled={!Object.keys(rowSelection).length} variant="outline" onClick={handleDownloadIdsClick}>{`Download Custom iCal (${Object.keys(rowSelection).length} Selected)`}</Button>
                     <Button variant="outline" onClick={handleDownloadClick}>Download iCal</Button>
 
                 </div>
-            </div>
-        </>
+            </div >
+        </div>
     )
 }

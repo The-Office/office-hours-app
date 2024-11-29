@@ -27,7 +27,7 @@ export default function Table() {
   }
 
   return (
-    <div className="py-20 mx-5 md:mx-10">
+    <div className="py-20 mx-5 md:mx-10 flex items-center justify-center w-screen">
       <DataTable columns={columns} data={officeHours} admin={admin}/>
     </div>
   );

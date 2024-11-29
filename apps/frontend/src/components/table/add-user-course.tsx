@@ -14,7 +14,7 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Search, X } from "lucide-react";
+import { ListFilter, Plus, Search, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchAllCourses, fetchUserCourses, storeUserCourse, deleteUserCourse } from "@/services/userService";
@@ -22,9 +22,12 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 export const AddCourseInput = ({
+    empty = false,
 }: {
-    }) => {
+    empty: boolean;
+}) => {
     const [inputValue, setInputValue] = useState("");
+    const [showAll, setShowAll] = useState(false);
     const queryClient = useQueryClient();
 
     const { data: userCourses = [] } = useQuery({
@@ -66,7 +69,8 @@ export const AddCourseInput = ({
         setInputValue("");
     };
 
-    const handleRemove = async (codeToRemove: string) => {
+    const handleRemove = async (e: React.MouseEvent, codeToRemove: string) => {
+        e.stopPropagation(); // Prevent the click from bubbling up to the DialogTrigger
         const course = userCourses.find(c => c.course_code === codeToRemove);
         if (course) {
             await deleteMutation.mutateAsync(course.course_id);
@@ -80,21 +84,35 @@ export const AddCourseInput = ({
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="outline" className="w-full justify-start hover:bg-white cursor-text">
-                    {userCourseCodes.length > 0 && (
-                        <div className="flex gap-1">
-                            {userCourseCodes.map(code => (
-                                <Badge key={code} variant="secondary" className="rounded-sm py-1">
-                                    {code}
-                                </Badge>
-                            ))}
-                        </div>
-                    )}
-                    <span className="text-muted-foreground">Select Courses...</span>
-                    <Search className="w-4 h-4 text-gray-400" />
-                </Button>
+                {empty ?
+                    <Button variant="outline">
+                        <span>Add your first course!</span>
+                        <Plus className="w-4 h-4 text-gray-400" />
+                    </Button>
+                    :
+                    <Button variant="outline" className="w-full justify-center hover:bg-white cursor-text px-2">
+                        {userCourseCodes.length > 0 && (
+                            <div className="flex gap-1">
+                                {userCourseCodes.map(code => (
+                                    <Badge key={code} variant="secondary" className="rounded-sm py-1 pr-2">
+                                        {code}
+                                        <button
+                                            className="ml-1 hover:bg-slate-200 rounded-full"
+                                            onClick={(e) => handleRemove(e, code)}
+                                        >
+                                            <X className="h-3 w-3" />
+                                        </button>
+                                    </Badge>
+                                ))}
+                            </div>
+                        )}
+                        <span className="text-muted-foreground">Select Courses...</span>
+                        <Search className="w-4 h-4 text-gray-400" />
+
+                    </Button>
+                }
             </DialogTrigger>
-            <DialogContent className="max-w-2xl">
+            <DialogContent className="max-w-3xl">
                 <DialogHeader>
                     <DialogTitle>Select Courses</DialogTitle>
                 </DialogHeader>
@@ -106,13 +124,13 @@ export const AddCourseInput = ({
                                     {code}
                                     <button
                                         className="ml-1 hover:bg-slate-200 rounded-full"
-                                        onClick={() => handleRemove(code)}
+                                        onClick={(e) => handleRemove(e, code)}
                                     >
                                         <X className="h-3 w-3" />
                                     </button>
                                 </Badge>
                             ))}
-                            <div className="flex-grow flex-shrink-0 mx-1">
+                            <div className="flex-grow flex-shrink-0 mx-1 relative">
                                 <CommandInput
                                     autoFocus
                                     placeholder="Add courses..."
@@ -120,23 +138,37 @@ export const AddCourseInput = ({
                                     onValueChange={setInputValue}
                                     className="h-7 w-full"
                                 />
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => setShowAll(!showAll)}
+                                    className={cn(
+                                        "h-7 px-2 absolute right-0 top-0",
+                                        showAll && "bg-slate-100"
+                                    )}
+                                >
+                                    <ListFilter className="h-3 w-3 mr-1" />
+                                    {showAll ? "Hide" : "Show All"}
+                                </Button>
                             </div>
                         </div>
                         {<CommandList>
-                            {inputValue && <>
-                                <CommandEmpty>No courses found.</CommandEmpty>
-                                <CommandGroup className="max-h-[200px] overflow-auto">
-                                    {filteredCourses.map((course) => (
-                                        <CommandItem
-                                            key={course.course_id}
-                                            value={course.course_code}
-                                            onSelect={handleSelect}
-                                        >
-                                            {course.course_code} - {course.title}
-                                        </CommandItem>
-                                    ))}
-                                </CommandGroup>
-                            </>}
+                            {(!inputValue && !showAll) ? null : (
+                                <>
+                                    <CommandEmpty>No courses found.</CommandEmpty>
+                                    <CommandGroup className="max-h-[200px] overflow-auto">
+                                        {filteredCourses.map((course) => (
+                                            <CommandItem
+                                                key={course.course_id}
+                                                value={course.course_code}
+                                                onSelect={handleSelect}
+                                            >
+                                                {course.course_code} - {course.title}
+                                            </CommandItem>
+                                        ))}
+                                    </CommandGroup>
+                                </>
+                            )}
                         </CommandList>}
                     </Command>
                 </div>
