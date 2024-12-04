@@ -97,8 +97,6 @@ export function DataTable<TData, TValue>({
         },
     })
 
-    console.log(columns.length)
-
 
     const handleDownloadIdsClick = async () => {
         if (Object.keys(rowSelection).length === 0) {

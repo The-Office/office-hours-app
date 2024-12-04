@@ -60,8 +60,11 @@ export const AddCourseInput = ({
 
 
     const handleSelect = async (value: string) => {
+        console.log(value)
         if (!userCourseCodes.includes(value)) {
-            const course = allCourses.find(c => c.course_code === value);
+            let course = allCourses.find(c => 
+                value.includes(c.course_code) && value.includes(c.title)
+            );
             if (course) {
                 await storeMutation.mutateAsync(course.course_id);
             }
@@ -160,7 +163,7 @@ export const AddCourseInput = ({
                                         {filteredCourses.map((course) => (
                                             <CommandItem
                                                 key={course.course_id}
-                                                value={course.course_code}
+                                                value={`${course.course_code} ${course.title}`}
                                                 onSelect={handleSelect}
                                             >
                                                 {course.course_code} - {course.title}

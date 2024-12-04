@@ -205,6 +205,7 @@ export function InsertOfficeHoursForm() {
             variant: "success",
         })
         console.log("Course and office hour created successfully");
+        await queryClient.invalidateQueries({ queryKey: ['officeHours'] });
     }
     return (
         <>
