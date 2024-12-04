@@ -1,26 +1,40 @@
-import { Knex } from 'knex';
+import { Knex } from "knex";
 
 export async function seed(knex: Knex): Promise<void> {
   // Deletes ALL existing entries
-  await knex('courses').del();
+  await knex("courses").del();
 
   // Inserts seed entries
-  await knex('courses').insert([
+  await knex("courses").insert([
     {
       course_id: 8371,
-      course_code: 'CDA3101',
+      course_code: "CDA3101",
       title: "Introduction to Computer Organization",
     },
     {
       course_id: 7699,
-      course_code: 'COP4533',
+      course_code: "COP4533",
       title: "Algorithm Abstraction and Design",
     },
     {
       course_id: 10279,
-      course_code: 'CEN3031',
+      course_code: "CEN3031",
       title: "Introduction to Software Engineering",
+    },
+    {
+      course_id: 9095,
+      course_code: "CAP4770",
+      title: "Introduction to Data Science",
+    },
+    {
+      course_id: 8769,
+      course_code: "EEL3008",
+      title: "Physics of Electrical Engineering"
+    },
+    {
+      course_id: 7563,
+      course_code: "FIN3403",
+      title: "Business Finance"
     }
-
   ]);
 }

@@ -16,4 +16,6 @@ export const env = cleanEnv(process.env, {
   MYSQL_HOST: host(), // Host validation for the database
   MYSQL_PORT: port(), // MySQL port as a number
   MYSQL_DATABASE: str(),
+
+  OPENAI_API_KEY: str(),
 });

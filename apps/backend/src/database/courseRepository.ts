@@ -13,7 +13,7 @@ export class CourseRepository {
 
   async getAllCourses(): Promise<Course[]> {
     try {
-      const [rows] = await this.db.query("SELECT * FROM courses");
+      const [rows] = await this.db.query("SELECT * FROM courses ORDER BY course_code");
       return rows as Course[];
     } catch (error) {
       console.error("Database query failed:", error);

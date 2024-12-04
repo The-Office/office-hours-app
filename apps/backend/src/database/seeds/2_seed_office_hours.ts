@@ -417,4 +417,216 @@ export async function seed(knex: Knex): Promise<void> {
       day: "wednesday",
     },
   ]);
+
+  await knex("office_hours").insert([
+    {
+      course_id: 9095,
+      host: "Richa Dutt",
+      mode: "in-person",
+      location: "MALA5200", 
+      start_time: "13:00",
+      end_time: "14:00",
+      day: "tuesday"
+    },
+    {
+      course_id: 9095,
+      host: "Yupu Zhang",
+      mode: "in-person",
+      location: "MALA5200",
+      start_time: "14:00",
+      end_time: "15:00",
+      day: "wednesday"
+    },
+    {
+      course_id: 9095,
+      host: "Yupu Zhang",
+      mode: "in-person",
+      location: "MALA5200",
+      start_time: "14:00",
+      end_time: "15:00",
+      day: "friday"
+    }
+  ]);
+
+  await knex("office_hours").insert([
+    {
+      "course_id": 8769,
+      "host": "Dr. Heidari",
+      "day": "friday",
+      "start_time": "12:00",
+      "end_time": "14:00",
+      "mode": "in-person",
+      "location": "Mala 3231"
+    },
+    {
+      "course_id": 8769,
+      "host": "Charlotte Smith",
+      "day": "monday",
+      "start_time": "13:30",
+      "end_time": "14:30",
+      "mode": "remote",
+      "link": "https://ufl.zoom.us/j/6865784397"
+    },
+    {
+      "course_id": 8769,
+      "host": "Charlotte Smith",
+      "day": "friday",
+      "start_time": "13:30",
+      "end_time": "14:30",
+      "mode": "remote",
+      "link": "https://ufl.zoom.us/j/6865784397"
+    },
+    {
+      "course_id": 8769,
+      "host": "Evan N. Espino-DeJesus",
+      "day": "tuesday",
+      "start_time": "13:00",
+      "end_time": "15:00",
+      "mode": "in-person",
+      "location": "Mala 5200"
+    },
+    {
+      "course_id": 8769,
+      "host": "Evan N. Espino-DeJesus",
+      "day": "thursday",
+      "start_time": "13:00",
+      "end_time": "15:00",
+      "mode": "in-person",
+      "location": "Mala 5200"
+    },
+    {
+      "course_id": 8769,
+      "host": "Katherine Gonzalez",
+      "day": "monday",
+      "start_time": "11:45",
+      "end_time": "12:35",
+      "mode": "in-person",
+      "location": "Mala 5200"
+    },
+    {
+      "course_id": 8769,
+      "host": "Katherine Gonzalez",
+      "day": "wednesday",
+      "start_time": "11:45",
+      "end_time": "12:35",
+      "mode": "in-person",
+      "location": "Mala 5200"
+    },
+    {
+      "course_id": 8769,
+      "host": "Qian Cai",
+      "day": "monday",
+      "start_time": "16:00",
+      "end_time": "17:00",
+      "mode": "in-person",
+      "location": "Mala 3300"
+    },
+    {
+      "course_id": 8769,
+      "host": "Qian Cai",
+      "day": "wednesday",
+      "start_time": "16:00",
+      "end_time": "17:00",
+      "mode": "in-person",
+      "location": "Mala 3300"
+    },
+    {
+      "course_id": 8769,
+      "host": "Qian Cai",
+      "day": "friday",
+      "start_time": "16:00",
+      "end_time": "17:00",
+      "mode": "in-person",
+      "location": "Mala 3300"
+    },
+    {
+      "course_id": 8769,
+      "host": "Jiachi Ye",
+      "day": "tuesday",
+      "start_time": "14:00",
+      "end_time": "15:00",
+      "mode": "in-person",
+      "location": "Mala 3300"
+    },
+    {
+      "course_id": 8769,
+      "host": "Jiachi Ye",
+      "day": "thursday",
+      "start_time": "14:00",
+      "end_time": "15:00",
+      "mode": "in-person",
+      "location": "Mala 3300"
+    }
+  ])
+
+  await knex("office_hours").insert(
+    [
+      {
+        "course_id": 7563,
+        "host": "Josh Dermer",
+        "day": "monday",
+        "start_time": "09:00",
+        "end_time": "10:00",
+        "mode": "remote",
+        "link": "https://ufl.zoom.us/j/92533415486"
+      },
+      {
+        "course_id": 7563,
+        "host": "Isabella Floreani",
+        "day": "monday",
+        "start_time": "10:00",
+        "end_time": "11:30",
+        "mode": "remote",
+        "link": "https://ufl.zoom.us/j/99104283876?pwd=ok6q2O5f7uVr8Rkv91T7VJiIipHbvr.1"
+      },
+      {
+        "course_id": 7563,
+        "host": "Kevin Carlstedt", 
+        "day": "tuesday",
+        "start_time": "09:30",
+        "end_time": "10:30",
+        "mode": "remote",
+        "link": "https://ufl.zoom.us/j/98596481019"
+      },
+      {
+        "course_id": 7563,
+        "host": "Jenny Lin",
+        "day": "tuesday", 
+        "start_time": "12:00",
+        "end_time": "13:00",
+        "mode": "remote",
+        "link": "https://ufl.zoom.us/j/98046766647"
+      },
+      {
+        "course_id": 7563,
+        "host": "Jackson Hoffnagle",
+        "day": "tuesday",
+        "start_time": "13:00",
+        "end_time": "14:00",
+        "mode": "in-person",
+        "location": "Lib West - 230"
+      },
+      {
+        "course_id": 7563,
+        "host": "Camilla Quintero",
+        "day": "wednesday",
+        "start_time": "14:00",
+        "end_time": "15:00",
+        "mode": "remote",
+        "link": "https://ufl.zoom.us/j/99111482288"
+      },
+      {
+        "course_id": 7563,
+        "host": "Peter Angelo",
+        "day": "thursday",
+        "start_time": "12:00", 
+        "end_time": "13:00",
+        "mode": "remote",
+        "link": "https://ufl.zoom.us/j/98370374618?pwd=nEiyhR0boH1hQwbaXbpBw3bmMb96uX.1"
+      }
+    ]
+  )
+  
+
+
 }

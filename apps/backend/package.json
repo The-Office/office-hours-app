@@ -23,6 +23,9 @@
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^7.0.0",
     "@clerk/clerk-sdk-node": "^5.0.65",
+    "@langchain/community": "^0.3.17",
+    "@langchain/core": "^0.3.20",
+    "@langchain/openai": "^0.3.14",
     "axios": "^1.7.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -33,6 +36,7 @@
     "http-status-codes": "^2.3.0",
     "ical-generator": "^8.0.1",
     "knex": "^3.1.0",
+    "langchain": "^0.3.6",
     "mysql2": "^3.11.3",
     "pino-http": "^10.0.0",
     "swagger-ui-express": "^5.0.0",
