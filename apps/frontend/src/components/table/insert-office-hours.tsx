@@ -210,14 +210,14 @@ export function InsertOfficeHoursForm() {
     return (
         <>
             <Dialog>
-                <DialogTrigger className="inline-flex items-center justify-center gap-2 rounded-md bg-background px-3 py-1 text-sm font-medium border border-input hover:bg-accent hover:text-accent-foreground">
+                <DialogTrigger className="inline-flex items-center justify-center gap-2 rounded-md px-3 py-1 text-sm font-medium border border-input bg-green-200 hover:bg-green-400 hover:text-accent-foreground">
                     Insert
                     <Plus className="h-4 w-4" />
                 </DialogTrigger>
                 <DialogContent className="min-w-96 overflow-y-scroll max-h-screen">
                     <DialogHeader>
                         <DialogTitle className="text-center text-xl">Create Office Hours</DialogTitle>
-                        <DialogDescription className="text-center text-sm text-slate-400">
+                        <DialogDescription className="text-center text-sm text-slate-40">
                             If you are seeing this, it means you are a verified TA or instructor at UF.
                         </DialogDescription>
                     </DialogHeader>
