@@ -12,7 +12,7 @@ import { OfficeHourService } from "./officeHourService";
 import { FeedbackService } from "./feedbackService";
 import { FeedbackRepository } from "@/database/feedbackRepository";
 import { PostFeedbackSchema } from "@/common/schemas/feedbackSchema";
-import { PostOfficeHourSchema } from "@/common/schemas/officeHoursSchema";
+import { PostOfficeHourSchema, PostListOfficeHourSchema } from "@/common/schemas/officeHoursSchema";
 import { StoreCourseSchema } from "@/common/schemas/courseSchema";
 import { SearchService } from "../search/searchService";
 import { adminAuth } from "@/common/middleware/adminAuth";
