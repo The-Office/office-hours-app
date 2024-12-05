@@ -55,7 +55,7 @@ userRouter.delete('/me/courses/:course_id', userController.deleteUserCourse);
 // Office Hours
 userRouter.get('/me/office-hours', userController.getOfficeHoursByUserId);
 userRouter.post('/office-hours', adminAuth(userService), validateRequest(PostOfficeHourSchema), userController.storeOfficeHour);
-userRouter.post('/office-hours-multiple', adminAuth(userService), validateRequest(PostListOfficeHourSchema), userController.storeListOfficeHours);
+userRouter.post('/office-hours-list', adminAuth(userService), validateRequest(PostListOfficeHourSchema), userController.storeListOfficeHours);
 userRouter.delete('/office-hours', adminAuth(userService), userController.deleteOfficeHours);
 
 // iCal

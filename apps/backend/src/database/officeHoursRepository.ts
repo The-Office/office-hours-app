@@ -1,4 +1,4 @@
-import { OfficeHour, OfficeHourSchema } from "@/common/schemas/officeHoursSchema";
+import { OfficeHour, OfficeHourSchema, PostListOfficeHourSchema } from "@/common/schemas/officeHoursSchema";
 import { ServiceResponse } from "@/common/schemas/serviceResponse";
 import { StatusCodes } from "http-status-codes";
 import { FieldPacket, Pool, ResultSetHeader, RowDataPacket } from "mysql2/promise";
@@ -108,6 +108,16 @@ export class OfficeHourRepository {
 
       return ServiceResponse.failure("An unexpected error occurred while creating office hours", null, StatusCodes.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  async storeListOfficeHours(data: z.infer<typeof PostListOfficeHourSchema>["body"]): Promise<ServiceResponse<OfficeHour | null>> {
+    for(const officeHour of data.office_hours) {
+      const serviceResponse = await this.storeOfficeHour(officeHour);
+      if(typeof serviceResponse === (typeof ServiceResponse.failure)) {
+        return serviceResponse;
+      }
+    }
+    return ServiceResponse.success("Succesfully inserted all provided office hours", null);
   }
 
   async deleteOfficeHours(officeHourIds: any): Promise<ServiceResponse<null>> {

@@ -233,8 +233,8 @@ export class OfficeHourService {
     return response;
   }
 
-  async storeListOfficeHour(data: z.infer<typeof PostOfficeHourSchema>["body"]): Promise<ServiceResponse<OfficeHour | null>> {
-    const response = await this.officeHourRepository.storeListOfficeHour(data);
+  async storeListOfficeHour(data: z.infer<typeof PostListOfficeHourSchema>["body"]): Promise<ServiceResponse<OfficeHour | null>> {
+    const response = await this.officeHourRepository.storeListOfficeHours(data);
     return response;
   }
 
