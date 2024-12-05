@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 
-import type { OfficeHour, OfficeHourSchema } from "@/common/schemas/officeHoursSchema";
+import type { OfficeHour, OfficeHourSchema, PostListOfficeHourSchema, PostOfficeHourSchema } from "@/common/schemas/officeHoursSchema";
 import { OfficeHourRepository } from "@/database/officeHoursRepository";
 import { ServiceResponse } from "@/common/schemas/serviceResponse";
 import { logger } from "@/server";
@@ -230,6 +230,11 @@ export class OfficeHourService {
 
   async storeOfficeHour(data: z.infer<typeof OfficeHourSchema>): Promise<ServiceResponse<OfficeHour | null>> {
     const response = await this.officeHourRepository.storeOfficeHour(data);
+    return response;
+  }
+
+  async storeListOfficeHour(data: z.infer<typeof PostOfficeHourSchema>["body"]): Promise<ServiceResponse<OfficeHour | null>> {
+    const response = await this.officeHourRepository.storeListOfficeHour(data);
     return response;
   }
 

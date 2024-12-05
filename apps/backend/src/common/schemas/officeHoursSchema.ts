@@ -68,7 +68,7 @@ export const PostOfficeHourSchema = z.object({
 export const PostListOfficeHourSchema = z.object({
   // Iterate through the provided body to validate each given office hour entry
   body: z.object({
-    body: z.array(OfficeHourSchema),
+    office_hours: z.array(OfficeHourSchema),
   }),
 });
 
