@@ -24,11 +24,7 @@ export class UserService {
     } catch (ex) {
       const errorMessage = `Error finding all users: $${(ex as Error).message}`;
       logger.error(errorMessage);
-      return ServiceResponse.failure(
-        "An error occurred while retrieving users.",
-        null,
-        StatusCodes.INTERNAL_SERVER_ERROR,
-      );
+      return ServiceResponse.failure("An error occurred while retrieving users.", null, StatusCodes.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -42,11 +38,7 @@ export class UserService {
     } catch (ex) {
       const errorMessage = `Error finding user: ${(ex as Error).message}`;
       logger.error(errorMessage);
-      return ServiceResponse.failure(
-        "An error occurred while retrieving user.",
-        null,
-        StatusCodes.INTERNAL_SERVER_ERROR,
-      );
+      return ServiceResponse.failure("An error occurred while retrieving user.", null, StatusCodes.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -56,11 +48,13 @@ export class UserService {
       return ServiceResponse.failure("No Clerk User found", null, StatusCodes.NOT_FOUND);
     }
 
+    const firstName = clerkUser.firstName?.replace(/,/g, "") || "";
+    await clerkClient.users.updateUser(id, { firstName });
+
     const email = clerkUser.primaryEmailAddress?.emailAddress || "";
     const imageUrl = clerkUser.imageUrl;
-    const firstName = clerkUser.firstName || "";
     const lastName = clerkUser.lastName || "";
-    const user =  await this.userRepository.storeUser(id, imageUrl, firstName, lastName, email, role);
+    const user = await this.userRepository.storeUser(id, imageUrl, firstName, lastName, email, role);
     if (!user) {
       return ServiceResponse.failure("Error storing user", null, StatusCodes.NOT_FOUND);
     }

@@ -47,7 +47,6 @@ export class UserController {
     if (!clerkUser) {
       return res.status(404).json({ error: "No Clerk User found" });
     }
-
     const email = clerkUser.primaryEmailAddress?.emailAddress || "";
     if (!email) {
       return res.status(400).json({ error: "No email found for user" });
