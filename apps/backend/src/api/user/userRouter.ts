@@ -12,7 +12,7 @@ import { OfficeHourService } from "./officeHourService";
 import { FeedbackService } from "./feedbackService";
 import { FeedbackRepository } from "@/database/feedbackRepository";
 import { PostFeedbackSchema } from "@/common/schemas/feedbackSchema";
-import { PostOfficeHourSchema } from "@/common/schemas/officeHoursSchema";
+import { PostOfficeHourSchema, PostListOfficeHourSchema } from "@/common/schemas/officeHoursSchema";
 import { StoreCourseSchema } from "@/common/schemas/courseSchema";
 import { SearchService } from "../search/searchService";
 import { adminAuth } from "@/common/middleware/adminAuth";
@@ -55,6 +55,7 @@ userRouter.delete('/me/courses/:course_id', userController.deleteUserCourse);
 // Office Hours
 userRouter.get('/me/office-hours', userController.getOfficeHoursByUserId);
 userRouter.post('/office-hours', adminAuth(userService), validateRequest(PostOfficeHourSchema), userController.storeOfficeHour);
+userRouter.post('/office-hours-list', adminAuth(userService), validateRequest(PostListOfficeHourSchema), userController.storeListOfficeHours);
 userRouter.delete('/office-hours', adminAuth(userService), userController.deleteOfficeHours);
 
 // iCal
