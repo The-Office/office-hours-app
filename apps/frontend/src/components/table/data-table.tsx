@@ -45,10 +45,10 @@ import {
 
 import { Input } from "@/components/ui/input"
 import { InsertOfficeHoursForm } from "./insert-office-hours"
-import { deleteOfficeHours, fetchOfficeHours, getIcalFile, getIcalFileByIds, OfficeHour } from "@/services/userService"
+import { deleteOfficeHours, fetchOfficeHours, fetchUserCourses, getIcalFile, getIcalFileByIds, OfficeHour } from "@/services/userService"
 import { useQuery } from "@tanstack/react-query"
 import { AddCourseInput } from "./add-user-course"
-import { Filter } from "lucide-react"
+import { Filter, Trash } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { cn } from "@/lib/utils"
 
@@ -72,6 +72,10 @@ export function DataTable<TData, TValue>({
     const { refetch } = useQuery({
         queryKey: ['officeHours'],
         queryFn: fetchOfficeHours,
+    });
+    const { data: userCourses = [] } = useQuery({
+        queryKey: ['userCourses'],
+        queryFn: fetchUserCourses,
     });
 
     const table = useReactTable({
@@ -184,19 +188,21 @@ export function DataTable<TData, TValue>({
                 <Tooltip delayDuration={0}>
                     {numSelected === 0 ? (
                         <TooltipTrigger className="cursor-not-allowed">
-                            <Button variant="outline" size="sm" disabled>
+                            <Button variant="destructive" size="sm" disabled>
                                 Delete
+                                <Trash className="h-4 w-4" />
                             </Button>
                         </TooltipTrigger>
                     ) : (
                         <AlertDialog>
                             <AlertDialogTrigger asChild>
                                 <Button
-                                    variant="outline"
+                                    variant="destructive"
                                     size="sm"
-                                    className="font-bold text-red-500 hover:text-red-700"
                                 >
                                     Delete {numSelected} Selected
+                                    <Trash className="h-4 w-4" />
+
                                 </Button>
                             </AlertDialogTrigger>
                             <AlertDialogContent>
@@ -273,7 +279,7 @@ export function DataTable<TData, TValue>({
                 </div>
 
                 <div className="flex flex-wrap-reverse items-center justify-end gap-4 ml-auto">
-                    {table.getRowModel().rows?.length > 0 &&
+                    {userCourses?.length > 0 &&
                         <div>
                             <AddCourseInput empty={false} />
                         </div>}
@@ -335,12 +341,18 @@ export function DataTable<TData, TValue>({
                             // Empty state message
                             <TableRow>
                                 <TableCell colSpan={columns.length} className="h-24 text-center text-muted-foreground">
-                                    <div className="flex-col flex items-center justify-center gap-2">
-                                        <p>You have no courses yet.</p>
-                                        <div className="max-w-48">
-                                            <AddCourseInput empty={true} />
+                                    {userCourses?.length > 0 ?
+                                        <p>No courses found.</p>
+                                        :
+                                        <div className="flex-col flex items-center justify-center gap-2">
+                                            <>
+                                                <p>You have no courses yet.</p>
+                                                <div className="max-w-48">
+                                                    <AddCourseInput empty={true} />
+                                                </div>
+                                            </>
                                         </div>
-                                    </div>
+                                    }
                                 </TableCell>
                             </TableRow>
                         )}
