@@ -127,6 +127,19 @@ export class UserController {
     return handleServiceResponse(serviceResponse, res);
   };
 
+  public storeListOfficeHours: RequestHandler = async (req: Request, res: Response) => {
+    const user_id = req.auth.userId;
+    const user = await this.userService.getById(user_id);
+    const role = user?.data?.role || "";
+    const authorizedRoles = ["professor", "admin"];
+    if(!authorizedRoles.includes(role)) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    const serviceResponse = await this.officeHourService.storeListOfficeHour(req.body);
+    return handleServiceResponse(serviceResponse, res);
+  }
+
   public deleteOfficeHours: RequestHandler = async (req: Request, res: Response) => {
     const user_id = req.auth.userId;
     let ids = req.query.ids;
