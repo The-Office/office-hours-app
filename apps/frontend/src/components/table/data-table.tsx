@@ -361,7 +361,7 @@ export function DataTable<TData, TValue>({
             </div >
 
             {/* Bottom section: Pagination controls and iCal download */}
-            < div className="my-3 flex justify-between" >
+            < div className="my-3 flex justify-between gap-2" >
                 <DataTablePagination table={table} />
                 <div className="flex gap-4">
                     <Button disabled={!Object.keys(rowSelection).length} variant="outline" onClick={handleDownloadIdsClick}>{`Download Custom iCal (${Object.keys(rowSelection).length} Selected)`}</Button>
