@@ -92,9 +92,9 @@ export class UserController {
   };
 
   public getIcalFileByIds: RequestHandler = async (req: Request, res: Response) => {
-    if (typeof req.query.ids !== undefined) {
-      let office_hour_ids = req.query.ids;
-      const serviceResponse = await this.officeHourService.getIcalFileByIds(office_hour_ids);
+    if (req.query.ids !== undefined) {
+      let ids = req.query.ids.toString().split(',').map(Number);
+      const serviceResponse = await this.officeHourService.getIcalFileByIds(ids);
       return handleServiceResponse(serviceResponse, res);
     } else {
       return handleServiceResponse(ServiceResponse.failure("Missing query parameters", null), res);
@@ -123,7 +123,7 @@ export class UserController {
       return res.status(401).json({ error: "Unauthorized" });
     }
 
-    const serviceResponse = await this.officeHourService.storeOfficeHour(req.body);
+    const serviceResponse = await this.officeHourService.storeOfficeHour(req.body, user_id);
     return handleServiceResponse(serviceResponse, res);
   };
 
@@ -132,19 +132,23 @@ export class UserController {
     const user = await this.userService.getById(user_id);
     const role = user?.data?.role || "";
     const authorizedRoles = ["professor", "admin"];
-    if(!authorizedRoles.includes(role)) {
+    if (!authorizedRoles.includes(role)) {
       return res.status(401).json({ error: "Unauthorized" });
     }
 
-    const serviceResponse = await this.officeHourService.storeListOfficeHour(req.body);
+    const serviceResponse = await this.officeHourService.storeListOfficeHour(req.body, user_id);
     return handleServiceResponse(serviceResponse, res);
-  }
+  };
 
   public deleteOfficeHours: RequestHandler = async (req: Request, res: Response) => {
     const user_id = req.auth.userId;
-    let ids = req.query.ids;
-    const serviceResponse = await this.officeHourService.deleteOfficeHours(ids);
-    return handleServiceResponse(serviceResponse, res);
+    if (req.query.ids !== undefined) {
+      let ids = req.query.ids.toString().split(',').map(Number);
+      const serviceResponse = await this.officeHourService.deleteOfficeHours(ids);
+      return handleServiceResponse(serviceResponse, res);
+    } else {
+      return handleServiceResponse(ServiceResponse.failure("Missing query parameters", null), res);
+    }
   };
 
   public storeCourse: RequestHandler = async (req: Request, res: Response) => {
@@ -171,4 +175,3 @@ export class UserController {
     return handleServiceResponse(serviceResponse, res);
   };
 }
-

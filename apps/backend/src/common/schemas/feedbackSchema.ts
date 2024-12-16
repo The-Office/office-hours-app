@@ -4,8 +4,8 @@ import { z } from "zod";
 extendZodWithOpenApi(z);
 
 export const FeedbackSchema = z.object({
-  id: z.string(),
-  user_id: z.number().int(),
+  id: z.number().int(),
+  user_id: z.string(),
   rating: z.number().int(),
   content: z.string(),
   created_at: z.date(), // Timestamp for when the user was created in your system.

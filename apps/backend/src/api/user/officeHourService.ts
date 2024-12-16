@@ -1,10 +1,10 @@
 import { StatusCodes } from "http-status-codes";
 
-import type { OfficeHour, OfficeHourSchema, PostListOfficeHourSchema, PostOfficeHourSchema } from "@/common/schemas/officeHoursSchema";
+import type { OfficeHour, OfficeHourSchema } from "@/common/schemas/officeHoursSchema";
 import { OfficeHourRepository } from "@/database/officeHoursRepository";
 import { ServiceResponse } from "@/common/schemas/serviceResponse";
 import { logger } from "@/server";
-import ical, { ICalEventRepeatingFreq } from 'ical-generator';
+import ical, { ICalEventRepeatingFreq, ICalEvent, ICalEventData } from "ical-generator";
 import { z } from "zod";
 
 export class OfficeHourService {
@@ -14,228 +14,179 @@ export class OfficeHourService {
     this.officeHourRepository = repository;
   }
 
-  transformTime(day: string, time: string) : Date {
+  transformTime(day: string, time: string): Date {
+    const dayOfWeek: { [key: string]: number } = { sunday: 0, monday: 1, tuesday: 2, wednesday: 3, thursday: 4, friday: 5, saturday: 6 };
 
-        // Rewriting values in office hour object into date object type
+    const today = new Date();
+    const index_of_today = today.getDay();
+    const office_hour_day_index = dayOfWeek[day];
 
-        const dayOfWeek: {[key:string]: number} = { sunday: 0, monday: 1, tuesday: 2, wednesday: 3, thursday: 4, friday: 5, saturday: 6};
+    const officeHourDate = new Date();
+    officeHourDate.setDate(today.getDate() + ((office_hour_day_index - index_of_today + 7) % 7 || 7));
 
-        const today = new Date();
-        const index_of_today = today.getDay();
-        const office_hour_day_index = dayOfWeek[day];
+    const [time_str, am_pm] = time.split(" ");
+    let [hours, minutes] = time_str.split(":").map(Number);
 
-        const officeHourDate = new Date();
-        officeHourDate.setDate(today.getDate() + (((office_hour_day_index - index_of_today + 7) % 7) || 7));
+    if (am_pm === "pm" && hours !== 12) {
+      hours += 12;
+    } else if (am_pm === "am" && hours === 12) {
+      hours = 0;
+    }
 
-        const [time_str, am_pm] = time.split(' ');
-        let [hours, minutes] = time_str.split(':').map(Number);
-        
-        if(am_pm === "pm" && hours !== 12) { hours += 12; }
-        else if(am_pm === "am" && hours === 12) { hours = 0; }
+    officeHourDate.setHours(hours);
+    officeHourDate.setMinutes(minutes);
 
-        officeHourDate.setHours(hours);
-        officeHourDate.setMinutes(minutes);
-
-        return officeHourDate;
+    return officeHourDate;
   }
 
   // Retrieves all courses from the database
   async getAll(): Promise<ServiceResponse<OfficeHour[] | null>> {
     try {
-      const officehours = await this.officeHourRepository.getAllOfficeHours();
-      if (!officehours || officehours.length === 0) {
+      const officeHours = await this.officeHourRepository.getAllOfficeHours();
+      if (!officeHours || officeHours.length === 0) {
         return ServiceResponse.failure("No office hours found", null, StatusCodes.NOT_FOUND);
       }
-      return ServiceResponse.success<OfficeHour[]>("Office hours found", officehours);
+      return ServiceResponse.success<OfficeHour[]>("Office hours found", officeHours);
     } catch (ex) {
       const errorMessage = `Error finding all office hours: $${(ex as Error).message}`;
       logger.error(errorMessage);
-      return ServiceResponse.failure(
-        "An error occurred while retrieving office hours.",
-        null,
-        StatusCodes.INTERNAL_SERVER_ERROR,
-      );
+      return ServiceResponse.failure("An error occurred while retrieving office hours.", null, StatusCodes.INTERNAL_SERVER_ERROR);
     }
   }
 
   async getOfficeHoursByUserId(id: string): Promise<ServiceResponse<OfficeHour[] | null>> {
     try {
-      const officehours = await this.officeHourRepository.getOfficeHoursByUserId(id);
-      // const officehours = await this.officeHourRepository.getAllOfficeHours();
-      if (!officehours) {
+      const officeHours = await this.officeHourRepository.getOfficeHoursByUserId(id);
+      // const officeHours = await this.officeHourRepository.getAllOfficeHours();
+      if (!officeHours) {
         return ServiceResponse.failure("No office hours found", null, StatusCodes.NOT_FOUND);
       }
-      return ServiceResponse.success<OfficeHour[]>("Office hours found", officehours);
+      return ServiceResponse.success<OfficeHour[]>("Office hours found", officeHours);
     } catch (ex) {
       const errorMessage = `Error finding office hour by id: $${(ex as Error).message}`;
       logger.error(errorMessage);
-      return ServiceResponse.failure(
-        "An error occurred while retrieving office hours.",
-        null,
-        StatusCodes.INTERNAL_SERVER_ERROR,
-      );
+      return ServiceResponse.failure("An error occurred while retrieving office hours.", null, StatusCodes.INTERNAL_SERVER_ERROR);
     }
   }
 
-  async deleteOfficeHours(officeHourIds: any): Promise<ServiceResponse<null>> {
-    const response = await this.officeHourRepository.deleteOfficeHours(officeHourIds);
-    return response;
+  async deleteOfficeHours(officeHourIds: number[]): Promise<ServiceResponse<{ deletedCount: number }>> {
+    try {
+      const result = await this.officeHourRepository.deleteOfficeHours(officeHourIds);
+
+      if (result.affectedRows === 0) {
+        return ServiceResponse.failure("No office hours were found to delete", { deletedCount: 0 }, StatusCodes.NOT_FOUND);
+      }
+
+      return ServiceResponse.success(`Successfully deleted ${result.affectedRows} office hour(s)`, { deletedCount: result.affectedRows });
+    } catch (ex) {
+      const errorMessage = `Error deleting office hours: ${(ex as Error).message}`;
+      logger.error(errorMessage);
+      return ServiceResponse.failure("An error occurred while deleting office hours", { deletedCount: 0 }, StatusCodes.INTERNAL_SERVER_ERROR);
+    }
   }
 
-  async getIcalFileByIds(officeHourIds: any): Promise<ServiceResponse<string | null>> {
+  async createIcalEvents(officeHours: OfficeHour[], calendarName: string): Promise<ServiceResponse<string | null>> {
     try {
-      const officehours = await this.officeHourRepository.getOfficeHoursByIds(officeHourIds);
-      if(!officehours) {
-        return ServiceResponse.failure("No office hours found", null, StatusCodes.NOT_FOUND)
+      if (!officeHours) {
+        return ServiceResponse.failure("No office hours found", null, StatusCodes.NOT_FOUND);
       }
-      const ical_file = ical ({ name: `Office Hours for Selected Classes` });
-
-      for(const oh of officehours) {
-        if(oh.mode === "in-person") {
-          ical_file.createEvent({  
-            start: this.transformTime(oh.day, oh.start_time),
-            end: this.transformTime(oh.day, oh.end_time),
-            summary: `${oh.host}'s Office Hours`,
-            location: oh.location,
-            organizer: {
-              name: oh.host,
-            },
-            repeating: {
-              freq: ICalEventRepeatingFreq.WEEKLY, // Repeat every week, until...
-              until: new Date(Date.now() + 3 * 3600 * 1000 * 24 * 7 * 4) // ... 12 weeks from now (approx 1 semester...?)
-            }
-          })
-        } else if(oh.mode === "hybrid") {
-          ical_file.createEvent({  
-            start: this.transformTime(oh.day, oh.start_time),
-            end: this.transformTime(oh.day, oh.end_time),
-            summary: `${oh.host}'s Office Hours`,
-            url: oh.link,
-            location: oh.location,
-            organizer: {
-              name: oh.host,
-            },
-            repeating: {
-              freq: ICalEventRepeatingFreq.WEEKLY, // Repeat every week, until...
-              until: new Date(Date.now() + 3 * 3600 * 1000 * 24 * 7 * 4) // ... 12 weeks from now (approx 1 semester...?)
-            }
-          })
-        } else if(oh.mode === "remote") {
-          ical_file.createEvent({  
-            start: this.transformTime(oh.day, oh.start_time),
-            end: this.transformTime(oh.day, oh.end_time),
-            summary: `${oh.host}'s Office Hours`,
-            url: oh.link,
-            organizer: {
-              name: oh.host,
-            },
-            repeating: {
-              freq: ICalEventRepeatingFreq.WEEKLY, // Repeat every week, until...
-              until: new Date(Date.now() + 3 * 3600 * 1000 * 24 * 7 * 4) // ... 12 weeks from now (approx 1 semester...?)
-            }
-          })
+  
+      const ical_file = ical({ name: calendarName });
+      const semesterEnd = new Date(Date.now() + 3 * 3600 * 1000 * 24 * 7 * 4); // 12 weeks from now
+  
+      for (const oh of officeHours) {
+        // Base event properties that are common to all modes
+        const eventConfig: ICalEventData = {
+          start: this.transformTime(oh.day, oh.start_time),
+          end: this.transformTime(oh.day, oh.end_time),
+          summary: `${oh.host}'s Office Hours`,
+          organizer: {
+            name: oh.host,
+          },
+          repeating: {
+            freq: ICalEventRepeatingFreq.WEEKLY,
+            until: semesterEnd,
+          },
+        };
+  
+        // Add optional properties based on mode
+        if (oh.mode !== "remote") {
+          eventConfig.location = oh.location;
         }
-
+        if (oh.mode !== "in-person") {
+          eventConfig["url"] = oh.link;
+        }
+  
+        ical_file.createEvent(eventConfig);
       }
-
+  
       const data_str = ical_file.toString();
-      if(data_str) { 
-        const url = `data:text/calendar;base64,${Buffer.from(data_str).toString('base64')}`;
-        return ServiceResponse.success<string>("Office hours found", url);
-      } else { throw new Error("Empty calendar data.") }
-
+      if (!data_str) {
+        throw new Error("Empty calendar data.");
+      }
+  
+      const url = `data:text/calendar;base64,${Buffer.from(data_str).toString("base64")}`;
+      return ServiceResponse.success<string>("Office hours found", url);
     } catch (ex) {
-      const errorMessage = `Error in generating office hour ical file by id: $${(ex as Error).message}`;
+      const errorMessage = `Error in generating office hour ical file: ${(ex as Error).message}`;
       logger.error(errorMessage);
       return ServiceResponse.failure(
         "An error occurred while retrieving and storing office hours to ical file.",
         null,
-        StatusCodes.INTERNAL_SERVER_ERROR,
+        StatusCodes.INTERNAL_SERVER_ERROR
       );
     }
   }
-
-  async getIcalFileByUserId(id: string): Promise<ServiceResponse<string | null>> {
+  
+  async getIcalFileByIds(officeHourIds: number[]): Promise<ServiceResponse<string | null>> {
     try {
-      const officehours = await this.officeHourRepository.getOfficeHoursByUserId(id);
-      if(!officehours) {
-        return ServiceResponse.failure("No office hours found", null, StatusCodes.NOT_FOUND)
-      }
-      const ical_file = ical ({ name: `Office Hours for User ${id}` });
-
-      for(const oh of officehours) {
-        if(oh.mode === "in-person") {
-          ical_file.createEvent({  
-            start: this.transformTime(oh.day, oh.start_time),
-            end: this.transformTime(oh.day, oh.end_time),
-            summary: `${oh.host}'s Office Hours`,
-            location: oh.location,
-            organizer: {
-              name: oh.host,
-            },
-            repeating: {
-              freq: ICalEventRepeatingFreq.WEEKLY, // Repeat every week, until...
-              until: new Date(Date.now() + 3 * 3600 * 1000 * 24 * 7 * 4) // ... 12 weeks from now (approx 1 semester...?)
-            }
-          })
-        } else if(oh.mode === "hybrid") {
-          ical_file.createEvent({  
-            start: this.transformTime(oh.day, oh.start_time),
-            end: this.transformTime(oh.day, oh.end_time),
-            summary: `${oh.host}'s Office Hours`,
-            url: oh.link,
-            location: oh.location,
-            organizer: {
-              name: oh.host,
-            },
-            repeating: {
-              freq: ICalEventRepeatingFreq.WEEKLY, // Repeat every week, until...
-              until: new Date(Date.now() + 3 * 3600 * 1000 * 24 * 7 * 4) // ... 12 weeks from now (approx 1 semester...?)
-            }
-          })
-        } else if(oh.mode === "remote") {
-          ical_file.createEvent({  
-            start: this.transformTime(oh.day, oh.start_time),
-            end: this.transformTime(oh.day, oh.end_time),
-            summary: `${oh.host}'s Office Hours`,
-            url: oh.link,
-            organizer: {
-              name: oh.host,
-            },
-            repeating: {
-              freq: ICalEventRepeatingFreq.WEEKLY, // Repeat every week, until...
-              until: new Date(Date.now() + 3 * 3600 * 1000 * 24 * 7 * 4) // ... 12 weeks from now (approx 1 semester...?)
-            }
-          })
-        }
-
-      }
-
-      const data_str = ical_file.toString();
-      if(data_str) { 
-        const url = `data:text/calendar;base64,${Buffer.from(data_str).toString('base64')}`;
-        return ServiceResponse.success<string>("Office hours found", url);
-      } else { throw new Error("Empty calendar data.") }
-
+      const officeHours = await this.officeHourRepository.getOfficeHoursByIds(officeHourIds);
+      return this.createIcalEvents(officeHours, `Office Hours for Selected Classes`);
     } catch (ex) {
-      const errorMessage = `Error in generating office hour ical file by id: $${(ex as Error).message}`;
+      const errorMessage = `Error in generating office hour ical file by id: ${(ex as Error).message}`;
       logger.error(errorMessage);
       return ServiceResponse.failure(
         "An error occurred while retrieving and storing office hours to ical file.",
         null,
-        StatusCodes.INTERNAL_SERVER_ERROR,
+        StatusCodes.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+  
+  async getIcalFileByUserId(user_id: string): Promise<ServiceResponse<string | null>> {
+    try {
+      const officeHours = await this.officeHourRepository.getOfficeHoursByUserId(user_id);
+      return this.createIcalEvents(officeHours, `Office Hours for User ${user_id}`);
+    } catch (ex) {
+      const errorMessage = `Error in generating office hour ical file by user_id: ${(ex as Error).message}`;
+      logger.error(errorMessage);
+      return ServiceResponse.failure(
+        "An error occurred while retrieving and storing office hours to ical file.",
+        null,
+        StatusCodes.INTERNAL_SERVER_ERROR
       );
     }
   }
 
-  async storeOfficeHour(data: z.infer<typeof OfficeHourSchema>): Promise<ServiceResponse<OfficeHour | null>> {
-    const response = await this.officeHourRepository.storeOfficeHour(data);
-    return response;
+  async storeOfficeHour(data: z.infer<typeof OfficeHourSchema>, userId: string): Promise<ServiceResponse<OfficeHour | null>> {
+    try {
+      const officeHour = await this.officeHourRepository.storeOfficeHour(data, userId);
+      return ServiceResponse.success("Office hour created successfully", officeHour);
+    } catch (ex) {
+      const errorMessage = `Error storing office hour: ${(ex as Error).message}`;
+      logger.error(errorMessage);
+      return ServiceResponse.failure("An error occurred while storing the office hour", null, StatusCodes.INTERNAL_SERVER_ERROR);
+    }
   }
 
-  async storeListOfficeHour(data: z.infer<typeof PostListOfficeHourSchema>["body"]): Promise<ServiceResponse<OfficeHour | null>> {
-    const response = await this.officeHourRepository.storeListOfficeHours(data);
-    return response;
+  async storeListOfficeHour(data: z.infer<typeof OfficeHourSchema>[], userId: string): Promise<ServiceResponse<OfficeHour[] | null>> {
+    try {
+      const officeHours = await this.officeHourRepository.storeListOfficeHours(data, userId);
+      return ServiceResponse.success("Office hours created successfully", officeHours);
+    } catch (ex) {
+      const errorMessage = `Error storing office hours: ${(ex as Error).message}`;
+      logger.error(errorMessage);
+      return ServiceResponse.failure("An error occurred while storing the office hours", null, StatusCodes.INTERNAL_SERVER_ERROR);
+    }
   }
-
 }
