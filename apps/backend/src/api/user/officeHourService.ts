@@ -69,7 +69,7 @@ export class OfficeHourService {
     }
   }
 
-  async deleteOfficeHours(officeHourIds: number[]): Promise<ServiceResponse<{ deletedCount: number }>> {
+  async deleteOfficeHours(officeHourIds: string): Promise<ServiceResponse<{ deletedCount: number }>> {
     try {
       const result = await this.officeHourRepository.deleteOfficeHours(officeHourIds);
 

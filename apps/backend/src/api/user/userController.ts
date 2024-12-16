@@ -143,7 +143,7 @@ export class UserController {
   public deleteOfficeHours: RequestHandler = async (req: Request, res: Response) => {
     const user_id = req.auth.userId;
     if (req.query.ids !== undefined) {
-      let ids = req.query.ids.toString().split(',').map(Number);
+      let ids = req.query.ids.toString();
       const serviceResponse = await this.officeHourService.deleteOfficeHours(ids);
       return handleServiceResponse(serviceResponse, res);
     } else {
