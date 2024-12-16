@@ -26,7 +26,7 @@ async function createOrgSecrets() {
       });
 
     // Your GitHub organization name
-    const orgName = 'The-Office';
+    const orgName = 'SynchrOHnize';
 
     for (const [key, value] of envVars) {
       if (!key || !value) continue;

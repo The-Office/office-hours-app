@@ -1,6 +1,6 @@
 services:
   app:
-    image: ghcr.io/the-office/main-service:latest
+    image: ghcr.io/SynchrOHnize/main-service:latest
     env_file:
       - ./apps/backend/.env.production
       - ./apps/frontend/.env.production

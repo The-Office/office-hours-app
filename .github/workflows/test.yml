@@ -55,7 +55,7 @@ jobs:
       uses: docker/metadata-action@v5
       with:
         images: |
-          ghcr.io/the-office/main-service
+          ghcr.io/SynchrOHnize/main-service
         tags: |
           type=sha,prefix=
           type=ref,event=branch
@@ -67,7 +67,7 @@ jobs:
         context: .
         push: true
         tags: |
-          ghcr.io/the-office/main-service:latest
-          ghcr.io/the-office/main-service:${{ github.sha }}
+          ghcr.io/SynchrOHnize/main-service:latest
+          ghcr.io/SynchrOHnize/main-service:${{ github.sha }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
