@@ -69,9 +69,9 @@ export class OfficeHourService {
     }
   }
 
-  async deleteOfficeHours(officeHourIds: string): Promise<ServiceResponse<{ deletedCount: number }>> {
+  async deleteOfficeHours(officeHourIds: string, userId: string): Promise<ServiceResponse<{ deletedCount: number }>> {
     try {
-      const result = await this.officeHourRepository.deleteOfficeHours(officeHourIds);
+      const result = await this.officeHourRepository.deleteOfficeHours(officeHourIds, userId);
 
       if (result.affectedRows === 0) {
         return ServiceResponse.failure("No office hours were found to delete", { deletedCount: 0 }, StatusCodes.NOT_FOUND);

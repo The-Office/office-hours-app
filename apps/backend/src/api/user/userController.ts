@@ -36,14 +36,14 @@ export class UserController {
   };
 
   public getUser: RequestHandler = async (req: Request, res: Response) => {
-    const user_id = req.auth.userId;
-    const serviceResponse = await this.userService.getById(user_id);
+    const userId = req.auth.userId;
+    const serviceResponse = await this.userService.getById(userId);
     return handleServiceResponse(serviceResponse, res);
   };
 
   public storeUser: RequestHandler = async (req: Request, res: Response) => {
-    const user_id = req.auth.userId;
-    const clerkUser = await clerkClient.users.getUser(user_id);
+    const userId = req.auth.userId;
+    const clerkUser = await clerkClient.users.getUser(userId);
     if (!clerkUser) {
       return res.status(404).json({ error: "No Clerk User found" });
     }
@@ -61,33 +61,33 @@ export class UserController {
 
     const userType = results.data.some((result) => result.email === email) ? "professor" : "student";
 
-    const serviceResponse = await this.userService.storeUser(user_id, userType);
+    const serviceResponse = await this.userService.storeUser(userId, userType);
     return handleServiceResponse(serviceResponse, res);
   };
 
   public getCoursesByUserId: RequestHandler = async (req: Request, res: Response) => {
-    const user_id = req.auth.userId;
-    const serviceResponse = await this.userCourseService.getCoursesByUserId(user_id);
+    const userId = req.auth.userId;
+    const serviceResponse = await this.userCourseService.getCoursesByUserId(userId);
     return handleServiceResponse(serviceResponse, res);
   };
 
   public deleteUserCourse: RequestHandler = async (req: Request, res: Response) => {
-    const user_id = req.auth.userId;
+    const userId = req.auth.userId;
     const course_id = Number(req.params.course_id);
-    const serviceResponse = await this.userCourseService.deleteUserCourse(user_id, course_id);
+    const serviceResponse = await this.userCourseService.deleteUserCourse(userId, course_id);
     return handleServiceResponse(serviceResponse, res);
   };
 
   public storeUserCourse: RequestHandler = async (req: Request, res: Response) => {
-    const user_id = req.auth.userId;
+    const userId = req.auth.userId;
     const course_id = Number(req.params.course_id);
-    const serviceResponse = await this.userCourseService.storeUserCourse(user_id, course_id);
+    const serviceResponse = await this.userCourseService.storeUserCourse(userId, course_id);
     return handleServiceResponse(serviceResponse, res);
   };
 
   public getOfficeHoursByUserId: RequestHandler = async (req: Request, res: Response) => {
-    const user_id = req.auth.userId;
-    const serviceResponse = await this.officeHourService.getOfficeHoursByUserId(user_id);
+    const userId = req.auth.userId;
+    const serviceResponse = await this.officeHourService.getOfficeHoursByUserId(userId);
     return handleServiceResponse(serviceResponse, res);
   };
 
@@ -102,49 +102,49 @@ export class UserController {
   };
 
   public getIcalFileByUserId: RequestHandler = async (req: Request, res: Response) => {
-    const user_id = req.auth.userId;
-    const serviceResponse = await this.officeHourService.getIcalFileByUserId(user_id);
+    const userId = req.auth.userId;
+    const serviceResponse = await this.officeHourService.getIcalFileByUserId(userId);
     return handleServiceResponse(serviceResponse, res);
   };
 
   public storeFeedback: RequestHandler = async (req: Request, res: Response) => {
-    const user_id = req.auth.userId;
+    const userId = req.auth.userId;
     const { content, rating } = req.body;
-    const serviceResponse = await this.feedbackService.storeFeedback(user_id, rating, content);
+    const serviceResponse = await this.feedbackService.storeFeedback(userId, rating, content);
     return handleServiceResponse(serviceResponse, res);
   };
 
   public storeOfficeHour: RequestHandler = async (req: Request, res: Response) => {
-    const user_id = req.auth.userId;
-    const user = await this.userService.getById(user_id);
+    const userId = req.auth.userId;
+    const user = await this.userService.getById(userId);
     const role = user?.data?.role || "";
     const authorizedRoles = ["professor", "admin"];
     if (!authorizedRoles.includes(role)) {
       return res.status(401).json({ error: "Unauthorized" });
     }
 
-    const serviceResponse = await this.officeHourService.storeOfficeHour(req.body, user_id);
+    const serviceResponse = await this.officeHourService.storeOfficeHour(req.body, userId);
     return handleServiceResponse(serviceResponse, res);
   };
 
   public storeListOfficeHours: RequestHandler = async (req: Request, res: Response) => {
-    const user_id = req.auth.userId;
-    const user = await this.userService.getById(user_id);
+    const userId = req.auth.userId;
+    const user = await this.userService.getById(userId);
     const role = user?.data?.role || "";
     const authorizedRoles = ["professor", "admin"];
     if (!authorizedRoles.includes(role)) {
       return res.status(401).json({ error: "Unauthorized" });
     }
 
-    const serviceResponse = await this.officeHourService.storeListOfficeHour(req.body, user_id);
+    const serviceResponse = await this.officeHourService.storeListOfficeHour(req.body, userId);
     return handleServiceResponse(serviceResponse, res);
   };
 
   public deleteOfficeHours: RequestHandler = async (req: Request, res: Response) => {
-    const user_id = req.auth.userId;
+    const userId = req.auth.userId;
     if (req.query.ids !== undefined) {
       let ids = req.query.ids.toString();
-      const serviceResponse = await this.officeHourService.deleteOfficeHours(ids);
+      const serviceResponse = await this.officeHourService.deleteOfficeHours(ids, userId);
       return handleServiceResponse(serviceResponse, res);
     } else {
       return handleServiceResponse(ServiceResponse.failure("Missing query parameters", null), res);
@@ -152,14 +152,14 @@ export class UserController {
   };
 
   public storeCourse: RequestHandler = async (req: Request, res: Response) => {
-    const user_id = req.auth.userId;
+    const userId = req.auth.userId;
     const { course_id, course_code, title } = req.body;
     const serviceResponse = await this.userCourseService.storeCourse(course_id, course_code, title);
     return handleServiceResponse(serviceResponse, res);
   };
 
   public getCourse: RequestHandler = async (req: Request, res: Response) => {
-    const user_id = req.auth.userId;
+    const userId = req.auth.userId;
     const course_id = Number(req.params.course_id);
 
     if (isNaN(course_id)) {

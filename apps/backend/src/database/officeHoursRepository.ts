@@ -167,12 +167,11 @@ export class OfficeHourRepository {
     return updated[0] as OfficeHour;
   }
 
-  async deleteOfficeHours(ids: string): Promise<{ affectedRows: number }> {
+  async deleteOfficeHours(ids: string, userId: string): Promise<{ affectedRows: number }> {
     const [result] = await this.db.execute<ResultSetHeader>(
-      "UPDATE office_hours SET is_deleted = true WHERE id IN (?) AND is_deleted = false",
-      [ids]
+      "UPDATE office_hours SET is_deleted = true, updated_by = ? WHERE id IN (?) AND is_deleted = false",
+      [userId, ids]
     );
-    
     return { affectedRows: result.affectedRows };
-  }
+}
 }
