@@ -52,6 +52,8 @@ import { Filter, Trash } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { cn } from "@/lib/utils"
 
+import { Edit } from "lucide-react"
+
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
@@ -247,6 +249,8 @@ export function DataTable<TData, TValue>({
         );
     };
 
+    console.log(table.getHeaderGroups()) // TODO Testing, Remove
+
     return (
         <div className={cn(table.getRowModel().rows?.length === 0 && "max-w-screen-lg")}>
             {/* Top section: Search, filters and action buttons */}
@@ -307,6 +311,11 @@ export function DataTable<TData, TValue>({
                                             )}
                                     </TableHead>
                                 ))}
+                                {admin && (
+                                    <TableHead>
+                                        Edit
+                                    </TableHead>
+                                )}
                             </TableRow>
                         ))}
                     </TableHeader>
@@ -335,6 +344,14 @@ export function DataTable<TData, TValue>({
                                             )}
                                         </TableCell>
                                     ))}
+
+                                    {admin && (
+                                    <TableCell>
+                                        <button>
+                                            <Edit className="h-4 w-4" />
+                                        </button>
+                                    </TableCell>
+                                    )}
                                 </TableRow>
                             ))
                         ) : (
