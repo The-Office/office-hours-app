@@ -39,6 +39,7 @@ import {
 } from "@/components/ui/command"
 import { TimeField } from "../ui/time-field";
 import { fetchCourseById, storeCourse, storeOfficeHour } from "@/services/userService";
+import { parseOfficeHours } from "@/services/userService";
 import { useToast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -113,6 +114,24 @@ const formSchema = z.object({
         }
     }
 });
+
+const textSchema = z.object({
+    course_id: z.number().min(1, {
+        message: "Course ID is required.",
+    }),
+    course_code: z.string()
+    .min(1, { message: "Course code is required." })
+    .regex(
+        /^[A-Z]{3}[0-9]{4}C?$/,
+        'Course code must be 3 uppercase letters followed by 4 numbers, with optional C at end (e.g., COP3503 or COP3503C)'
+    ),
+    title: z.string().min(1, {
+        message: "Course title is required.",
+    }),
+    inputted_text: z.string().min(1, { 
+        message: "Inputted text cannot be empty",
+    }),
+})
 
 export function InsertOfficeHoursForm() {
     const [searchResults, setSearchResults] = useState<SearchClass[]>([]);
@@ -431,6 +450,187 @@ export function InsertOfficeHoursForm() {
                                     )}
                                 />
                             )}
+                            <hr className="my-4 border-dotted border-1 border-gray-300" />
+                            <Button type="submit">Submit</Button>
+                        </form>
+                    </Form>
+                </DialogContent>
+            </Dialog>
+        </>
+    )
+}
+
+export function InsertOfficeHoursText() {
+    const [searchResults, setSearchResults] = useState<SearchClass[]>([]);
+    const [isFocused, setIsFocused] = useState(false);
+    const { toast } = useToast();
+    const queryClient = useQueryClient();
+
+    const form = useForm<z.infer<typeof textSchema>>({
+        resolver: zodResolver(textSchema),
+        defaultValues: {
+            course_code: "",
+            title: "",
+            inputted_text:"",
+        },
+    })
+
+    const handleSearch = async (value: string) => {
+
+        if (value.length >= 3) {
+            const response = await searchClasses(value);
+            setSearchResults(response?.results || []);
+        } else {
+            setSearchResults([]);
+        }
+    };
+
+    const handleSelectClass = (selectedClass: SearchClass) => {
+
+        form.reset({
+            ...form.getValues(),
+            course_id: parseInt(selectedClass.key, 10),
+            course_code: selectedClass.code.replace(/\s+/g, '').toUpperCase(),
+            title: selectedClass.title
+        });
+        setSearchResults([]);
+        setIsFocused(false);
+    };
+
+    const onSubmit = async (data: z.infer<typeof textSchema>) => {
+
+        const existingCourse = await fetchCourseById(data.course_id);
+        if (!existingCourse) {
+            const course = await storeCourse(data);
+            if (!course) {
+                console.error("Failed to create course");
+                return;
+            }
+            await queryClient.invalidateQueries({ queryKey: ['courses'] });
+        }
+
+        const officeHour = await parseOfficeHours(data);
+        if (!officeHour) {
+            console.error("Failed to create office hour");
+            return;
+        }
+
+        // await resetForm();
+        toast({
+            title: "Success!",
+            description: "Office hours parsed successfully.",
+            variant: "success",
+        })
+        console.log("Course and office hour created successfully");
+        await queryClient.invalidateQueries({ queryKey: ['officeHours'] });
+    }
+    return (
+        <>
+            <Dialog>
+                <DialogTrigger className="inline-flex items-center justify-center gap-2 rounded-md px-3 py-1 text-sm font-medium border border-input bg-green-200 hover:bg-green-400 hover:text-accent-foreground">
+                    Insert
+                    <Plus className="h-4 w-4" />
+                </DialogTrigger>
+                <DialogContent className="min-w-96 overflow-y-scroll max-h-screen">
+                    <DialogHeader>
+                        <DialogTitle className="text-center text-xl">Create Office Hours</DialogTitle>
+                        <DialogDescription className="text-center text-sm text-slate-40">
+                            If you are seeing this, it means you are a verified TA or instructor at UF.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 flex flex-col">
+                            <input type="hidden" {...form.register('course_id')} />
+
+                            <FormField
+                                control={form.control}
+                                name="course_code"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-col">
+                                        <FormLabel>Course Code (Search)</FormLabel>
+                                        <FormControl>
+                                            <div className="relative">
+                                                <Input
+                                                    placeholder="Search course code..."
+                                                    {...field}
+                                                    onFocus={() => setIsFocused(true)}
+                                                    onBlur={() => {
+                                                        // Small delay to allow click events on CommandItems to fire
+                                                        setTimeout(() => {
+                                                            setIsFocused(false);
+                                                        }, 200);
+                                                    }}
+                                                    onChange={(e) => {
+                                                        field.onChange(e);
+                                                        form.reset({
+                                                            ...form.getValues(),
+                                                            course_id: undefined,
+                                                            title: ""
+                                                        });
+                                                        handleSearch(e.target.value);
+                                                    }}
+                                                />
+                                                {searchResults.length > 0 && isFocused && (
+                                                    <Command className="h-[300px] absolute top-full left-0 right-0 z-50 mt-1 border rounded-md bg-popover">
+                                                        <CommandList>
+                                                            <CommandGroup>
+                                                                {searchResults.map((result) => (
+                                                                    <CommandItem
+                                                                        key={result.key}
+                                                                        onSelect={() => handleSelectClass(result)}
+                                                                        className="cursor-pointer"
+                                                                    >
+                                                                        <span>{result.code} - {result.title}</span>
+                                                                    </CommandItem>
+                                                                ))}
+                                                            </CommandGroup>
+                                                        </CommandList>
+                                                    </Command>
+                                                )}
+                                            </div>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="title"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Course Title</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                {...field}
+                                                readOnly
+                                                placeholder="Course title will appear here..."
+                                                className="bg-muted"
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <hr className="my-4 border-t border-border" />
+
+
+                            {/* Rest of the form fields remain unchanged */}
+                            <FormField
+                                control={form.control}
+                                name="inputted_text"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Office Hours in Text Format</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Text containing your office hours..." {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
                             <hr className="my-4 border-dotted border-1 border-gray-300" />
                             <Button type="submit">Submit</Button>
                         </form>
